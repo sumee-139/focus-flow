@@ -8,6 +8,9 @@
 - **階層化Memory Bank**: 必要な情報のみ読み込み
 - **段階的拡張**: 小規模→大規模プロジェクトに対応
 - **日次運用**: 3分で状況更新完了
+- **汎用性**: 言語・技術スタックに依存しない設計
+- **開発規約統合**: Anthropicベストプラクティスを統合
+- **品質管理**: エラー対応ガイド・品質ゲート内蔵
 
 ## 📁 テンプレート構成
 
@@ -37,13 +40,9 @@ docs/requirements.md         # 要求仕様書
     ├── act.md              # 実装実行
     ├── daily.md            # 日次更新
     ├── focus.md            # フォーカスモード
-    ├── update-memory.md    # Memory Bank更新
-    ├── compress.md         # 圧縮・アーカイブ
-    ├── monthly.md          # 月次メンテナンス
     ├── debug-start.md      # デバッグ特化モード
     ├── feature-plan.md     # 新機能設計モード
-    ├── review-check.md     # コードレビューモード
-    └── deploy-prep.md      # デプロイ準備モード
+    └── review-check.md     # コードレビューモード
 ```
 
 ## 🚀 使い方
@@ -71,25 +70,15 @@ cd your-project/
 ↓ /debug:start      # バグ対応時
 ↓ /feature:plan     # 新機能設計時
 ↓ /review:check     # コードレビュー時
-↓ /deploy:prep      # デプロイ準備時
 ↓
 集中作業: /project:focus  # タスク切り替え・集中時
 ↓
 夕方: /project:daily    # 日次更新（3分）
 ```
 
-#### 追加コマンド（必要時）
+#### タグ検索（必要時）
 ```
-/project:update-memory  # 重要な変更・学びがあった時
-/project:compress      # 週1回（Memory Bank整理）
-/project:monthly       # 月1回（月次アーカイブ）
-タグ検索: #urgent #bug  # 関連情報の高速検索
-```
-
-### 3. 定期メンテナンス
-```
-週次: /project:compress  # Memory Bank圧縮
-月次: /project:monthly   # 自動アーカイブ＆メンテナンス
+タグ検索: #urgent #bug #feature #completed  # 関連情報の高速検索
 ```
 
 ## 💡 効率化のポイント
@@ -115,24 +104,42 @@ cd your-project/
 | コマンド | 用途 | 所要時間 |
 |---------|------|----------|
 | `/project:plan` | 作業計画立案 | 5分 |
-| `/project:act` | 計画に基づいて実装実行 | 実装時間 |
-| `/project:focus` | 集中モード（現在タスクのみ） | 即座 |
-| `/project:daily` | 日次更新 | 3分 |
-| `/project:update-memory` | Memory Bank差分更新 | 必要時 |
-| `/project:compress` | Memory Bank圧縮・アーカイブ | 週1回 |
-| `/project:monthly` | 月次アーカイブ＆メンテナンス | 月1回 |
+| `/project:act` | 計画に基づく実装実行 | 実装時間 |
+| `/project:focus` | 現在タスクに集中 | 即座 |
+| `/project:daily` | 日次振り返り | 3分 |
 
-### Quick Modes（専門化モード）
+### 専門化モード
 | コマンド | 用途 | 参照ファイル |
 |---------|------|-------------|
 | `/debug:start` | デバッグ特化モード | current.md + tech.md + debug/latest.md |
 | `/feature:plan` | 新機能設計モード | overview.md + next.md + 要件定義 |
 | `/review:check` | コードレビューモード | history.md + チェックリスト |
-| `/deploy:prep` | デプロイ準備モード | tech.md + リリース確認 |
 
 ### タグ検索
 - タグ形式: `#tag_name` でMemory Bank内検索
-- 主要タグ: #urgent #bug #feature #tech #completed #blocked
+- 主要タグ: #urgent #bug #feature #completed
+
+## 📋 内蔵機能
+
+### 開発規約（Core Development Rules）
+- パッケージ管理統一方針
+- コード品質基準・テスト要件
+- Git/PR規約（コミット形式・トレーラー・レビュー規約）
+
+### 実行コマンド一覧
+- 言語非依存の開発フロー（`[tool]`記法）
+- セットアップ・テスト・品質チェック・ビルドの統一コマンド
+- 主要言語（Node.js/Python/Rust/Go）対応
+
+### エラー対応ガイド
+- 問題解決の標準順序（フォーマット→型→リント→テスト）
+- 分野別よくある問題と解決策
+- 開発・エラー対応・情報収集時のベストプラクティス
+
+### 品質ゲート
+- 段階別チェックリスト（コミット前・PR前・デプロイ前）
+- 自動化レベル分類（完全自動化・半自動化・手動確認）
+- 継続的品質管理の運用指針
 
 ## 🎯 適用プロジェクト
 
@@ -150,8 +157,8 @@ cd your-project/
 ## 📈 期待効果
 
 ### トークン使用量
-- **60%削減**: 従来のMemory Bankと比較
-- **一定量維持**: プロジェクト規模に関係なく
+- **大幅削減**: 階層化Memory Bankによる効率化
+- **一定量維持**: プロジェクト規模に関係なく軽量
 
 ### 開発効率
 - **高速計画**: 段階的情報読み込み
@@ -216,7 +223,6 @@ cd your-project/
              /review:check でコード品質確認
 15:00-15:30  人間: 軌道修正・追加指示
 15:30-16:30  AI: 最終実装・調整
-             /deploy:prep でリリース準備（必要時）
 16:30-17:00  人間: 最終レビュー・明日準備
 17:00-17:15  人間: /project:daily で振り返り
 ```
@@ -257,11 +263,7 @@ AI実装中（30-90分）の並行作業:
 | 状況別 | `/debug:start` | バグ対応時 |
 | 状況別 | `/feature:plan` | 新機能設計時 |
 | 状況別 | `/review:check` | コードレビュー時 |
-| 状況別 | `/deploy:prep` | デプロイ準備時 |
 | 随時 | `#タグ検索` | 関連情報検索時 |
-| 重要変更時 | `/project:update-memory` | 技術決定・学び時 |
-| 週1回 | `/project:compress` | Memory Bank整理 |
-| 月1回 | `/project:monthly` | 月次メンテナンス |
 
 ## 🎉 始めよう
 
