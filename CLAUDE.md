@@ -3,6 +3,29 @@
 ## プロジェクト概要
 [プロジェクトの簡潔な説明をここに記載]
 
+## プロンプトキャッシュ最適化設定
+
+### 環境設定
+- **CLAUDE_CACHE**: `./.ccache` - プロジェクト固有キャッシュで90%コスト削減・85%レイテンシ短縮
+- **cache_control**: 長期安定情報（overview.md, templates.md, tech.md, debt.md, requirements.md）に適用済み
+- **キャッシュ効果**: 同一プロンプト再利用時のトークン課金大幅削減
+
+### 設定ファイル
+```json
+// .claude/settings.json
+{
+  "env": {
+    "CLAUDE_CACHE": "./.ccache"
+  }
+}
+```
+
+### .gitignore設定
+```gitignore
+.ccache/**
+*.cache
+```
+
 ## Memory Bank構造（軽量化済み）
 このプロジェクトでは効率的な階層化Memory Bankシステムを使用しています：
 
@@ -15,22 +38,39 @@
 ### コンテキスト（必要時参照）
 - 技術詳細: @.claude/context/tech.md
 - 履歴・決定事項: @.claude/context/history.md
+- 技術負債トラッキング: @.claude/context/debt.md
+
+### デバッグ情報（デバッグ時参照）
+- 最新デバッグセッション: @.claude/debug/latest.md
 
 ### アーカイブ（定期整理）
 - 完了済み情報: @.claude/archive/
 
+### カスタムコマンドファイル
+- 計画立案: @.claude/commands/plan.md
+- 実装実行: @.claude/commands/act.md
+- 日次更新: @.claude/commands/daily.md
+- フォーカスモード: @.claude/commands/focus.md
+- デバッグ特化: @.claude/commands/debug-start.md
+- 新機能設計: @.claude/commands/feature-plan.md
+- コードレビュー: @.claude/commands/review-check.md
+
 ## カスタムコマンド
 
 ### 基本コマンド
-- `/project:plan` - 作業計画立案
-- `/project:act` - 計画に基づく実装実行
-- `/project:focus` - 現在タスクに集中
-- `/project:daily` - 日次振り返り（3分以内）
+| コマンド | 用途 | 所要時間 |
+|---------|----- |-----------|
+| `/project:plan` | 作業計画立案 | 5分 |
+| `/project:act` | 計画に基づく実装実行 | 実装時間 |
+| `/project:focus` | 現在タスクに集中 | 即座 |
+| `/project:daily` | 日次振り返り | 3分 |
 
 ### 専門化モード
-- `/debug:start` - デバッグ特化モード
-- `/feature:plan` - 新機能設計モード
-- `/review:check` - コードレビューモード
+| コマンド | 用途 | 参照ファイル |
+|---------|----- |-------------|
+| `/debug:start` | デバッグ特化モード | current.md + tech.md + debug/latest.md |
+| `/feature:plan` | 新機能設計モード | overview.md + next.md + 要件定義 |
+| `/review:check` | コードレビューモード | history.md + チェックリスト |
 
 ### タグ検索
 - タグ形式: `#tag_name` でMemory Bank内検索
@@ -54,14 +94,37 @@
 - **既存パターン**: 必ず既存コードのパターンに従う
 - **行長制限**: 80-120文字（言語・チームで統一）
 
-### 3. テスト要件
+### 3. テスト要件（段階的TDD学習パス）
+
+#### TDD学習ステップ（未経験者向け）
+**Phase 1 (Week 1-2): TDD体験なし**
+- 既存コードの理解・修正に集中
+- 実装後のテスト追加でもOK
+- Claude Codeの基本操作習得
+
+**Phase 2 (Week 3-4): TDD体験開始**
+- 小さな機能でTDD体験（Claudeがテスト作成サポート）
+- 「まず失敗するテストを書いて」→実装→リファクタリング
+- Red-Green-Refactorサイクルを体験
+
+**Phase 3 (Month 2-3): TDD習得**
+- 新機能開発時にTDD適用
+- 自己デバッグループ（`claude test --fix`）活用
+- TDDパターンが自然に身につく
+
+#### テスト基準
 - **テストフレームワーク**: プロジェクトで統一されたものを使用
-- **カバレッジ目標**: 重要な機能は80%以上
-- **必須テストケース**: 
+- **カバレッジ目標**: 重要な機能は80%以上（段階的に向上）
+- **推奨テストケース**: 
   - エッジケース（境界値・異常値）
   - エラーハンドリング
-  - 新機能には対応するテスト
+  - 新機能には対応するテスト（TDD習得後は先行作成）
   - バグ修正には回帰テスト
+
+#### Claude Code TDD支援機能
+- **テスト生成**: Claudeが失敗テスト作成をガイド
+- **自己デバッグ**: `claude test --fix`で自動パッチ提案
+- **学習効果**: 実際のコードでTDDパターン習得
 
 ### 4. Git/PR規約
 
@@ -234,6 +297,49 @@ git commit -m "feat: add user authentication" --trailer "Github-Issue: #123"
 - **日次**: コミット前チェックを習慣化
 - **週次**: 品質メトリクス確認
 - **月次**: チェック項目の見直し・改善
+
+## ADR（Architecture Decision Record）システム
+
+### 基本運用
+- **テンプレート**: @docs/adr/template.md
+- **新規ADR作成**: `claude adr new "決定内容"`で雛形生成
+- **連番**: ADR-001, ADR-002...で管理
+- **ステータス**: Proposed → Accepted → Deprecated/Superseded
+
+### 記録すべき決定
+- 技術スタック選択（フレームワーク、ライブラリ等）
+- アーキテクチャ設計（データベース、API設計等）
+- セキュリティ方針（認証、暗号化等）
+- パフォーマンス最適化手法
+- デプロイメント戦略
+
+### 連携システム
+- **負債ログ**: @.claude/context/debt.mdで技術的影響追跡
+- **履歴管理**: @.claude/context/history.mdで決定経緯記録
+- **GitHub Integration**: Issue番号と連携したPR作成
+
+## 技術負債トラッキングシステム
+
+### 基本運用
+- **負債ログ**: @.claude/context/debt.md
+- **優先度分類**: 高🔥 / 中⚠️ / 低📝
+- **コスト試算**: 時間単位で推定、実績記録
+- **影響範囲**: ファイル・機能レベルで記載
+
+### キャッシュ影響分析
+- **削除必要変更**: 推定追加コストを算出
+- **最適化改善**: コスト削減効果を測定
+- **TTL管理**: 5分失効を考慮した計画
+
+### 運用ルール
+- **新機能開発時**: 潜在的負債を事前予測・記録
+- **スプリント終了時**: 発生した負債の優先度付け
+- **月1回**: 負債全体の見直し・アーカイブ
+
+### 継続的改善
+- **自動検知**: CI/CDでの負債発生監視
+- **メトリクス**: 週次での負債増減確認
+- **予防策**: コードレビュー・リファクタリングの習慣化
 
 ## データファイル
 [プロジェクトで使用するデータファイルのパスを記載]

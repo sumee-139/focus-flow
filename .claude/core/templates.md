@@ -1,3 +1,6 @@
+---
+cache_control: {"type": "ephemeral"}
+---
 # Quick Templates
 tags: #templates #quick
 

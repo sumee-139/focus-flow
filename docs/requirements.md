@@ -1,3 +1,6 @@
+---
+cache_control: {"type": "ephemeral"}
+---
 # [プロジェクト名] 要求仕様書
 
 ## 1. プロジェクト概要

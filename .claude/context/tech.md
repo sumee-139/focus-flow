@@ -1,3 +1,6 @@
+---
+cache_control: {"type": "ephemeral"}
+---
 # Technical Context
 
 ## アーキテクチャ概要

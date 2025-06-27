@@ -1,3 +1,6 @@
+---
+cache_control: {"type": "ephemeral"}
+---
 # Project Overview
 tags: #overview #project #summary
 
