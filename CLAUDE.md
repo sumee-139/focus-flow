@@ -4,31 +4,11 @@
 [プロジェクトの簡潔な説明をここに記載]
 
 ## プロンプトキャッシュ最適化設定
+- **CLAUDE_CACHE**: `./.ccache` - 90%コスト削減・85%レイテンシ短縮
+- **cache_control**: 長期安定情報に適用済み
+- **設定**: `.claude/settings.json`参照
 
-### 環境設定
-- **CLAUDE_CACHE**: `./.ccache` - プロジェクト固有キャッシュで90%コスト削減・85%レイテンシ短縮
-- **cache_control**: 長期安定情報（overview.md, templates.md, tech.md, debt.md, requirements.md）に適用済み
-- **キャッシュ効果**: 同一プロンプト再利用時のトークン課金大幅削減
-
-### 設定ファイル
-```json
-// .claude/settings.json
-{
-  "env": {
-    "CLAUDE_CACHE": "./.ccache"
-  }
-}
-```
-
-### .gitignore設定
-```gitignore
-.ccache/**
-*.cache
-```
-
-## Memory Bank構造（軽量化済み）
-このプロジェクトでは効率的な階層化Memory Bankシステムを使用しています：
-
+## Memory Bank構造
 ### コア（常時参照）
 - 現在の状況: @.claude/core/current.md
 - 次のアクション: @.claude/core/next.md
@@ -38,322 +18,49 @@
 ### コンテキスト（必要時参照）
 - 技術詳細: @.claude/context/tech.md
 - 履歴・決定事項: @.claude/context/history.md
-- 技術負債トラッキング: @.claude/context/debt.md
+- 技術負債: @.claude/context/debt.md
 
-### デバッグ情報（デバッグ時参照）
-- 最新デバッグセッション: @.claude/debug/latest.md
-
-### アーカイブ（定期整理）
+### デバッグ/その他
+- 最新デバッグ: @.claude/debug/latest.md
 - 完了済み情報: @.claude/archive/
-
-### カスタムコマンドファイル
-- 計画立案: @.claude/commands/plan.md
-- 実装実行: @.claude/commands/act.md
-- 日次更新: @.claude/commands/daily.md
-- フォーカスモード: @.claude/commands/focus.md
-- デバッグ特化: @.claude/commands/debug-start.md
-- 新機能設計: @.claude/commands/feature-plan.md
-- コードレビュー: @.claude/commands/review-check.md
+- Hooks設定: @.claude/hooks.yaml
 
 ## カスタムコマンド
+| コマンド | 用途 | 詳細 |
+|---------|------|------|
+| `/project:plan` | 作業計画立案 | @.claude/commands/plan.md |
+| `/project:act` | 計画実行 | @.claude/commands/act.md |
+| `/project:focus` | タスク集中 | @.claude/commands/focus.md |
+| `/project:daily` | 日次更新 | @.claude/commands/daily.md |
+| `/debug:start` | デバッグ特化 | @.claude/commands/debug-start.md |
+| `/feature:plan` | 新機能設計 | @.claude/commands/feature-plan.md |
+| `/review:check` | コードレビュー | @.claude/commands/review-check.md |
 
-### 基本コマンド
-| コマンド | 用途 | 所要時間 |
-|---------|----- |-----------|
-| `/project:plan` | 作業計画立案 | 5分 |
-| `/project:act` | 計画に基づく実装実行 | 実装時間 |
-| `/project:focus` | 現在タスクに集中 | 即座 |
-| `/project:daily` | 日次振り返り | 3分 |
-
-### 専門化モード
-| コマンド | 用途 | 参照ファイル |
-|---------|----- |-------------|
-| `/debug:start` | デバッグ特化モード | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | 新機能設計モード | overview.md + next.md + 要件定義 |
-| `/review:check` | コードレビューモード | history.md + チェックリスト |
-
-### タグ検索
-- タグ形式: `#tag_name` でMemory Bank内検索
-- 主要タグ: #urgent #bug #feature #completed
-
-## 開発規約（Core Development Rules）
-
-### 1. パッケージ管理
-- **推奨ツール**: プロジェクトに応じて統一（npm/yarn/pnpm, pip/poetry/uv等）
-- **インストール**: `[tool] add package` 形式を推奨
-- **実行**: `[tool] run command` 形式を推奨
-- **禁止事項**: 
-  - 混在使用（複数のパッケージマネージャーの併用）
-  - `@latest`構文の使用（バージョン固定推奨）
-  - グローバルインストール（プロジェクト内で完結）
-
-### 2. コード品質基準
-- **型注釈**: 全ての関数・変数に型情報を付与
-- **ドキュメント**: パブリックAPI・複雑な処理に必須
-- **関数設計**: 単一責任・小さな関数を心がける
-- **既存パターン**: 必ず既存コードのパターンに従う
-- **行長制限**: 80-120文字（言語・チームで統一）
-
-### 3. テスト要件（段階的TDD学習パス）
-
-#### TDD学習ステップ（未経験者向け）
-**Phase 1 (Week 1-2): TDD体験なし**
-- 既存コードの理解・修正に集中
-- 実装後のテスト追加でもOK
-- Claude Codeの基本操作習得
-
-**Phase 2 (Week 3-4): TDD体験開始**
-- 小さな機能でTDD体験（Claudeがテスト作成サポート）
-- 「まず失敗するテストを書いて」→実装→リファクタリング
-- Red-Green-Refactorサイクルを体験
-
-**Phase 3 (Month 2-3): TDD習得**
-- 新機能開発時にTDD適用
-- 自己デバッグループ（`claude test --fix`）活用
-- TDDパターンが自然に身につく
-
-#### テスト基準
-- **テストフレームワーク**: プロジェクトで統一されたものを使用
-- **カバレッジ目標**: 重要な機能は80%以上（段階的に向上）
-- **推奨テストケース**: 
-  - エッジケース（境界値・異常値）
-  - エラーハンドリング
-  - 新機能には対応するテスト（TDD習得後は先行作成）
-  - バグ修正には回帰テスト
-
-#### Claude Code TDD支援機能
-- **テスト生成**: Claudeが失敗テスト作成をガイド
-- **自己デバッグ**: `claude test --fix`で自動パッチ提案
-- **学習効果**: 実際のコードでTDDパターン習得
-
-### 4. Git/PR規約
-
-#### コミットメッセージ
-- **基本形式**: `[prefix]: [変更内容]`
-- **prefix一覧**:
-  - `feat`: 新機能追加
-  - `fix`: バグ修正
-  - `docs`: ドキュメント更新
-  - `style`: フォーマット・空白等（動作変更なし）
-  - `refactor`: リファクタリング（機能変更なし）
-  - `test`: テスト追加・修正
-  - `chore`: ビルド・依存関係・設定変更
-
-#### 必須トレーラー
-```bash
-# バグ報告ベースの修正
-git commit -m "fix: resolve memory leak in data processor" --trailer "Reported-by: Username"
-
-# GitHub Issue関連
-git commit -m "feat: add user authentication" --trailer "Github-Issue: #123"
-```
-
-#### Pull Request規約
-- **タイトル**: コミットメッセージと同様の形式
-- **説明要件**:
-  - **背景**: なぜこの変更が必要か
-  - **変更内容**: 何を変更したか（高レベル）
-  - **影響範囲**: どこに影響するか
-  - **テスト**: どのようにテストしたか
-- **レビュー**:
-  - 適切なレビュアーを指定
-  - セルフレビューを先に実施
-- **禁止事項**:
-  - `Co-authored-by` 等のツール言及禁止
-  - 単純な作業ログの羅列
+## 開発ガイドライン
+- **開発全般**: @.claude/guidelines/development.md
+- **Gitワークフロー**: @.claude/guidelines/git-workflow.md
+- **テスト・品質**: @.claude/guidelines/testing-quality.md
 
 ## 実行コマンド一覧
-
-### 基本開発フロー
 ```bash
-# プロジェクトセットアップ（初回のみ）
-[tool] install                   # 依存関係インストール
-[tool] run dev                   # 開発サーバー起動
+# 基本開発フロー
+[tool] install          # 依存関係インストール
+[tool] run dev         # 開発サーバー起動
+[tool] run test        # テスト実行
+[tool] run check       # 総合チェック
 
-# テスト実行
-[tool] run test                  # 全テスト実行
-[tool] run test:watch           # ウォッチモード
-
-# 品質チェック
-[tool] run format               # コードフォーマット適用
-[tool] run lint                 # リントチェック・自動修正
-[tool] run typecheck            # 型チェック実行（該当言語）
-
-# ビルド・リリース
-[tool] run build                # プロダクションビルド
-[tool] run check                # 総合チェック（CI前確認）
+# 詳細は @.claude/guidelines/development.md 参照
 ```
 
-### パッケージ管理
-```bash
-[tool] add [package-name]       # 依存関係追加
-[tool] remove [package-name]    # 依存関係削除
-[tool] update                   # 全依存関係更新
-```
-
-**注記**: `[tool]`はプロジェクトで使用するパッケージマネージャーに置き換え
-- Node.js: `npm`, `yarn`, `pnpm`
-- Python: `pip`, `poetry`, `uv`
-- Rust: `cargo`
-- Go: `go`
-- その他言語の標準ツール
-
-## エラー対応ガイド（Error Resolution）
-
-### 1. 問題解決の標準順序
-エラーが発生した際は、以下の順序で対処することで効率的に問題を解決できます：
-
-1. **フォーマットエラー** → `[tool] run format`
-2. **型エラー** → `[tool] run typecheck`
-3. **リントエラー** → `[tool] run lint:fix`
-4. **テストエラー** → `[tool] run test`
-
-### 2. よくある問題と解決策
-
-#### フォーマット・リント関連
-- **行長エラー**: 適切な箇所で改行、文字列は括弧で分割
-- **インポート順序**: 自動修正を使用 `[tool] run lint:fix`
-- **未使用インポート**: 不要な import を削除
-
-#### 型チェック関連
-- **Optional型エラー**: null/undefined チェックを追加
-- **型推論エラー**: 明示的な型注釈を追加
-- **関数シグネチャ**: 引数・戻り値の型を確認
-
-#### テスト関連
-- **テスト環境**: 必要な依存関係・設定を確認
-- **非同期テスト**: Promise の適切な処理を確認
-- **モック**: 外部依存関係の適切なモック化
-
-### 3. ベストプラクティス
-
-#### 開発時の心がけ
-- **コミット前**: `[tool] run check` で総合チェック
-- **最小変更**: 一度に多くの変更を避ける
-- **既存パターン**: 既存コードの書き方に合わせる
-- **段階的修正**: 大きな変更は小さく分割
-
-#### エラー対応時
-- **エラーメッセージを熟読**: 具体的な原因を特定
-- **コンテキスト確認**: エラー周辺のコードを理解
-- **ドキュメント参照**: 公式ドキュメント・チーム内資料を確認
-- **再現性確認**: 修正後に同じエラーが発生しないか確認
-
-#### 情報収集・質問時
-- **環境情報**: OS・言語・ツールバージョンを明記
-- **再現手順**: 具体的な操作手順を記録
-- **エラーログ**: 完全なエラーメッセージを保存
-- **試行錯誤**: 既に試した解決策を記録
-
-## 品質ゲート（Quality Gates）
-
-### 必須チェック項目
-開発・デプロイ前に以下の項目を必ず確認してください：
-
-#### コミット前チェック
-- [ ] `[tool] run format` - コードフォーマット適用済み
-- [ ] `[tool] run lint` - リント警告解消済み
-- [ ] `[tool] run typecheck` - 型チェック通過
-- [ ] `[tool] run test` - 全テスト通過
-- [ ] Git status確認 - 意図しないファイル変更なし
-
-#### PR作成前チェック
-- [ ] `[tool] run check` - 総合チェック通過
-- [ ] セルフレビュー実施済み
-- [ ] 関連ドキュメント更新済み
-- [ ] テストケース追加済み（新機能・バグ修正）
-- [ ] Breaking changesの文書化（該当時）
-
-#### デプロイ前チェック
-- [ ] `[tool] run build` - ビルド成功
-- [ ] 統合テスト通過
-- [ ] パフォーマンス確認
-- [ ] セキュリティチェック
-- [ ] ロールバック手順確認
-
-### 自動化レベル
-
-#### 完全自動化（CI/CD）
-- コードフォーマット
-- リントチェック
-- 型チェック
-- 単体テスト実行
-- ビルド検証
-
-#### 半自動化（人間が開始）
-- 統合テスト
-- E2Eテスト
-- セキュリティスキャン
-- パフォーマンステスト
-
-#### 手動確認必須
-- コードレビュー
-- アーキテクチャ設計確認
-- ユーザビリティ確認
-- ビジネスロジック妥当性
-- データ移行影響確認
-
-### チェックリスト運用
-- **日次**: コミット前チェックを習慣化
-- **週次**: 品質メトリクス確認
-- **月次**: チェック項目の見直し・改善
-
-## ADR（Architecture Decision Record）システム
-
-### 基本運用
-- **テンプレート**: @docs/adr/template.md
-- **新規ADR作成**: `claude adr new "決定内容"`で雛形生成
-- **連番**: ADR-001, ADR-002...で管理
-- **ステータス**: Proposed → Accepted → Deprecated/Superseded
-
-### 記録すべき決定
-- 技術スタック選択（フレームワーク、ライブラリ等）
-- アーキテクチャ設計（データベース、API設計等）
-- セキュリティ方針（認証、暗号化等）
-- パフォーマンス最適化手法
-- デプロイメント戦略
-
-### 連携システム
-- **負債ログ**: @.claude/context/debt.mdで技術的影響追跡
-- **履歴管理**: @.claude/context/history.mdで決定経緯記録
-- **GitHub Integration**: Issue番号と連携したPR作成
-
-## 技術負債トラッキングシステム
-
-### 基本運用
-- **負債ログ**: @.claude/context/debt.md
-- **優先度分類**: 高🔥 / 中⚠️ / 低📝
-- **コスト試算**: 時間単位で推定、実績記録
-- **影響範囲**: ファイル・機能レベルで記載
-
-### キャッシュ影響分析
-- **削除必要変更**: 推定追加コストを算出
-- **最適化改善**: コスト削減効果を測定
-- **TTL管理**: 5分失効を考慮した計画
-
-### 運用ルール
-- **新機能開発時**: 潜在的負債を事前予測・記録
-- **スプリント終了時**: 発生した負債の優先度付け
-- **月1回**: 負債全体の見直し・アーカイブ
-
-### 継続的改善
-- **自動検知**: CI/CDでの負債発生監視
-- **メトリクス**: 週次での負債増減確認
-- **予防策**: コードレビュー・リファクタリングの習慣化
-
-## データファイル
-[プロジェクトで使用するデータファイルのパスを記載]
-- 例: `data/input.csv` - 入力データ
-- 例: `config/settings.json` - 設定ファイル
-
-## 要求仕様書
-詳細な要求仕様は以下を参照：
-@docs/requirements.md
-
-## プロジェクト固有の学習
-プロジェクト固有の知見は`.clauderules`ファイルに記録されます。
+## プロジェクトデータ
+- 設定: `config/settings.json`
+- データ: `data/`
+- 要求仕様: @docs/requirements.md
 
 ## Memory Bank使用方針
-- **通常時**: coreファイルのみ参照でコンテキスト使用量を最小化
+- **通常時**: coreファイルのみ参照でコンテキスト最小化
 - **詳細必要時**: contextファイルを明示的に指定
-- **定期整理**: 古い情報をarchiveに移動してパフォーマンス維持
+- **定期整理**: 古い情報をarchiveに移動
+
+## プロジェクト固有の学習
+`.clauderules`ファイルに自動記録されます。
