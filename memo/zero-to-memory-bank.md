@@ -55,6 +55,7 @@ ls -la .claude/ 2>/dev/null || echo "Memory Bank未導入"
 # Memory Bank基本構造
 mkdir -p .claude/core
 mkdir -p .claude/context
+mkdir -p .claude/scripts
 mkdir -p docs
 
 # 段階的に追加（後日）
@@ -65,11 +66,24 @@ mkdir -p docs
 
 #### 1.2 最小限の設定ファイル導入
 ```bash
-# キャッシュ設定（即座効果）
+# キャッシュ設定 + セキュリティ設定（即座効果）
 cat > .claude/settings.json << 'EOF'
 {
   "env": {
     "CLAUDE_CACHE": "./.ccache"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/deny-check.sh"
+          }
+        ]
+      }
+    ]
   }
 }
 EOF
@@ -77,6 +91,16 @@ EOF
 # .gitignore更新
 echo ".ccache/" >> .gitignore
 echo "*.cache" >> .gitignore
+```
+
+#### 1.2.1 セキュリティ機能導入
+```bash
+# セキュリティスクリプト設置（テンプレートからコピー）
+# deny-check.sh, allow-check.sh, test-security.shを配置
+chmod +x .claude/scripts/*.sh
+
+# セキュリティテスト実行
+.claude/scripts/test-security.sh
 ```
 
 #### 1.3 現状のスナップショット作成

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-07-09
+
+### Added
+- **セキュリティ機能**: Claude Code hooks による危険なコマンドブロック機能
+- **Deny List**: システム破壊的コマンド・外部コード実行・権限昇格の自動ブロック
+- **Allow List**: 開発に必要な安全なコマンドの事前許可システム
+- **セキュリティスクリプト**: `.claude/scripts/deny-check.sh` と `.claude/scripts/allow-check.sh`
+- **セキュリティテスト**: 自動テストスクリプト `.claude/scripts/test-security.sh`
+- **セキュリティログ**: 実行コマンドの監査ログ機能
+- **ドキュメント**: セキュリティ設定の詳細説明 `.claude/security-README.md`
+
+### Security
+- 危険なコマンドパターン（`rm -rf /`, `chmod 777`, `curl | sh`等）の自動検知・ブロック
+- 開発用コマンド（`git`, `npm`, `python`, `eza`等）の安全な許可設定
+- hooks設定による PreToolUse イベントでのリアルタイム監視
+- セキュリティログによる実行履歴追跡
+
+### Enhanced
+- `.claude/settings.json` にセキュリティ設定を統合
+- プロジェクトテンプレートのセキュリティ強化
+- 開発効率を保ちながらセキュリティを向上
+
 ## [1.0.0] - 2025-06-22
 
 ### Added

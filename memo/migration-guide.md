@@ -8,6 +8,7 @@
 1. **プロンプトキャッシュ最適化**
 2. **.gitignore強化**
 3. **誤字・一貫性修正**
+4. **セキュリティ機能導入**
 
 ### 🟡 段階導入推奨（リスク：低）
 4. **ADRシステム**
@@ -103,6 +104,60 @@ cache_control: {"type": "ephemeral"}
 - 「連用」→「運用」
 - 「遵用」→「運用」
 - カスタムコマンド説明の詳細度統一
+
+### 1.4 セキュリティ機能導入
+
+#### 思想
+- **危険コマンドの自動ブロック**でセキュリティリスクを減少
+- 開発効率を保ちながら安全性を向上
+- 既存ワークフローへの影響最小限
+
+#### 導入手順
+
+**Step 1: セキュリティスクリプトディレクトリ作成**
+```bash
+mkdir -p .claude/scripts
+```
+
+**Step 2: セキュリティスクリプト設置**
+[セキュリティスクリプトをコピー - .claude/scripts/deny-check.sh, allow-check.sh]
+
+**Step 3: 実行権付与**
+```bash
+chmod +x .claude/scripts/*.sh
+```
+
+**Step 4: settings.jsonにセキュリティ設定追加**
+```json
+{
+  "env": {
+    "CLAUDE_CACHE": "./.ccache"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/deny-check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Step 5: セキュリティテスト実行**
+```bash
+.claude/scripts/test-security.sh
+```
+
+#### 期待効果
+- **即座**: 危険コマンドの自動ブロック
+- **継続**: 安全な開発環境の維持
+- **ログ**: コマンド実行履歴の追跡可能
 
 ---
 
@@ -219,6 +274,7 @@ mkdir -p .claude/commands
 - [ ] cache_control適用（対象ファイル特定・追加）
 - [ ] .gitignore更新
 - [ ] 用語統一（誤字修正）
+- [ ] セキュリティ機能導入（スクリプト設置・テスト実行）
 - [ ] キャッシュ効果確認（コスト削減実感）
 
 ### Phase 2（段階導入）
