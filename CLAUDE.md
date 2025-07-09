@@ -4,31 +4,11 @@
 [プロジェクトの簡潔な説明をここに記載]
 
 ## プロンプトキャッシュ最適化設定
+- **CLAUDE_CACHE**: `./.ccache` - 90%コスト削減・85%レイテンシ短縮
+- **cache_control**: 長期安定情報に適用済み
+- **設定**: `.claude/settings.json`参照
 
-### 環境設定
-- **CLAUDE_CACHE**: `./.ccache` - プロジェクト固有キャッシュで90%コスト削減・85%レイテンシ短縮
-- **cache_control**: 長期安定情報（overview.md, templates.md, tech.md, debt.md, requirements.md）に適用済み
-- **キャッシュ効果**: 同一プロンプト再利用時のトークン課金大幅削減
-
-### 設定ファイル
-```json
-// .claude/settings.json
-{
-  "env": {
-    "CLAUDE_CACHE": "./.ccache"
-  }
-}
-```
-
-### .gitignore設定
-```gitignore
-.ccache/**
-*.cache
-```
-
-## Memory Bank構造（軽量化済み）
-このプロジェクトでは効率的な階層化Memory Bankシステムを使用しています：
-
+## Memory Bank構造
 ### コア（常時参照）
 - 現在の状況: @.claude/core/current.md
 - 次のアクション: @.claude/core/next.md
@@ -38,23 +18,24 @@
 ### コンテキスト（必要時参照）
 - 技術詳細: @.claude/context/tech.md
 - 履歴・決定事項: @.claude/context/history.md
-- 技術負債トラッキング: @.claude/context/debt.md
+- 技術負債: @.claude/context/debt.md
 
 ### その他
 - デバッグ情報: @.claude/debug/latest.md
 - カスタムコマンド: @.claude/commands/
 - セキュリティスクリプト: @.claude/scripts/
+- Hooks設定: @.claude/hooks.yaml
 - アーカイブ: @.claude/archive/
 
 ## カスタムコマンド
 
 ### 基本コマンド
-| コマンド | 用途 | 所要時間 |
-|---------|----- |-----------|
-| `/project:plan` | 作業計画立案 | 5分 |
-| `/project:act` | 計画に基づく実装実行 | 実装時間 |
-| `/project:focus` | 現在タスクに集中 | 即座 |
-| `/project:daily` | 日次振り返り | 3分 |
+| コマンド | 用途 | 所要時間 | 詳細 |
+|---------|----- |-----------|------|
+| `/project:plan` | 作業計画立案 | 5分 | @.claude/commands/plan.md |
+| `/project:act` | 計画に基づく実装実行 | 実装時間 | @.claude/commands/act.md |
+| `/project:focus` | 現在タスクに集中 | 即座 | @.claude/commands/focus.md |
+| `/project:daily` | 日次振り返り | 3分 | @.claude/commands/daily.md |
 
 ### 専門化モード
 | コマンド | 用途 | 参照ファイル |
@@ -108,6 +89,22 @@ tail -f ~/.claude/activity.log
 
 詳細規約: @docs/development-rules.md
 
+## 開発ガイドライン
+- **開発全般**: @.claude/guidelines/development.md
+- **Gitワークフロー**: @.claude/guidelines/git-workflow.md
+- **テスト・品質**: @.claude/guidelines/testing-quality.md
+
+## 実行コマンド一覧
+```bash
+# 基本開発フロー
+[tool] install          # 依存関係インストール
+[tool] run dev         # 開発サーバー起動
+[tool] run test        # テスト実行
+[tool] run check       # 総合チェック
+
+# 詳細は @.claude/guidelines/development.md 参照
+```
+
 ## ADR・技術負債システム
 
 ### ADR（Architecture Decision Record）
@@ -120,25 +117,22 @@ tail -f ~/.claude/activity.log
 - **優先度管理**: 高🔥 / 中⚠️ / 低📝
 - **運用**: 新機能開発時の事前予測、スプリント終了時の整理
 
-## データファイル
-[プロジェクトで使用するデータファイルのパスを記載]
-- 例: `data/input.csv` - 入力データ
-- 例: `config/settings.json` - 設定ファイル
-
-## 要求仕様書
-詳細な要求仕様は以下を参照：
-@docs/requirements.md
-
-## プロジェクト固有の学習
-プロジェクト固有の知見は`.clauderules`ファイルに記録されます。
+## プロジェクトデータ
+- 設定: `config/settings.json`
+- データ: `data/`
+- 要求仕様: @docs/requirements.md
 
 ## Memory Bank使用方針
-- **通常時**: coreファイルのみ参照でコンテキスト使用量を最小化
+- **通常時**: coreファイルのみ参照でコンテキスト最小化
 - **詳細必要時**: contextファイルを明示的に指定
-- **定期整理**: 古い情報をarchiveに移動してパフォーマンス維持
+- **定期整理**: 古い情報をarchiveに移動
+
+## プロジェクト固有の学習
+`.clauderules`ファイルに自動記録されます。
 
 ## 関連ドキュメント
 - 開発規約詳細: @docs/development-rules.md
+- 開発ガイドライン: @.claude/guidelines/development.md
 - Hooksシステム: @.claude/hooks-README.md
 - セキュリティ設定: @.claude/security-README.md
 - 要求仕様書: @docs/requirements.md

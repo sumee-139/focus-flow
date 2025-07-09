@@ -1,0 +1,61 @@
+# Claude Code Hooks Configuration
+# このファイルはプロジェクト固有の自動化を定義します
+
+hooks:
+  # コード品質の自動チェック
+  - event: PostToolUse
+    matcher:
+      tool: [Edit, Write, MultiEdit]
+      glob: "*.{js,ts,jsx,tsx,py}"
+    command: |
+      # コード変更をログに記録（必要に応じて有効化）
+      # echo "[$(date '+%Y-%m-%d %H:%M')] コード変更: $CLAUDE_FILE_PATHS" >> .claude/logs/changes.log
+      # 言語別の品質チェック（存在するコマンドのみ実行）
+      if command -v npm >/dev/null 2>&1 && [ -f package.json ]; then
+        npm run lint --if-present
+        npm run typecheck --if-present
+      elif command -v python >/dev/null 2>&1 && [ -f requirements.txt ]; then
+        python -m flake8 $CLAUDE_FILE_PATHS 2>/dev/null || true
+        python -m mypy $CLAUDE_FILE_PATHS 2>/dev/null || true
+      fi
+
+  # テスト成功時の自動記録
+  - event: PostToolUse
+    matcher:
+      tool: Bash
+      command_contains: "test"
+    command: |14
+      if [ $CLAUDE_EXIT_CODE -eq 0 ]; then
+        echo "### $(date '+%Y-%m-%d %H:%M') - テスト成功" >> .claude/context/history.md
+        echo "- コマンド: $CLAUDE_COMMAND" >> .claude/context/history.md
+        echo "" >> .claude/context/history.md
+      fi
+
+  # 新機能追加時の記録
+  - event: PostToolUse
+    matcher:
+      tool: [Write, MultiEdit]
+      glob: "*.{js,ts,jsx,tsx,py}"
+    command: |
+      # 新しいファイルが作成された場合
+      if [ "$CLAUDE_TOOL" = "Write" ]; then
+        # 新機能追加をログに記録（必要に応じて有効化）
+        # echo "### $(date '+%Y-%m-%d') - 新機能追加: $CLAUDE_FILE_PATHS" >> .claude/logs/features.log
+      fi
+
+  # git操作の自動記録
+  - event: PostToolUse
+    matcher:
+      tool: Bash
+      command_contains: "git commit"
+    command: |
+      if [ $CLAUDE_EXIT_CODE -eq 0 ]; then
+        # コミットをログに記録（必要に応じて有効化）
+        # echo "### $(date '+%Y-%m-%d %H:%M') - コミット" >> .claude/logs/commits.log
+        # echo "$CLAUDE_OUTPUT" >> .claude/logs/commits.log
+      fi
+
+# 環境変数設定
+env:
+  CLAUDE_HOOKS_ENABLED: true
+  CLAUDE_PROJECT_ROOT: $PWD
