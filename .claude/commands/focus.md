@@ -1,39 +1,43 @@
-# フォーカスモード
+---
+description: "Focus on current task - 現在のタスクに集中"
+---
 
-現在のタスクに集中するため、必要最小限の情報のみ表示します。
+# Focus Mode
 
-## 実行手順
+To concentrate on the current task, display only the minimum necessary information.
 
-1. **コア情報の読み込み**
-   - `@.claude/core/current.md`の「3行サマリー」セクションのみ読み込み
-   - `@.claude/core/next.md`の「今日の3つのゴール」セクションのみ読み込み
+## Execution Steps
 
-2. **現在のタスク分析**
-   - 進行中のタスクを1つに絞り込み
-   - そのタスクに必要な技術情報のみ特定
-   - 不要な背景情報は読み込まない
+1. **Load Core Information**
+   - Load only the "3-line summary" section from `@.claude/core/current.md`
+   - Load only the "Today's 3 goals" section from `@.claude/core/next.md`
 
-3. **集中的な作業提案**
-   - 特定されたタスクの具体的な次のステップを提案
-   - 25分間のポモドーロタイマー推奨
-   - 他のタスクへの言及は避ける
+2. **Current Task Analysis**
+   - Narrow down to one ongoing task
+   - Identify only technical information needed for that task
+   - Do not load unnecessary background information
 
-4. **簡潔なレスポンス**
-   - 回答は3-5文以内
-   - 具体的なアクションのみ提示
-   - 長い説明や背景情報は省略
+3. **Focused Work Suggestions**
+   - Propose specific next steps for the identified task
+   - Recommend 25-minute Pomodoro timer
+   - Avoid mentioning other tasks
 
-## フォーカス対象の優先順位
-1. 🔥 緊急 & 重要（即座に対応）
-2. ⭐ 重要 & 非緊急（計画的に対応）
-3. その他は一旦保留
+4. **Concise Response**
+   - Keep responses within 3-5 sentences
+   - Present only specific actions
+   - Omit lengthy explanations or background information
 
-## レスポンス例
+## Focus Priority Order
+1. 🔥 Urgent & Important (Respond immediately)
+2. ⭐ Important & Not Urgent (Respond systematically)
+3. Others are temporarily on hold
+
+## Response Example
 ```
-現在のフォーカス: [タスク名]
-次のアクション: [具体的な作業]
-時間見積もり: [分]
-完了条件: [明確な基準]
+Current Focus: [Task name]
+Next Action: [Specific work]
+Time Estimate: [minutes]
+Completion Criteria: [Clear criteria]
 ```
 
-詳細な情報が必要な場合は、明示的に「詳細情報が必要」と依頼してください。
+If detailed information is needed, explicitly request "detailed information needed".

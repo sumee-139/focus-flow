@@ -1,55 +1,59 @@
-# 日次更新
+---
+description: "Daily retrospective - 日次振り返り"
+---
 
-毎日の軽量な状況更新を3分以内で完了します。
+# Daily Update
 
-## 健康診断機能（オプション）
+Complete daily lightweight status updates within 3 minutes.
 
-週次で以下のメトリクスを確認：
-- **コードサイズ**: `du -sh . | grep -v .git`
+## Health Check Feature (Optional)
+
+Check the following metrics weekly:
+- **Code size**: `du -sh . | grep -v .git`
 - **TODO/FIXME**: `grep -r "TODO\|FIXME" --include="*.{js,ts,py}" . | wc -l`
-- **技術負債**: `@.claude/context/debt.md`の高優先度項目数
-- **Memory Bank状態**: 100行超のファイルをチェック
+- **Technical debt**: Number of high priority items in `@.claude/context/debt.md`
+- **Memory Bank status**: Check files exceeding 100 lines
 
-## 実行手順
+## Execution Steps
 
-1. **現在の状況更新**
-   - `@.claude/core/current.md`の以下セクションのみ更新：
-     - 「今日/今週の作業」の進捗状況
-     - 「時間追跡」の実績
-     - 「今週学んだこと」に新しい学び（あれば）
+1. **Update Current Status**
+   - Update only the following sections in `@.claude/core/current.md`:
+     - Progress on "Today/This week's work"
+     - Results in "Time tracking"
+     - New learnings in "This week's learnings" (if any)
 
-2. **明日の準備**
-   - `@.claude/core/next.md`の「今日の3つのゴール」を明日用に更新
-   - ブロッカーがあれば「ブロッカー」セクションに記載
+2. **Prepare for Tomorrow**
+   - Update "Today's 3 goals" in `@.claude/core/next.md` for tomorrow
+   - If there are blockers, record them in the "Blockers" section
 
-3. **簡潔な振り返り**
-   - 今日完了したタスク（1-2個）
-   - 明日の最優先タスク（1個）
-   - 課題があれば（1個まで）
+3. **Brief Reflection**
+   - Tasks completed today (1-2 items)
+   - Tomorrow's highest priority task (1 item)
+   - Issues if any (up to 1)
 
-## テンプレート
+## Template
 ```
-## [日付] 日次更新
-### 今日完了
-- [タスク1]
-- [タスク2]
+## [Date] Daily Update
+### Completed Today
+- [Task 1]
+- [Task 2]
 
-### 明日の最優先
-- [タスク名] - [理由]
+### Tomorrow's Top Priority
+- [Task name] - [Reason]
 
-### 課題・気づき
-- [あれば1つまで]
+### Issues/Insights
+- [Up to 1 if any]
 
-### 時間実績
-- 実働時間: [時間]
-- 効率: 高/中/低
+### Time Results
+- Actual work time: [hours]
+- Efficiency: High/Medium/Low
 ```
 
-## 更新不要な情報
-- プロジェクト概要
-- 技術スタック
-- 長期的な計画
-- 詳細な技術情報
+## Information Not Requiring Updates
+- Project overview
+- Technology stack
+- Long-term plans
+- Detailed technical information
 
-3分で完了しない場合は、情報を絞り込んでください。
-重要でない情報の更新は週次にまとめて実施。
+If you cannot complete within 3 minutes, narrow down the information.
+Updates to non-critical information should be done weekly in batch.

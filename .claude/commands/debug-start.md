@@ -1,39 +1,43 @@
-# デバッグ特化モード
+---
+description: "Debug-focused mode - デバッグ特化モード"
+---
 
-バグ調査・エラー解析・問題解決に特化したコンテキストで作業を開始します。
+# Debug-Focused Mode
 
-## 実行手順
+Start working in a context specialized for bug investigation, error analysis, and problem solving.
 
-1. **現在の状況把握**
-   - `@.claude/core/current.md`から進行中の課題とGit状態を確認
-   - ブロッカー・エラー・問題の状況を把握
+## Execution Steps
 
-2. **技術詳細の確認**
-   - `@.claude/context/tech.md`から関連する技術スタック・設定・既知問題を確認
-   - エラーハンドリング・ログ・デバッグ設定を確認
+1. **Understand Current Situation**
+   - Check ongoing issues and Git status from `@.claude/core/current.md`
+   - Grasp the status of blockers, errors, and problems
 
-3. **問題分析テンプレート使用**
-   - `@.claude/core/templates.md`の問題解決テンプレートを適用
-   - 以下の形式で問題を整理：
+2. **Check Technical Details**
+   - Confirm relevant tech stack, settings, and known issues from `@.claude/context/tech.md`
+   - Check error handling, logs, and debug settings
+
+3. **Use Problem Analysis Template**
+   - Apply problem-solving template from `@.claude/core/templates.md`
+   - Organize problems in the following format:
      ```
-     問題: [何が起きているか] #bug #error
-     再現手順: [手順] #reproduce
-     期待値: [期待される動作] #expected
-     実際: [実際の動作] #actual
-     環境: [OS/バージョン] #environment
+     Problem: [What is happening] #bug #error
+     Reproduction steps: [Steps] #reproduce
+     Expected: [Expected behavior] #expected
+     Actual: [Actual behavior] #actual
+     Environment: [OS/Version] #environment
      ```
 
-4. **デバッグアクション**
-   - ログ確認・エラーメッセージ分析
-   - 関連コードの確認・修正
-   - テストケース作成・実行
+4. **Debug Actions**
+   - Check logs and analyze error messages
+   - Review and fix related code
+   - Create and execute test cases
 
-5. **解決記録**
-   - 問題と解決策を`current.md`に記録
-   - 再発防止策を`history.md`に記録
-   - 学んだことを`templates.md`の学習ログに追加
+5. **Record Resolution**
+   - Record problems and solutions in `current.md`
+   - Record prevention measures in `history.md`
+   - Add learnings to learning log in `templates.md`
 
-## 使用タグ
+## Tags to Use
 `#bug #error #debug #issue #reproduce #fix #testing`
 
-読み込むファイルはcurrent.md + tech.md + templatesの問題解決部分のみに限定し、効率的なデバッグを実行してください。
+Limit loaded files to current.md + tech.md + problem-solving sections of templates for efficient debugging.

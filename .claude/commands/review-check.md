@@ -1,44 +1,48 @@
-# コードレビューモード
+---
+description: "Code review mode - コードレビューモード"
+---
 
-コードレビュー・品質チェック・リファクタリングに特化したコンテキストで作業を開始します。
+# Code Review Mode
 
-## 実行手順
+Start working in a context specialized for code review, quality checking, and refactoring.
 
-1. **過去の知見確認**
-   - `@.claude/context/history.md`から過去の決定事項・解決した問題・学びを確認
-   - 似たような問題や改善点の履歴を把握
+## Execution Steps
 
-2. **レビューテンプレート使用**
-   - `@.claude/core/templates.md`のコードレビューチェックリストを適用：
+1. **Review Past Insights**
+   - Check past decisions, resolved problems, and learnings from `@.claude/context/history.md`
+   - Understand history of similar problems and improvements
+
+2. **Use Review Template**
+   - Apply code review checklist from `@.claude/core/templates.md`:
      ```
-     レビュー対象: [ファイル/機能] #review #code
-     チェック項目: [確認すべき点] #checklist
-     改善提案: [提案内容] #improvement
+     Review Target: [File/Function] #review #code
+     Check Items: [Points to verify] #checklist
+     Improvement Suggestions: [Suggestions] #improvement
      ```
 
-3. **品質チェック項目**
-   - **動作確認**: 機能が正しく動作するか #functionality #testing
-   - **エラーハンドリング**: 例外処理が適切か #error #exception
-   - **パフォーマンス**: 性能面で問題ないか #performance #optimization
-   - **セキュリティ**: 脆弱性がないか #security #vulnerability
-   - **テスト**: テストカバレッジは十分か #testing #coverage
+3. **Quality Check Items**
+   - **Functionality**: Does the feature work correctly? #functionality #testing
+   - **Error Handling**: Is exception handling appropriate? #error #exception
+   - **Performance**: Are there performance issues? #performance #optimization
+   - **Security**: Are there vulnerabilities? #security #vulnerability
+   - **Testing**: Is test coverage sufficient? #testing #coverage
 
-4. **コードスタイル確認**
-   - 既存のコーディング規約との整合性
-   - 可読性・保守性の観点
-   - ドキュメント・コメントの適切性
+4. **Code Style Check**
+   - Consistency with existing coding conventions
+   - Readability and maintainability perspective
+   - Appropriateness of documentation and comments
 
-5. **改善提案**
-   - 具体的で実行可能な改善案を提示
-   - 優先度（Critical/High/Medium/Low）を付与
-   - リファクタリングの影響範囲を評価
+5. **Improvement Suggestions**
+   - Present specific and actionable improvement suggestions
+   - Assign priority (Critical/High/Medium/Low)
+   - Evaluate impact scope of refactoring
 
-6. **レビュー記録**
-   - レビュー結果を`current.md`に記録
-   - 重要な改善点は`history.md`に記録
-   - 学んだパターンは`templates.md`に追加
+6. **Record Review**
+   - Record review results in `current.md`
+   - Record important improvements in `history.md`
+   - Add learned patterns to `templates.md`
 
-## 使用タグ
+## Tags to Use
 `#review #code #quality #refactor #improvement #checklist #standards`
 
-読み込むファイルはhistory.md + templatesのレビュー部分に限定し、効率的なコードレビューを実行してください。
+Limit loaded files to history.md + review sections of templates for efficient code review.

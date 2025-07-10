@@ -1,38 +1,42 @@
-# 実装作業の実行
+---
+description: "Execute based on plan - 計画に基づく実行"
+---
 
-立案された計画に基づいて実装作業を実行してください。
+# Execute Implementation
 
-## 実行手順
+Execute implementation work based on the developed plan.
 
-1. **事前確認**
-   - `activeContext.md`から現在のタスクを確認
-   - 必要なファイルとディレクトリを確認
-   - 依存関係が満たされているか確認
-   - カレントディレクトリがプロジェクトのルートにあるか確認
+## Execution Steps
 
-2. **実装作業**
-   - コードを書く前に設計を説明
-   - 小さな単位で実装とテストを繰り返す
-   - エラーハンドリングを適切に実装
+1. **Pre-check**
+   - Confirm current task from `activeContext.md`
+   - Verify necessary files and directories
+   - Confirm dependencies are satisfied
+   - Verify current directory is at project root
 
-3. **品質チェック**
-   - コードのリントを実行
-   - 基本的な動作確認を実施
-   - エラーケースをテスト
+2. **Implementation Work**
+   - Explain design before writing code
+   - Iterate implementation and testing in small units
+   - Implement proper error handling
 
-4. **ドキュメント更新**
-   - 実装した機能の説明を記載
-   - 使用方法を明記
-   - 制限事項があれば記録
+3. **Quality Check**
+   - Run code linting
+   - Perform basic functionality verification
+   - Test error cases
 
-5. **進捗更新**
-   - `progress.md`の該当項目を更新
-   - 完了したタスクに✓マークを付ける
-   - 新たに発見した課題を記録
+4. **Documentation Update**
+   - Document implemented features
+   - Clearly describe usage instructions
+   - Record any limitations
 
-6. **コミット準備**
-   - 変更内容を整理
-   - わかりやすいコミットメッセージを作成
-   - 関連ファイルをグループ化
+5. **Progress Update**
+   - Update relevant items in `progress.md`
+   - Mark completed tasks with ✓
+   - Record newly discovered issues
 
-実装完了後、必ず`activeContext.md`と`progress.md`を更新してください。
+6. **Commit Preparation**
+   - Organize changes
+   - Create clear commit messages
+   - Group related files
+
+After implementation is complete, always update `activeContext.md` and `progress.md`.

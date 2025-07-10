@@ -1,40 +1,44 @@
-# 新機能設計モード
+---
+description: "New feature design mode - 新機能設計モード"
+---
 
-新機能企画・要件定義・設計フェーズに特化したコンテキストで作業を開始します。
+# New Feature Design Mode
 
-## 実行手順
+Start working in a context specialized for new feature planning, requirements definition, and design phase.
 
-1. **プロジェクト全体の把握**
-   - `@.claude/core/overview.md`でプロジェクト目的・ターゲット・成功基準を確認
-   - 既存のコア機能・技術スタック・制約を把握
+## Execution Steps
 
-2. **計画立案**
-   - `@.claude/core/next.md`で優先度マトリックスと今後のゴールを確認
-   - 新機能の位置づけと優先度を評価
+1. **Understand Overall Project**
+   - Check project purpose, target, and success criteria in `@.claude/core/overview.md`
+   - Grasp existing core features, tech stack, and constraints
 
-3. **機能設計テンプレート使用**
-   - `@.claude/core/templates.md`から以下の形式で機能を整理：
+2. **Planning**
+   - Check priority matrix and future goals in `@.claude/core/next.md`
+   - Evaluate positioning and priority of new feature
+
+3. **Use Feature Design Template**
+   - Organize feature using the following format from `@.claude/core/templates.md`:
      ```
-     機能名: [機能名] #feature #new
-     目的: [解決したい課題] #purpose
-     ユーザーストーリー: [As a... I want... So that...] #story
-     受け入れ条件: [完了の定義] #acceptance
+     Feature Name: [Feature name] #feature #new
+     Purpose: [Problem to solve] #purpose
+     User Story: [As a... I want... So that...] #story
+     Acceptance Criteria: [Definition of done] #acceptance
      ```
 
-4. **技術検討（必要時のみ）**
-   - 技術的制約が重要な場合のみ`@.claude/context/tech.md`を確認
-   - 既存アーキテクチャとの整合性を確認
+4. **Technical Review (Only When Needed)**
+   - Check `@.claude/context/tech.md` only when technical constraints are important
+   - Verify consistency with existing architecture
 
-5. **実装計画**
-   - 機能を小さなタスクに分解
-   - 依存関係・順序・見積もりを整理
-   - MVP（最小実用プロダクト）と追加機能を分離
+5. **Implementation Plan**
+   - Break down feature into small tasks
+   - Organize dependencies, order, and estimates
+   - Separate MVP (Minimum Viable Product) from additional features
 
-6. **計画記録**
-   - 新機能タスクを`next.md`の適切な優先度に追加
-   - 設計決定を`history.md`に記録
+6. **Record Plan**
+   - Add new feature tasks to appropriate priority in `next.md`
+   - Record design decisions in `history.md`
 
-## 使用タグ
+## Tags to Use
 `#feature #new #planning #design #requirements #story #acceptance`
 
-読み込むファイルはoverview.md + next.md + templatesの設計部分に限定し、効率的な機能設計を実行してください。
+Limit loaded files to overview.md + next.md + design sections of templates for efficient feature design.

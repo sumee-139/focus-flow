@@ -1,35 +1,39 @@
-# 作業計画の立案
+---
+description: "Work planning - 作業計画の立案"
+---
 
-効率的な計画立案のため、段階的にMemory Bankを読み込んで作業計画を立案してください。
+# Work Planning
 
-## 実行手順
+To create an efficient plan, load the Memory Bank progressively and develop a work plan.
 
-1. **コア情報の分析**
-   - `@.claude/core/current.md`と`@.claude/core/next.md`を読み込み
-   - 現在の状況と直近のタスクを把握
-   - 緊急度・重要度を評価
+## Execution Steps
 
-2. **詳細分析（必要に応じて）**
-   - `@.claude/core/overview.md`でプロジェクト全体を確認
-   - 技術的な詳細が必要な場合のみ`@.claude/context/tech.md`を参照
-   - 過去の経緯が重要な場合のみ`@.claude/context/history.md`を参照
+1. **Core Information Analysis**
+   - Load `@.claude/core/current.md` and `@.claude/core/next.md`
+   - Understand current situation and immediate tasks
+   - Evaluate urgency and importance
 
-3. **優先度マトリックス作成**
-   - 緊急×重要の4象限でタスクを分類
-   - 依存関係を考慮した実装順序を決定
-   - リソース（時間・集中力）を考慮
+2. **Detailed Analysis (As Needed)**
+   - Check overall project with `@.claude/core/overview.md`
+   - Reference `@.claude/context/tech.md` only when technical details are needed
+   - Reference `@.claude/context/history.md` only when past context is important
 
-4. **実用的な計画作成**
-   - 今日・今週・来週のタスクに分類
-   - 各タスクの推定時間（15分単位）
-   - 明確な完了条件（Definition of Done）
+3. **Create Priority Matrix**
+   - Classify tasks using Urgent × Important quadrants
+   - Determine implementation order considering dependencies
+   - Consider resources (time and focus)
 
-5. **リスク評価**
-   - ブロッカーになりそうな要素を特定
-   - コンティンジェンシープラン（Plan B）を準備
+4. **Create Practical Plan**
+   - Classify tasks into Today/This Week/Next Week
+   - Estimate time for each task (15-minute increments)
+   - Clear completion criteria (Definition of Done)
 
-6. **計画の記録**
-   - `core/next.md`に今日の計画を記録
-   - `core/current.md`に週次計画を記録
+5. **Risk Assessment**
+   - Identify potential blockers
+   - Prepare contingency plans (Plan B)
 
-読み込むファイルは必要最小限に留め、詳細情報は明示的に要求された場合のみ参照してください。
+6. **Record the Plan**
+   - Record today's plan in `core/next.md`
+   - Record weekly plan in `core/current.md`
+
+Keep loaded files to the minimum necessary, and reference detailed information only when explicitly requested.
