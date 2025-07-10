@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-07-10
+
+### Added
+- **AI-Friendly Logger**: Vibe Logger概念を採用した構造化JSONログシステム
+- **AIログ解析ツール**: `analyze-ai-logs.py`によるパターン分析・洞察生成機能
+- **豊富なコンテキスト**: プロジェクト・環境・Git情報を自動収集
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクションの自動付与
+- **エラー分析機能**: エラーパターンの検出と改善提案
+
+### Enhanced
+- 既存の活動ログシステムと並行動作による段階的移行サポート
+- AI駆動開発（VibeCoding）の効率を大幅に向上
+- デバッグプロセスの「推測と確認」から「分析と解決」への転換
+
+### Documentation
+- `.claude/ai-logger-README.md`: AI Logger システムの詳細説明
+- `CLAUDE.md`: AI-Friendly Logger機能の統合
+
 ## [1.1.0] - 2025-07-09
 
 ### Added

@@ -71,7 +71,23 @@ echo "..." >> .claude/evolution/changes.log
 echo "..." >> .claude/logs/changes.log  # logsディレクトリを作成
 ```
 
-### ステップ 4: 検証
+### ステップ 4: AI Logger の有効化（オプション）
+```bash
+# 設定ファイルの確認
+cat .claude/settings.json
+
+# AI Logger が hooks に含まれていることを確認
+# "command": ".claude/scripts/ai-logger.sh" が存在するか確認
+
+# テスト実行
+echo "Test file" > test.txt
+rm test.txt
+
+# AI ログの確認
+ls -la ~/.claude/ai-activity.jsonl
+```
+
+### ステップ 5: 検証
 ```bash
 # ファイル構造の確認
 find .claude -type f -name "*.md" | sort
@@ -85,11 +101,26 @@ cat CLAUDE.md
 移行完了の確認：
 - [ ] CLAUDE.md が新しい簡素化版になっている
 - [ ] `.claude/guidelines/` に3つのファイルがある
-- [ ] `.claude/commands/` に8つのファイルがある
+- [ ] `.claude/commands/` に7つのファイルがある
 - [ ] カスタムコマンドが正常に動作する
 - [ ] hooks.yaml のパスが更新されている
 
 ## 🆕 新機能
+
+### AI-Friendly Logger（v1.2.0 - Vibe Logger概念採用）
+**新規追加ファイル**:
+- `.claude/scripts/ai-logger.sh` - 構造化ログ生成スクリプト
+- `.claude/scripts/analyze-ai-logs.py` - AIログ解析ツール
+- `.claude/ai-logger-README.md` - 詳細ドキュメント
+
+**主な機能**:
+- 構造化JSON形式でAI分析に最適化されたログ
+- プロジェクト・環境・Git情報の自動収集
+- AIメタデータ（デバッグヒント・優先度・推奨アクション）
+- エラーパターン分析とAI向け洞察生成
+- 既存の活動ログシステムと並行動作
+
+**インスピレーション**: [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
 
 ### セキュアな Bash 設定
 `.claude/settings.local.json` に安全な実行権限が追加されました：

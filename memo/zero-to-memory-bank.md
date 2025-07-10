@@ -12,9 +12,9 @@
 - [ ] 新メンバーのオンボーディングに時間がかかる
 
 ### 導入効果予測
-- **短期（1-2週間）**: 情報集約・可視化
-- **中期（1-2ヶ月）**: 開発効率向上・コスト削減
-- **長期（3ヶ月以降）**: 知識資産化・技術負債管理
+- **短期（1-2週間）**: 情報集約・可視化・AIデバッグ支援強化
+- **中期（1-2ヶ月）**: 開発効率向上・コスト削減・エラーパターン分析
+- **長期（3ヶ月以降）**: 知識資産化・技術負債管理・AI駆動開発実現
 
 ---
 
@@ -103,6 +103,31 @@ chmod +x .claude/scripts/*.sh
 .claude/scripts/test-security.sh
 ```
 
+#### 1.2.2 AI Logger機能導入（推奨）
+```bash
+# AI Logger スクリプト設置（テンプレートからコピー）
+# ai-logger.sh, analyze-ai-logs.py, ai-logger-README.md を配置
+chmod +x .claude/scripts/ai-logger.sh
+chmod +x .claude/scripts/analyze-ai-logs.py
+
+# settings.json に AI Logger を追加
+# PostToolUse セクションに以下を追加：
+# {
+#   "type": "command",
+#   "command": ".claude/scripts/ai-logger.sh"
+# }
+
+# 動作確認
+echo "test" > test.txt && rm test.txt
+ls -la ~/.claude/ai-activity.jsonl
+```
+
+**AI Logger のメリット**：
+- 構造化ログでAIがエラーを効果的に分析
+- プロジェクト・環境情報の自動収集
+- 既存ログシステムとの並行動作
+- 参考: [Vibe Logger](https://github.com/fladdict/vibe-logger)
+
 #### 1.3 現状のスナップショット作成
 ```markdown
 # .claude/core/overview.md
@@ -127,6 +152,7 @@ cache_control: {"type": "ephemeral"}
 #### 期待効果
 - **即座**: プロンプトキャッシュによる90%コスト削減
 - **心理**: 「情報整理の場所」の確保
+- **デバッグ**: AI分析に最適化されたログでエラー解決効率向上
 
 ### Stage 2: 情報集約（Week 2-3）- 影響度：小
 
@@ -389,6 +415,8 @@ A: 利用価値の再確認。新機能・改善の継続的導入
 - [ ] settings.json作成・キャッシュ設定
 - [ ] .gitignore更新
 - [ ] overview.md暫定版作成
+- [ ] セキュリティ機能導入（オプション）
+- [ ] AI Logger導入（推奨）
 - [ ] キャッシュ効果確認
 
 ### Stage 2（情報集約）

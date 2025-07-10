@@ -1,4 +1,4 @@
-# Claude Code 軽量プロジェクトテンプレート v1.0.0
+# Claude Code 軽量プロジェクトテンプレート v1.2.0
 
 個人開発者向けに最適化された、効率的なプロジェクト開発テンプレートです。
 
@@ -12,21 +12,21 @@
 - **開発規約統合**: Anthropicベストプラクティスを統合
 - **品質管理**: エラー対応ガイド・品質ゲート内蔵
 - **セキュリティ強化**: Claude Code hooks による危険なコマンドブロック機能
-- **プロジェクト記憶**: PROJECT_MEMORY.mdによる「なぜ」の永続化
+- **プロジェクト記憶**: 履歴と決定事項の体系的管理
 - **自動化ワークフロー**: Hooks機能による品質チェック自動化
-- **進化記録**: プロジェクトの成長過程を自動追跡
+- **AI-Friendly Logger**: Vibe Logger概念採用・構造化JSON形式でAI分析最適化
 
 ## 📁 テンプレート構成
 
 ### 必須ファイル
 ```
 CLAUDE.md                    # プロジェクト設定
-PROJECT_MEMORY.md            # プロジェクトの記憶（新規）
 .clauderules                 # プロジェクト知見
 .gitignore                   # キャッシュファイル除外設定
 .claude/settings.json        # キャッシュ環境設定 + セキュリティ設定
 .claude/hooks.yaml           # Hooks設定（新規）
 .claude/security-README.md   # セキュリティ設定説明
+.claude/ai-logger-README.md  # AI Logger設定説明
 docs/requirements.md         # 要求仕様書
 docs/adr/template.md         # ADRテンプレート
 ```
@@ -45,11 +45,6 @@ docs/adr/template.md         # ADRテンプレート
 │   └── debt.md             # 技術負債トラッキング
 ├── debug/                  # デバッグ情報
 │   └── latest.md           # 最新のデバッグセッション（100行以内）
-├── evolution/              # 進化記録（新規）
-│   ├── changes.log         # 変更履歴
-│   ├── features.log        # 機能追加履歴
-│   └── commits.log         # コミット履歴
-├── agents/                 # エージェント定義（新規）
 ├── archive/                # 定期整理
 ├── commands/               # カスタムコマンド
 │   ├── plan.md             # 計画立案
@@ -58,12 +53,13 @@ docs/adr/template.md         # ADRテンプレート
 │   ├── focus.md            # フォーカスモード
 │   ├── debug-start.md      # デバッグ特化モード
 │   ├── feature-plan.md     # 新機能設計モード
-│   ├── review-check.md     # コードレビューモード
-│   └── health.md           # プロジェクト健康診断（新規）
-├── scripts/                # セキュリティスクリプト
+│   └── review-check.md     # コードレビューモード
+├── scripts/                # セキュリティ＆ログスクリプト
 │   ├── deny-check.sh       # 危険コマンドブロック
 │   ├── allow-check.sh      # 安全コマンド許可
-│   └── test-security.sh    # セキュリティテスト
+│   ├── test-security.sh    # セキュリティテスト
+│   ├── ai-logger.sh        # AI-Friendly Logger
+│   └── analyze-ai-logs.py  # AIログ解析ツール
 ├── security-README.md      # セキュリティ設定説明
 └── settings.json           # プロジェクト設定（キャッシュ+セキュリティ）
 ```
@@ -170,6 +166,14 @@ cd your-project/
 - **セキュリティログ**: 実行コマンドの監査・記録機能
 - **テストスイート**: セキュリティ設定の自動検証機能
 - **ドキュメント**: 設定方法・緊急時対応ガイド完備
+
+### AI-Friendly Logger（v1.2.0新機能 - Vibe Logger概念採用）
+- **構造化ログ**: AI分析に最適化されたJSON形式（`~/.claude/ai-activity.jsonl`）
+- **豊富なコンテキスト**: プロジェクト・環境・Git情報を自動収集
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクションの自動付与
+- **パターン分析**: エラー検出・頻繁な操作・ファイルアクティビティの可視化
+- **解析ツール**: `analyze-ai-logs.py`でAI向け洞察生成
+- **参考**: [Vibe Logger](https://github.com/fladdict/vibe-logger)概念を採用
 
 ## 🎯 適用プロジェクト
 
@@ -337,6 +341,10 @@ AI実装中（30-90分）の並行作業:
 - **Cloud Artisan**: [Claude Code Tips & Tricks: Maximising Memory](https://cloudartisan.com/posts/2025-04-16-claude-code-tips-memory/)
 - **DEV Community**: [Introducing Claude Crew: Enhancing Claude Desktop's Coding Agent Capabilities](https://dev.to/kimuson/introducing-claude-crew-enhancing-claude-desktops-coding-agent-capabilities-36ah)
 
+#### AI-Friendly Logging
+- **Vibe Logger**: [GitHub - fladdict/vibe-logger](https://github.com/fladdict/vibe-logger)
+- **Vibe Logger解説**: [note - AIエージェント向けログシステム「Vibe Logger」の提案](https://note.com/fladdict/n/n5046f72bdadd)
+
 #### キャッシュ技術詳細
 - **Anthropic 公式**: [Long context prompting tips](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips)
 - **LinkedIn**: [How to Use Anthropic Claude Prompt Caching (and RAG)](https://www.linkedin.com/posts/anantharamuavinash_how-to-use-claude-prompt-caching-and-ditch-activity-7230786805590061056-xupU)
@@ -392,12 +400,7 @@ AI実装中（30-90分）の並行作業:
 - **セキュリティ設定**: テスト実行後に本番環境で使用すること
 - **ログ監視**: `~/.claude/security.log`を定期的に確認し、不正なアクセスに注意すること
 
-### v1.2.0 新機能（PROJECT MEMORY & 自動化）
-
-#### PROJECT_MEMORY.md
-- **設計の「なぜ」を記録**: 重要な決定とその理由を永続化
-- **失敗と成功の学習**: 同じ失敗を繰り返さないための記憶
-- **実装と設計の整合性**: 自動的に追跡・記録
+### v1.2.0 新機能（AI-Friendly Logger & 自動化）
 
 #### Hooks自動化システム  
 - **品質チェック自動化**: コード変更時に自動でリント・型チェック
@@ -408,3 +411,11 @@ AI実装中（30-90分）の並行作業:
 - **メトリクス収集**: コードサイズ、技術負債、依存関係の健全性
 - **総合スコア算出**: A-Fでプロジェクトの健康状態を評価
 - **改善提案**: 具体的なアクションプランを自動生成
+
+#### AI-Friendly Logger（Vibe Logger概念採用）
+- **構造化ログ形式**: AI分析に最適化されたJSONLファイル
+- **自動コンテキスト収集**: プロジェクト・環境・Git状態を自動記録
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクション付与
+- **パターン分析ツール**: エラー傾向・操作頻度・ファイル活動の可視化
+- **既存システムとの共存**: 従来のログも継続生成で段階的移行可能
+- **インスピレーション**: [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict

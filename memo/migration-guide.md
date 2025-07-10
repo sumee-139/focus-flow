@@ -9,17 +9,18 @@
 2. **.gitignore強化**
 3. **誤字・一貫性修正**
 4. **セキュリティ機能導入**
+5. **AI-Friendly Logger（新機能）**
 
 ### 🟡 段階導入推奨（リスク：低）
-4. **ADRシステム**
-5. **技術負債トラッキング**
+6. **ADRシステム**
+7. **技術負債トラッキング**
 
 ### 🔴 慎重検討必要（リスク：中）
-6. **Memory Bank構造変更**
+8. **Memory Bank構造変更**
 
 ---
 
-## 🚀 段階1: 即座導入可能（所要時間：15分）
+## 🚀 段階1: 即座導入可能（所要時間：20分）
 
 ### 1.1 プロンプトキャッシュ最適化
 
@@ -159,6 +160,76 @@ chmod +x .claude/scripts/*.sh
 - **継続**: 安全な開発環境の維持
 - **ログ**: コマンド実行履歴の追跡可能
 
+### 1.5 AI-Friendly Logger導入（新機能）
+
+#### 思想
+- **AI分析に最適化されたログ形式**でデバッグ効率向上
+- **Vibe Logger概念採用**によるAI駆動開発（VibeCoding）の実現
+- 既存ログシステムとの並行動作で段階的移行可能
+
+#### 導入手順
+
+**Step 1: スクリプトディレクトリ確認**
+```bash
+mkdir -p .claude/scripts
+```
+
+**Step 2: AI Logger スクリプトのダウンロード**
+最新テンプレートから以下のファイルをコピー：
+- `.claude/scripts/ai-logger.sh`
+- `.claude/scripts/analyze-ai-logs.py`
+- `.claude/ai-logger-README.md`
+
+**Step 3: 実行権限付与**
+```bash
+chmod +x .claude/scripts/ai-logger.sh
+chmod +x .claude/scripts/analyze-ai-logs.py
+```
+
+**Step 4: settings.jsonにAI Logger追加**
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/scripts/activity-logger.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/scripts/ai-logger.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Step 5: 動作確認**
+```bash
+# テストファイル作成・削除
+echo "test" > test.txt && rm test.txt
+
+# AIログ生成確認
+ls -la ~/.claude/ai-activity.jsonl
+
+# ログ解析テスト
+.claude/scripts/analyze-ai-logs.py --format summary
+```
+
+#### 期待効果
+- **即座**: 構造化ログによるデバッグ情報の充実
+- **短期**: エラーパターンの可視化・分析
+- **長期**: AI支援によるデバッグ効率の大幅向上
+
+#### 参考
+- [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
+- [AIエージェント向けログシステム「Vibe Logger」の提案](https://note.com/fladdict/n/n5046f72bdadd)
+
 ---
 
 ## 📈 段階2: 段階導入推奨（所要時間：30分）
@@ -275,6 +346,7 @@ mkdir -p .claude/commands
 - [ ] .gitignore更新
 - [ ] 用語統一（誤字修正）
 - [ ] セキュリティ機能導入（スクリプト設置・テスト実行）
+- [ ] AI Logger導入（スクリプト設置・動作確認）
 - [ ] キャッシュ効果確認（コスト削減実感）
 
 ### Phase 2（段階導入）
