@@ -1,43 +1,43 @@
 # Latest Debug Session
 tags: #debug #latest #issue #troubleshooting
 
-## 現在のデバッグ状況
-- **問題**: [問題の簡潔な説明] #bug #error
-- **発生日時**: [YYYY-MM-DD HH:MM]
-- **優先度**: 高/中/低
-- **ステータス**: 調査中/解決済み/保留
+## Current Debug Status
+- **Problem**: [Concise problem description] #bug #error
+- **Occurrence Date/Time**: [YYYY-MM-DD HH:MM]
+- **Priority**: High/Medium/Low
+- **Status**: Investigating/Resolved/On Hold
 
-## エラー内容
+## Error Details
 ```
-[エラーメッセージやスタックトレース]
+[Error message or stack trace]
 ```
 
-## 再現手順
-1. [手順1]
-2. [手順2]
-3. [手順3]
+## Reproduction Steps
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
 
-## 調査ログ
-- **[時刻]**: [実施した調査内容]
-- **[時刻]**: [発見した事実]
-- **[時刻]**: [試した解決策]
+## Investigation Log
+- **[Time]**: [Investigation performed]
+- **[Time]**: [Facts discovered]
+- **[Time]**: [Solutions attempted]
 
-## 原因
-- **推定原因**: [原因の説明]
-- **根本原因**: [判明した場合]
+## Cause
+- **Suspected Cause**: [Cause explanation]
+- **Root Cause**: [If identified]
 
-## 解決策
-- **実施した対策**: [対策内容]
-- **結果**: [成功/失敗/部分的成功]
+## Solution
+- **Measures Taken**: [Solution details]
+- **Result**: [Success/Failure/Partial Success]
 
-## 学び
-- [今回得られた知見]
-- [今後の予防策]
+## Learnings
+- [Insights gained this time]
+- [Future prevention measures]
 
-## 関連リンク
-- Issue: #[番号]
-- PR: #[番号]
-- 参考: [URL]
+## Related Links
+- Issue: #[Number]
+- PR: #[Number]
+- Reference: [URL]
 
 ---
-*注意: このファイルは100行以内を維持。古い情報は定期的にarchiveへ移動*
+*Note: Keep this file within 100 lines. Move old information to archive periodically*

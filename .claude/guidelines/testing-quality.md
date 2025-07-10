@@ -1,51 +1,51 @@
-# テスト・品質・技術負債管理
+# Testing, Quality & Technical Debt Management
 
-## テスト要件（段階的TDD学習パス）
+## Test Requirements (Gradual TDD Learning Path)
 
-### TDD学習ステップ
-#### Phase 1 (Week 1-2): TDD体験なし
-- 既存コードの理解・修正に集中
-- 実装後のテスト追加でもOK
-- Claude Codeの基本操作習得
+### TDD Learning Steps
+#### Phase 1 (Week 1-2): No TDD Experience
+- Focus on understanding and modifying existing code
+- Adding tests after implementation is OK
+- Master basic Claude Code operations
 
-#### Phase 2 (Week 3-4): TDD体験開始
-- 小さな機能でTDD体験（Claudeがテスト作成サポート）
-- 「まず失敗するテストを書いて」→実装→リファクタリング
-- Red-Green-Refactorサイクルを体験
+#### Phase 2 (Week 3-4): Start TDD Experience
+- Experience TDD with small features (Claude supports test creation)
+- "Write failing test first" → Implementation → Refactoring
+- Experience Red-Green-Refactor cycle
 
-#### Phase 3 (Month 2-3): TDD習得
-- 新機能開発時にTDD適用
-- 自己デバッグループ（`claude test --fix`）活用
-- TDDパターンが自然に身につく
+#### Phase 3 (Month 2-3): Master TDD
+- Apply TDD for new feature development
+- Utilize self-debugging group (`claude test --fix`)
+- TDD patterns become natural
 
-### テスト基準
-- **テストフレームワーク**: プロジェクトで統一されたものを使用
-- **カバレッジ目標**: 重要な機能は80%以上（段階的に向上）
-- **推奨テストケース**: 
-  - エッジケース（境界値・異常値）
-  - エラーハンドリング
-  - 新機能には対応するテスト（TDD習得後は先行作成）
-  - バグ修正には回帰テスト
+### Test Standards
+- **Test Framework**: Use unified framework for the project
+- **Coverage Target**: 80%+ for important features (improve gradually)
+- **Recommended Test Cases**: 
+  - Edge cases (boundary values, abnormal values)
+  - Error handling
+  - Corresponding tests for new features (create first after TDD mastery)
+  - Regression tests for bug fixes
 
-## 技術負債トラッキング
+## Technical Debt Tracking
 
-### 基本運用
-- **負債ログ**: @.claude/context/debt.md
-- **優先度分類**: 高🔥 / 中⚠️ / 低📝
-- **コスト試算**: 時間単位で推定、実績記録
-- **影響範囲**: ファイル・機能レベルで記載
+### Basic Operations
+- **Debt Log**: @.claude/context/debt.md
+- **Priority Classification**: High🔥 / Medium⚠️ / Low📝
+- **Cost Estimation**: Estimate in hours, record actuals
+- **Impact Range**: Record at file/feature level
 
-### キャッシュ影響分析
-- **削除必要変更**: 推定追加コストを算出
-- **最適化改善**: コスト削減効果を測定
-- **TTL管理**: 5分失効を考慮した計画
+### Cache Impact Analysis
+- **Changes Requiring Deletion**: Calculate estimated additional cost
+- **Optimization Improvements**: Measure cost reduction effect
+- **TTL Management**: Plan considering 5-minute expiration
 
-### 運用ルール
-- **新機能開発時**: 潜在的負債を事前予測・記録
-- **スプリント終了時**: 発生した負債の優先度付け
-- **月1回**: 負債全体の見直し・アーカイブ
+### Operation Rules
+- **During New Feature Development**: Pre-predict and record potential debt
+- **At Sprint End**: Prioritize incurred debt
+- **Monthly**: Review and archive overall debt
 
-### 継続的改善
-- **自動検知**: CI/CDでの負債発生監視
-- **メトリクス**: 週次での負債増減確認
-- **予防策**: コードレビュー・リファクタリングの習慣化
+### Continuous Improvement
+- **Automatic Detection**: Monitor debt occurrence in CI/CD
+- **Metrics**: Weekly debt increase/decrease check
+- **Prevention**: Habituation of code review and refactoring

@@ -1,142 +1,67 @@
 #!/bin/bash
 
 # Claude Code Security Hook - Allow List Checker
-# このスクリプトは許可されたコマンドのみを通します
+# Allows common development commands
 
-# 標準入力からコマンドを読み取り
 command=$(cat)
-
-# ログファイルの設定
 LOG_FILE="${HOME}/.claude/security.log"
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
-# ログ記録関数
 log_attempt() {
     echo "[$timestamp] $1" >> "$LOG_FILE"
 }
 
-# 許可されたコマンドパターンのリスト
+# Common development command patterns
 ALLOWED_PATTERNS=(
-    # 基本的なファイル操作
-    "^ls( |$)"
-    "^cat( |$)"
-    "^head( |$)"
-    "^tail( |$)"
-    "^grep( |$)"
-    "^find( |$)"
-    "^sort( |$)"
-    "^uniq( |$)"
-    "^wc( |$)"
-    "^awk( |$)"
-    "^sed( |$)"
+    # File operations
+    "^(ls|cat|head|tail|grep|find|mkdir|touch|cp|mv|rm|chmod|chown)( |$)"
     
-    # 安全なファイル操作
-    "^mkdir( |$)"
-    "^touch( |$)"
-    "^cp( |$)"
-    "^mv( |$)"
-    "^rm [^-]"  # rm -rf 等の危険なオプション以外
-    "^chmod [0-7][0-7][0-7]( |$)"  # 具体的なパーミッション指定のみ
+    # Git - all common operations
+    "^git( |$)"
     
-    # Git操作（プロジェクト内）
-    "^git status( |$)"
-    "^git add( |$)"
-    "^git commit( |$)"
-    "^git push( |$)"
-    "^git pull( |$)"
-    "^git diff( |$)"
-    "^git log( |$)"
-    "^git branch( |$)"
-    "^git checkout( |$)"
-    "^git merge( |$)"
-    "^git stash( |$)"
+    # Node.js ecosystem
+    "^(npm|yarn|pnpm|npx|node)( |$)"
     
-    # 開発ツール（プロジェクト内）
-    "^npm install( |$)"
-    "^npm run( |$)"
-    "^npm test( |$)"
-    "^npm start( |$)"
-    "^npm build( |$)"
-    "^yarn install( |$)"
-    "^yarn run( |$)"
-    "^pnpm install( |$)"
-    "^pnpm run( |$)"
+    # Python ecosystem
+    "^(python|python3|pip|pip3|poetry|uv|conda)( |$)"
     
-    # Python開発
-    "^python( |$)"
-    "^python3( |$)"
-    "^pip install( |$)"
-    "^pip show( |$)"
-    "^pip list( |$)"
-    "^poetry install( |$)"
-    "^poetry run( |$)"
-    "^uv( |$)"
+    # Build tools
+    "^(make|cmake|cargo|go|mvn|gradle|docker)( |$)"
     
-    # 現代的CLIツール
-    "^eza( |$)"
-    "^batcat( |$)"
-    "^rg( |$)"
-    "^fd( |$)"
-    "^dust( |$)"
-    "^z( |$)"
+    # Text processing
+    "^(awk|sed|sort|uniq|wc|cut|tr|jq)( |$)"
     
-    # プロセス確認
-    "^ps( |$)"
-    "^top( |$)"
-    "^htop( |$)"
-    "^jobs( |$)"
+    # Modern CLI tools
+    "^(eza|batcat|bat|rg|fd|dust|z|fzf)( |$)"
     
-    # ネットワーク（読み取り専用）
-    "^curl -s( |$)"
-    "^wget -q( |$)"
-    "^ping( |$)"
-    "^nslookup( |$)"
+    # System info & monitoring
+    "^(ps|top|htop|df|free|uname|whoami|pwd|env|date)( |$)"
     
-    # テスト・ビルド
-    "^make( |$)"
-    "^cmake( |$)"
-    "^cargo( |$)"
-    "^go( |$)"
-    "^mvn( |$)"
-    "^gradle( |$)"
+    # Network tools (safe operations)
+    "^(curl|wget|ping|nslookup|dig)( |$)"
     
-    # システム情報（読み取り専用）
-    "^uname( |$)"
-    "^whoami( |$)"
-    "^pwd( |$)"
-    "^env( |$)"
-    "^date( |$)"
-    "^uptime( |$)"
-    "^df( |$)"
-    "^free( |$)"
+    # Editors
+    "^(nano|vim|vi|emacs|code)( |$)"
     
-    # エディタ
-    "^nano( |$)"
-    "^vim( |$)"
-    "^emacs( |$)"
-    "^code( |$)"
+    # Archive tools
+    "^(tar|zip|unzip|gzip|gunzip)( |$)"
     
-    # 圧縮・解凍
-    "^tar( |$)"
-    "^zip( |$)"
-    "^unzip( |$)"
-    "^gzip( |$)"
-    "^gunzip( |$)"
+    # Other development tools
+    "^(ssh|scp|rsync|diff|patch)( |$)"
 )
 
-# コマンドチェック
+# Check if command is allowed
 for pattern in "${ALLOWED_PATTERNS[@]}"; do
     if echo "$command" | grep -qE "$pattern"; then
-        log_attempt "ALLOWED: $command (matched: $pattern)"
+        log_attempt "ALLOWED: $command"
         exit 0
     fi
 done
 
-# 許可されていないコマンドをログに記録
-log_attempt "DENIED: $command (no matching allow pattern)"
-echo "セキュリティ警告: 許可されていないコマンドが検出されました"
-echo "拒否されたコマンド: $command"
+# Command not in allow list
+log_attempt "DENIED: $command (not in allow list)"
+echo "Security warning: Command not in allow list"
+echo "Denied command: $command"
 echo ""
-echo "このコマンドは許可リストに含まれていません。"
-echo "必要な場合は、管理者に許可リストの追加を依頼してください。"
+echo "This command is not in the allow list. Contact admin to add it if needed."
 exit 1

@@ -1,59 +1,59 @@
-# Git ワークフロー & ADR
+# Git Workflow & ADR
 
-## Git/PR規約
+## Git/PR Conventions
 
-### コミットメッセージ
+### Commit Messages
 
-#### 基本形式
-`[prefix]: [変更内容]`
+#### Basic Format
+`[prefix]: [change description]`
 
-#### prefix一覧
-- `feat`: 新機能追加
-- `fix`: バグ修正
-- `docs`: ドキュメント更新
-- `style`: フォーマット・空白等（動作変更なし）
-- `refactor`: リファクタリング（機能変更なし）
-- `test`: テスト追加・修正
-- `chore`: ビルド・依存関係・設定変更
+#### Prefix List
+- `feat`: New feature addition
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `style`: Formatting, whitespace, etc. (no functional changes)
+- `refactor`: Refactoring (no functional changes)
+- `test`: Test addition/modification
+- `chore`: Build, dependencies, configuration changes
 
-#### 必須トレーラー
+#### Required Trailers
 ```bash
-# バグ報告ベースの修正
+# Bug report-based fixes
 git commit -m "fix: resolve memory leak in data processor" --trailer "Reported-by: Username"
 
-# GitHub Issue関連
+# GitHub Issue related
 git commit -m "feat: add user authentication" --trailer "Github-Issue: #123"
 ```
 
-### Pull Request規約
-- **タイトル**: コミットメッセージと同様の形式
-- **説明要件**:
-  - **背景**: なぜこの変更が必要か
-  - **変更内容**: 何を変更したか（高レベル）
-  - **影響範囲**: どこに影響するか
-  - **テスト**: どのようにテストしたか
+### Pull Request Conventions
+- **Title**: Same format as commit messages
+- **Description Requirements**:
+  - **Background**: Why this change is needed
+  - **Changes**: What was changed (high level)
+  - **Impact**: Where it affects
+  - **Testing**: How it was tested
 
-### レビュー
-- 適切なレビュアーを指定
-- セルフレビューを先に実施
-- `Co-authored-by` 等のツール言及禁止
+### Review
+- Assign appropriate reviewers
+- Conduct self-review first
+- Prohibition of tool mentions like `Co-authored-by`
 
-## ADR（Architecture Decision Record）
+## ADR (Architecture Decision Record)
 
-### 基本運用
-- **テンプレート**: @docs/adr/template.md
-- **新規ADR作成**: `claude adr new "決定内容"`で雛形生成
-- **連番**: ADR-001, ADR-002...で管理
-- **ステータス**: Proposed → Accepted → Deprecated/Superseded
+### Basic Operations
+- **Template**: @docs/adr/template.md
+- **Create New ADR**: Generate template with `claude adr new "decision content"`
+- **Numbering**: Manage with ADR-001, ADR-002...
+- **Status**: Proposed → Accepted → Deprecated/Superseded
 
-### 記録すべき決定
-- 技術スタック選択（フレームワーク、ライブラリ等）
-- アーキテクチャ設計（データベース、API設計等）
-- セキュリティ方針（認証、暗号化等）
-- パフォーマンス最適化手法
-- デプロイメント戦略
+### Decisions to Record
+- Technology stack selection (frameworks, libraries, etc.)
+- Architecture design (database, API design, etc.)
+- Security policies (authentication, encryption, etc.)
+- Performance optimization techniques
+- Deployment strategies
 
-### 連携システム
-- **負債ログ**: @.claude/context/debt.mdで技術的影響追跡
-- **履歴管理**: @.claude/context/history.mdで決定経緯記録
-- **GitHub Integration**: Issue番号と連携したPR作成
+### Integration Systems
+- **Debt Log**: Track technical impact in @.claude/context/debt.md
+- **History Management**: Record decision history in @.claude/context/history.md
+- **GitHub Integration**: Create PRs linked with Issue numbers

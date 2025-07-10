@@ -1,90 +1,100 @@
-# Claude Code セキュリティ設定
+# Claude Code Security Settings
 
-このプロジェクトには、Claude Codeの安全な利用のためのセキュリティ設定が実装されています。
+This project includes security settings for safe use of Claude Code.
 
-## 実装内容
+## Implementation
 
-### 1. Deny List（拒否リスト）
-危険なコマンドを自動的にブロックする仕組みです。
+### 1. Deny List
+A mechanism to automatically block dangerous commands.
 
-**ブロック対象のコマンド:**
-- システム破壊的コマンド（`rm -rf /`, `chmod 777`等）
-- 外部コードの実行（`curl | sh`, `wget | bash`等）
-- 設定変更（`git config --global`, `npm config set`等）
-- 権限昇格（`sudo`, `su`等）
-- 危険なファイル操作（`shred`, `dd if=/dev/zero`等）
+**Blocked Commands:**
+- System destruction (`rm -rf /`, `rm -rf /usr`, `chmod -R 777 /`)
+- Remote code execution (`curl | sh`, `wget | bash`)
+- Privilege escalation to root shell (`sudo su`, `sudo -i`)
+- Direct disk operations (`dd if=/dev/zero of=/dev/`, `> /dev/sda`)
+- Database destruction (`DROP DATABASE`)
 
-### 2. Allow List（許可リスト）
-頻繁に使用される安全なコマンドを事前に許可する仕組みです。
+### 2. Allow List
+A mechanism to pre-approve commonly used safe commands.
 
-**許可対象のコマンド:**
-- 基本的なファイル操作（`ls`, `cat`, `mkdir`等）
-- Git操作（`git status`, `git add`, `git commit`等）
-- 開発ツール（`npm run`, `python`, `pip install`等）
-- 現代的CLIツール（`eza`, `batcat`, `rg`, `fd`等）
+**Allowed Commands:**
+- All file operations (`ls`, `cat`, `mkdir`, `cp`, `mv`, `rm`, etc.)
+- All Git operations (`git status`, `git config`, `git commit`, etc.)
+- Development tools (`npm`, `yarn`, `python`, `pip`, `cargo`, etc.)
+- Modern CLI tools (`eza`, `batcat`, `rg`, `fd`, etc.)
+- Text processing (`awk`, `sed`, `grep`, `jq`, etc.)
+- Safe network operations (`curl`, `wget`, `ping`, etc.)
 
-### 3. ファイル構成
+### 3. File Structure
 
 ```
 .claude/
-├── settings.json          # メインの設定ファイル
+├── settings.json          # Main configuration file
 ├── scripts/
-│   ├── deny-check.sh     # 拒否リストチェッカー
-│   └── allow-check.sh    # 許可リストチェッカー
-└── security-README.md    # このファイル
+│   ├── deny-check.sh     # Deny list checker
+│   └── allow-check.sh    # Allow list checker
+└── security-README.md    # This file
 ```
 
-## セキュリティログ
+## Security Log
 
-実行されたコマンドは `~/.claude/security.log` に記録されます：
+Executed commands are logged to `~/.claude/security.log`:
 
 ```
 [2024-01-01 12:00:00] BLOCKED: rm -rf / (matched: rm -rf /)
 [2024-01-01 12:01:00] ALLOWED: git status
-[2024-01-01 12:02:00] DENIED: custom-command (no matching allow pattern)
+[2024-01-01 12:02:00] DENIED: custom-command (not in allow list)
 ```
 
-## 設定の修正
+## Configuration Modifications
 
-### 許可リストに追加する場合
-1. `.claude/scripts/allow-check.sh` の `ALLOWED_PATTERNS` に追加
-2. 必要に応じて `.claude/settings.json` の `permissions.allow` に追加
+### Adding to Allow List
+1. Add pattern to `ALLOWED_PATTERNS` in `.claude/scripts/allow-check.sh`
+2. Test the pattern works as expected
 
-### 拒否リストに追加する場合
-1. `.claude/scripts/deny-check.sh` の `DANGEROUS_PATTERNS` に追加
-2. 必要に応じて `.claude/settings.json` の `permissions.deny` に追加
+### Adding to Deny List
+1. Add pattern to `DANGEROUS_PATTERNS` in `.claude/scripts/deny-check.sh`
+2. Ensure it doesn't block legitimate commands
 
-## 緊急時の対応
+## Emergency Response
 
-セキュリティ設定が問題を起こした場合：
+If security settings cause problems:
 
-1. **一時的に無効化**
+1. **Temporarily disable**
    ```bash
    mv .claude/settings.json .claude/settings.json.backup
    ```
 
-2. **ログを確認**
+2. **Check logs**
    ```bash
    tail -f ~/.claude/security.log
    ```
 
-3. **設定を復元**
+3. **Restore settings**
    ```bash
    mv .claude/settings.json.backup .claude/settings.json
    ```
 
-## 注意事項
+## Important Notes
 
-- **設定変更前**: 必ずバックアップを取ること
-- **テスト**: 本番環境で使用前に十分なテストを行うこと
-- **監視**: セキュリティログを定期的に確認すること
-- **更新**: 脅威情報に応じて定期的に設定を更新すること
+- **Before changes**: Always backup configurations
+- **Testing**: Thoroughly test before production use
+- **Monitoring**: Regularly check security logs
+- **Updates**: Update settings based on threat information
 
-## サポート
+## Design Philosophy
 
-設定に問題がある場合は、プロジェクトの管理者に連絡してください。
+The security system is designed to:
+- Block only truly dangerous operations
+- Allow all normal development workflows
+- Be transparent and debuggable
+- Minimize false positives
+
+## Support
+
+Contact the project administrator for configuration issues.
 
 ---
 
-**最終更新**: 2024-07-09  
-**バージョン**: 1.0.0
+**Last Updated**: 2025-07-10  
+**Version**: 2.0.0

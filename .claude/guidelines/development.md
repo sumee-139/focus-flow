@@ -1,80 +1,80 @@
-# 開発ガイドライン
+# Development Guidelines
 
-## 1. パッケージ管理
-- **推奨ツール**: プロジェクトに応じて統一（npm/yarn/pnpm, pip/poetry/uv等）
-- **インストール**: `[tool] add package` 形式を推奨
-- **実行**: `[tool] run command` 形式を推奨
-- **禁止事項**: 
-  - 混在使用（複数のパッケージマネージャーの併用）
-  - `@latest`構文の使用（バージョン固定推奨）
-  - グローバルインストール（プロジェクト内で完結）
+## 1. Package Management
+- **Recommended Tools**: Unify per project (npm/yarn/pnpm, pip/poetry/uv, etc.)
+- **Installation**: Recommend `[tool] add package` format
+- **Execution**: Recommend `[tool] run command` format
+- **Prohibited Practices**: 
+  - Mixed usage (using multiple package managers together)
+  - Using `@latest` syntax (version pinning recommended)
+  - Global installation (keep everything within project)
 
-## 2. コード品質基準
-- **型注釈**: 全ての関数・変数に型情報を付与
-- **ドキュメント**: パブリックAPI・複雑な処理に必須
-- **関数設計**: 単一責任・小さな関数を心がける
-- **既存パターン**: 必ず既存コードのパターンに従う
-- **行長制限**: 80-120文字（言語・チームで統一）
+## 2. Code Quality Standards
+- **Type Annotations**: Add type information to all functions and variables
+- **Documentation**: Required for public APIs and complex processes
+- **Function Design**: Aim for single responsibility and small functions
+- **Existing Patterns**: Always follow existing code patterns
+- **Line Length**: 80-120 characters (unified by language/team)
 
-## 3. 実行コマンド一覧
+## 3. Command List
 
-### 基本開発フロー
+### Basic Development Flow
 ```bash
-# プロジェクトセットアップ（初回のみ）
-[tool] install                   # 依存関係インストール
-[tool] run dev                   # 開発サーバー起動
+# Project setup (first time only)
+[tool] install                   # Install dependencies
+[tool] run dev                   # Start development server
 
-# テスト実行
-[tool] run test                  # 全テスト実行
-[tool] run test:watch           # ウォッチモード
+# Test execution
+[tool] run test                  # Run all tests
+[tool] run test:watch           # Watch mode
 
-# 品質チェック
-[tool] run format               # コードフォーマット適用
-[tool] run lint                 # リントチェック・自動修正
-[tool] run typecheck            # 型チェック実行（該当言語）
+# Quality checks
+[tool] run format               # Apply code formatting
+[tool] run lint                 # Lint check and auto-fix
+[tool] run typecheck            # Run type check (for applicable languages)
 
-# ビルド・リリース
-[tool] run build                # プロダクションビルド
-[tool] run check                # 総合チェック（CI前確認）
+# Build and release
+[tool] run build                # Production build
+[tool] run check                # Comprehensive check (pre-CI confirmation)
 ```
 
-### パッケージ管理
+### Package Management
 ```bash
-[tool] add [package-name]       # 依存関係追加
-[tool] remove [package-name]    # 依存関係削除
-[tool] update                   # 全依存関係更新
+[tool] add [package-name]       # Add dependency
+[tool] remove [package-name]    # Remove dependency
+[tool] update                   # Update all dependencies
 ```
 
-**注記**: `[tool]`はプロジェクトで使用するパッケージマネージャーに置き換え
+**Note**: Replace `[tool]` with the package manager used in the project
 - Node.js: `npm`, `yarn`, `pnpm`
 - Python: `pip`, `poetry`, `uv`
 - Rust: `cargo`
 - Go: `go`
-- その他言語の標準ツール
+- Standard tools for other languages
 
-## 4. エラー対応ガイド
+## 4. Error Handling Guide
 
-### 問題解決の標準順序
-1. **フォーマットエラー** → `[tool] run format`
-2. **型エラー** → `[tool] run typecheck`
-3. **リントエラー** → `[tool] run lint:fix`
-4. **テストエラー** → `[tool] run test`
+### Standard Problem-Solving Order
+1. **Format Errors** → `[tool] run format`
+2. **Type Errors** → `[tool] run typecheck`
+3. **Lint Errors** → `[tool] run lint:fix`
+4. **Test Errors** → `[tool] run test`
 
-### よくある問題と解決策
-- **行長エラー**: 適切な箇所で改行
-- **インポート順序**: 自動修正を使用
-- **型エラー**: 明示的な型注釈を追加
+### Common Problems and Solutions
+- **Line length errors**: Break at appropriate places
+- **Import order**: Use auto-fix
+- **Type errors**: Add explicit type annotations
 
-## 5. 品質ゲート
+## 5. Quality Gates
 
-### コミット前チェック
-- [ ] `[tool] run format` - フォーマット適用済み
-- [ ] `[tool] run lint` - リント警告解消済み
-- [ ] `[tool] run typecheck` - 型チェック通過
-- [ ] `[tool] run test` - 全テスト通過
+### Pre-commit Checks
+- [ ] `[tool] run format` - Formatting applied
+- [ ] `[tool] run lint` - Lint warnings resolved
+- [ ] `[tool] run typecheck` - Type check passed
+- [ ] `[tool] run test` - All tests passed
 
-### CI/CD自動化
-- コードフォーマット
-- リントチェック
-- 型チェック
-- 単体テスト実行
+### CI/CD Automation
+- Code formatting
+- Lint checks
+- Type checks
+- Unit test execution
