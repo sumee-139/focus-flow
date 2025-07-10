@@ -5,62 +5,62 @@ cache_control: {"type": "ephemeral"}
 tags: #templates #quick
 
 ## Quick Modes
-### `/debug:start` - デバッグ特化モード
+### `/debug:start` - Debug-focused mode
 ```
-問題: [何が起きているか] #bug
-再現手順: [手順] #reproduce
-期待値: [期待される動作] #expected
-実際: [実際の動作] #actual
-環境: [OS/バージョン] #environment
-```
-
-### `/feature:plan` - 新機能設計モード
-```
-機能名: [機能名] #feature
-目的: [解決したい課題] #purpose
-ユーザーストーリー: [As a... I want... So that...] #story
-受け入れ条件: [完了の定義] #acceptance
+Problem: [What is happening] #bug
+Reproduction steps: [Steps] #reproduce
+Expected: [Expected behavior] #expected
+Actual: [Actual behavior] #actual
+Environment: [OS/Version] #environment
 ```
 
-### `/review:check` - コードレビューモード
+### `/feature:plan` - New feature design mode
 ```
-レビュー対象: [ファイル/機能] #review
-チェック項目:
-- [ ] 動作確認 #functionality
-- [ ] エラーハンドリング #error  
-- [ ] パフォーマンス #performance
-- [ ] セキュリティ #security
-- [ ] テスト #testing
-改善提案: [提案内容] #improvement
+Feature name: [Feature name] #feature
+Purpose: [Problem to solve] #purpose
+User story: [As a... I want... So that...] #story
+Acceptance criteria: [Definition of done] #acceptance
 ```
 
-## 基本テンプレート
-
-### Decision Log（@.claude/context/history.mdに記録）
+### `/review:check` - Code review mode
 ```
-[日付] [決定内容] → [理由] #decision
-```
-
-### 学習ログ（@.claude/core/current.mdに記録）
-```
-技術: [学んだ技術] → [どう使えるか] #tech
-ツール: [試したツール] → [評価と使用感] #tool
-プロセス: [改善したプロセス] → [効果] #process
+Review target: [File/Function] #review
+Check items:
+- [ ] Functionality check #functionality
+- [ ] Error handling #error  
+- [ ] Performance #performance
+- [ ] Security #security
+- [ ] Testing #testing
+Improvement suggestions: [Suggestions] #improvement
 ```
 
-## よく使うパターン
+## Basic Templates
 
-### Git操作パターン
+### Decision Log (Record in @.claude/context/history.md)
+```
+[Date] [Decision] → [Reason] #decision
+```
+
+### Learning Log (Record in @.claude/core/current.md)
+```
+Technology: [Technology learned] → [How to use it] #tech
+Tool: [Tool tried] → [Evaluation and usage experience] #tool
+Process: [Improved process] → [Effect] #process
+```
+
+## Common Patterns
+
+### Git Operation Patterns
 ```bash
-# 作業前の最新化
+# Update before work
 git pull origin main && git status
 
-# 機能ブランチ作成
-git checkout -b feature/[機能名]
+# Create feature branch
+git checkout -b feature/[feature-name]
 
-# 変更の確認とコミット
-git diff && git add -A && git commit -m "[prefix]: [変更内容]"
+# Check changes and commit
+git diff && git add -A && git commit -m "[prefix]: [changes]"
 
-# コンフリクト解決
+# Resolve conflicts
 git stash && git pull origin main && git stash pop
 ```

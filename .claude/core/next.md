@@ -1,36 +1,36 @@
 # Next Actions
 tags: #next #actions #planning
 
-## 3行サマリー
-- **今日やること**: [最優先タスク] #today #urgent
-- **今週のゴール**: [週次目標] #weekly #goal
-- **ブロッカー**: [あれば記載/なければ「なし」] #blocker #risk
+## 3-Line Summary
+- **Today's Tasks**: [Highest priority task] #today #urgent
+- **This Week's Goal**: [Weekly target] #weekly #goal
+- **Blockers**: [List if any/write "None" if none] #blocker #risk
 
-## 優先度マトリックス
-### 🔥 緊急 & 重要
-- [タスク1] - [期限] #urgent #important #critical
-- [タスク2] - [期限] #urgent #important #critical
+## Priority Matrix
+### 🔥 Urgent & Important
+- [Task 1] - [Deadline] #urgent #important #critical
+- [Task 2] - [Deadline] #urgent #important #critical
 
-### ⭐ 重要 & 非緊急
-- [タスク1] - [予定日] #important #planned #strategic
-- [タスク2] - [予定日] #important #planned #strategic
+### ⭐ Important & Not Urgent
+- [Task 1] - [Scheduled date] #important #planned #strategic
+- [Task 2] - [Scheduled date] #important #planned #strategic
 
-### ⚡ 緊急 & 非重要
-- [タスク1] - [期限] #urgent #reactive #quick
+### ⚡ Urgent & Not Important
+- [Task 1] - [Deadline] #urgent #reactive #quick
 
-### 📋 非緊急 & 非重要
-- [タスク1] - [いつか] #backlog #someday #optional
+### 📋 Not Urgent & Not Important
+- [Task 1] - [Someday] #backlog #someday #optional
 
-## 今日の3つのゴール
-1. [具体的なゴール1]
-2. [具体的なゴール2]
-3. [具体的なゴール3]
+## Today's 3 Goals
+1. [Specific goal 1]
+2. [Specific goal 2]
+3. [Specific goal 3]
 
-## 準備が必要なもの
-- [ツール/ライブラリ]: [目的]
-- [情報/ドキュメント]: [目的]
+## Required Preparation
+- [Tool/Library]: [Purpose]
+- [Information/Document]: [Purpose]
 
 ## Definition of Done
-各タスクの完了条件:
-- [タスク名]: [完了の定義]
-- [タスク名]: [完了の定義]
+Completion criteria for each task:
+- [Task name]: [Definition of done]
+- [Task name]: [Definition of done]
