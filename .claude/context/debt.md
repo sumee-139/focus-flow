@@ -1,77 +1,77 @@
 ---
 cache_control: {"type": "ephemeral"}
 ---
-# 技術負債トラッキング
+# Technical Debt Tracking
 tags: #debt #technical-debt #tracking
 
-## 現在の技術負債
+## Current Technical Debt
 
-### 高優先度 🔥
-| 負債内容 | 推定コスト | 期限 | 影響範囲 | 対策案 |
-|---------|-----------|------|---------|--------|
-| [負債項目1] | [X時間] | [日付] | [範囲] | [対策] |
-| [負債項目2] | [X時間] | [日付] | [範囲] | [対策] |
+### High Priority 🔥
+| Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
+|-----------|----------------|----------|--------------|----------|
+| [Debt item 1] | [X hours] | [Date] | [Range] | [Solution] |
+| [Debt item 2] | [X hours] | [Date] | [Range] | [Solution] |
 
-### 中優先度 ⚠️
-| 負債内容 | 推定コスト | 期限 | 影響範囲 | 対策案 |
-|---------|-----------|------|---------|--------|
-| [負債項目1] | [X時間] | [日付] | [範囲] | [対策] |
-| [負債項目2] | [X時間] | [日付] | [範囲] | [対策] |
+### Medium Priority ⚠️
+| Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
+|-----------|----------------|----------|--------------|----------|
+| [Debt item 1] | [X hours] | [Date] | [Range] | [Solution] |
+| [Debt item 2] | [X hours] | [Date] | [Range] | [Solution] |
 
-### 低優先度 📝
-| 負債内容 | 推定コスト | 期限 | 影響範囲 | 対策案 |
-|---------|-----------|------|---------|--------|
-| [負債項目1] | [X時間] | [日付] | [範囲] | [対策] |
-| [負債項目2] | [X時間] | [日付] | [範囲] | [対策] |
+### Low Priority 📝
+| Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
+|-----------|----------------|----------|--------------|----------|
+| [Debt item 1] | [X hours] | [Date] | [Range] | [Solution] |
+| [Debt item 2] | [X hours] | [Date] | [Range] | [Solution] |
 
-## キャッシュ影響分析
+## Cache Impact Analysis
 
-### キャッシュ削除が必要な変更
-- **[変更内容]**: 推定追加コスト [X%] - 影響ファイル: [ファイル名]
-- **[変更内容]**: 推定追加コスト [X%] - 影響ファイル: [ファイル名]
+### Changes Requiring Cache Deletion
+- **[Change content]**: Estimated additional cost [X%] - Affected files: [File name]
+- **[Change content]**: Estimated additional cost [X%] - Affected files: [File name]
 
-### キャッシュ最適化による改善
-- **[改善内容]**: コスト削減 [X%] - TTL効果: [効果説明]
-- **[改善内容]**: レイテンシ短縮 [X%] - 効果: [効果説明]
+### Improvements from Cache Optimization
+- **[Improvement content]**: Cost reduction [X%] - TTL effect: [Effect description]
+- **[Improvement content]**: Latency reduction [X%] - Effect: [Effect description]
 
-## 負債解決履歴
+## Debt Resolution History
 
-### 解決済み（今月）
-- **[日付]** [負債内容] → 解決策: [解決方法] → 効果: [改善効果]
-- **[日付]** [負債内容] → 解決策: [解決方法] → 効果: [改善効果]
+### Resolved (This Month)
+- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
+- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
 
-### 解決済み（先月）
-- **[日付]** [負債内容] → 解決策: [解決方法] → 効果: [改善効果]
-- **[日付]** [負債内容] → 解決策: [解決方法] → 効果: [改善効果]
+### Resolved (Last Month)
+- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
+- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
 
-## 負債予防策
+## Debt Prevention Measures
 
-### 継続的改善
-- **コードレビュー**: 新機能開発時の負債チェック
-- **リファクタリング**: スプリント終了時の定期整理
-- **メトリクス監視**: 週次での負債増減確認
+### Continuous Improvement
+- **Code Review**: Debt check during new feature development
+- **Refactoring**: Regular cleanup at sprint end
+- **Metrics Monitoring**: Weekly debt increase/decrease check
 
-### 自動化
-- **静的解析**: CI/CDでの自動負債検出
-- **テストカバレッジ**: 低カバレッジ箇所の負債化防止
-- **依存関係**: 脆弱性・古いバージョンの自動検知
+### Automation
+- **Static Analysis**: Automatic debt detection in CI/CD
+- **Test Coverage**: Prevention of low coverage areas becoming debt
+- **Dependencies**: Automatic detection of vulnerabilities and old versions
 
-## 月次レポート
+## Monthly Report
 
-### [月] 負債サマリー
-- **新規発生**: [X件] (推定コスト: [X時間])
-- **解決完了**: [X件] (実際コスト: [X時間])
-- **繰越分**: [X件] (累積コスト: [X時間])
-- **キャッシュ効率**: ヒット率[X%] / コスト削減[X%]
+### [Month] Debt Summary
+- **New occurrences**: [X items] (Estimated cost: [X hours])
+- **Resolutions completed**: [X items] (Actual cost: [X hours])
+- **Carried forward**: [X items] (Cumulative cost: [X hours])
+- **Cache efficiency**: Hit rate [X%] / Cost reduction [X%]
 
-### 来月の重点項目
-1. [重点負債1] - 期限: [日付]
-2. [重点負債2] - 期限: [日付]
-3. [重点負債3] - 期限: [日付]
+### Next Month's Focus Items
+1. [Focus debt 1] - Deadline: [Date]
+2. [Focus debt 2] - Deadline: [Date]
+3. [Focus debt 3] - Deadline: [Date]
 
 ---
 
-**運用ルール**:
-- 新機能開発時: 潜在的負債を事前予測・記録
-- スプリント終了時: 発生した負債の優先度付け
-- 月1回: 負債全体の見直し・アーカイブ
+**Operation Rules**:
+- During new feature development: Predict and record potential debt
+- At sprint end: Prioritize incurred debt
+- Monthly: Review and archive overall debt

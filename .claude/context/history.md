@@ -1,58 +1,58 @@
 # Project History
 
-## 重要な決定事項
-### [日付] [決定タイトル]
-- **背景**: [なぜこの決定が必要だったか]
-- **選択肢**: [検討した選択肢]
-- **決定**: [最終的な選択]
-- **理由**: [選択した理由]
-- **影響**: [この決定の影響]
+## Important Decisions
+### [Date] [Decision Title]
+- **Background**: [Why this decision was needed]
+- **Options**: [Options considered]
+- **Decision**: [Final choice]
+- **Reason**: [Reason for selection]
+- **Impact**: [Impact of this decision]
 
-### [日付] [決定タイトル]
-- **背景**: [なぜこの決定が必要だったか]
-- **選択肢**: [検討した選択肢]
-- **決定**: [最終的な選択]
-- **理由**: [選択した理由]
-- **影響**: [この決定の影響]
+### [Date] [Decision Title]
+- **Background**: [Why this decision was needed]
+- **Options**: [Options considered]
+- **Decision**: [Final choice]
+- **Reason**: [Reason for selection]
+- **Impact**: [Impact of this decision]
 
-## 解決した問題
-### [日付] [問題タイトル]
-- **問題**: [何が起きたか]
-- **原因**: [根本原因]
-- **解決策**: [実施した解決策]
-- **学び**: [今後に活かせること]
+## Resolved Problems
+### [Date] [Problem Title]
+- **Problem**: [What happened]
+- **Cause**: [Root cause]
+- **Solution**: [Implemented solution]
+- **Learning**: [Things to apply in the future]
 
-### [日付] [問題タイトル]
-- **問題**: [何が起きたか]
-- **原因**: [根本原因]
-- **解決策**: [実施した解決策]
-- **学び**: [今後に活かせること]
+### [Date] [Problem Title]
+- **Problem**: [What happened]
+- **Cause**: [Root cause]
+- **Solution**: [Implemented solution]
+- **Learning**: [Things to apply in the future]
 
-## フェーズ履歴
-### Phase 1: [フェーズ名] ([期間])
-- **目標**: [フェーズの目標]
-- **成果**: [達成した成果]
-- **課題**: [直面した課題]
-- **学び**: [得られた学び]
+## Phase History
+### Phase 1: [Phase Name] ([Period])
+- **Goal**: [Phase goal]
+- **Results**: [Achieved results]
+- **Challenges**: [Challenges faced]
+- **Learnings**: [Learnings gained]
 
-### Phase 2: [フェーズ名] ([期間])
-- **目標**: [フェーズの目標]
-- **成果**: [達成した成果]
-- **課題**: [直面した課題]
-- **学び**: [得られた学び]
+### Phase 2: [Phase Name] ([Period])
+- **Goal**: [Phase goal]
+- **Results**: [Achieved results]
+- **Challenges**: [Challenges faced]
+- **Learnings**: [Learnings gained]
 
-## 技術的進化
-- **[日付]**: [技術的変更] - [理由と効果]
-- **[日付]**: [技術的変更] - [理由と効果]
-- **[日付]**: [技術的変更] - [理由と効果]
+## Technical Evolution
+- **[Date]**: [Technical change] - [Reason and effect]
+- **[Date]**: [Technical change] - [Reason and effect]
+- **[Date]**: [Technical change] - [Reason and effect]
 
-## 振り返りログ
-### 週次振り返り - [日付]
-- **うまくいったこと**: [成功要因]
-- **改善できること**: [改善点]
-- **来週試すこと**: [新しい取り組み]
+## Retrospective Log
+### Weekly Retrospective - [Date]
+- **What went well**: [Success factors]
+- **What can be improved**: [Improvement points]
+- **To try next week**: [New initiatives]
 
-### 月次振り返り - [日付]
-- **月の成果**: [主要な達成事項]
-- **プロセス改善**: [改善したプロセス]
-- **来月の重点**: [注力すべきエリア]
+### Monthly Retrospective - [Date]
+- **Monthly achievements**: [Major accomplishments]
+- **Process improvements**: [Improved processes]
+- **Next month's focus**: [Areas to focus on]

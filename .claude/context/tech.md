@@ -3,67 +3,67 @@ cache_control: {"type": "ephemeral"}
 ---
 # Technical Context
 
-## アーキテクチャ概要
+## Architecture Overview
 ```
-[必要に応じてASCIIアートでアーキテクチャ図]
+[Architecture diagram in ASCII art as needed]
 ```
 
-## 技術スタック詳細
-### フロントエンド
-- [フレームワーク] v[バージョン]
-- [ライブラリ1] v[バージョン] - [用途]
-- [ライブラリ2] v[バージョン] - [用途]
+## Technology Stack Details
+### Frontend
+- [Framework] v[version]
+- [Library 1] v[version] - [Purpose]
+- [Library 2] v[version] - [Purpose]
 
-### バックエンド
-- [言語] v[バージョン]
-- [フレームワーク] v[バージョン]
-- [重要ライブラリ] v[バージョン] - [用途]
+### Backend
+- [Language] v[version]
+- [Framework] v[version]
+- [Important library] v[version] - [Purpose]
 
-### インフラ・ツール
-- [DB] v[バージョン]
-- [その他重要ツール]
+### Infrastructure & Tools
+- [DB] v[version]
+- [Other important tools]
 
-## 開発環境
+## Development Environment
 ```bash
-# セットアップ手順
-[コマンド1]
-[コマンド2]
-[コマンド3]
+# Setup steps
+[Command 1]
+[Command 2]
+[Command 3]
 ```
 
-## 起動手順
+## Startup Procedures
 ```bash
-# 開発環境
-[起動コマンド]
+# Development environment
+[Startup command]
 
-# 本番環境
-[デプロイコマンド]
+# Production environment
+[Deploy command]
 ```
 
-## API設計
-### 主要エンドポイント
-- `GET /api/[resource]` - [用途]
-- `POST /api/[resource]` - [用途]
-- `PUT /api/[resource]/:id` - [用途]
-- `DELETE /api/[resource]/:id` - [用途]
+## API Design
+### Main Endpoints
+- `GET /api/[resource]` - [Purpose]
+- `POST /api/[resource]` - [Purpose]
+- `PUT /api/[resource]/:id` - [Purpose]
+- `DELETE /api/[resource]/:id` - [Purpose]
 
-## データベース設計
-### 主要テーブル
-- `[table1]`: [用途]
-- `[table2]`: [用途]
+## Database Design
+### Main Tables
+- `[table1]`: [Purpose]
+- `[table2]`: [Purpose]
 
-## 設定ファイル
-- `[ファイル名]`: [用途と重要な設定]
-- `[ファイル名]`: [用途と重要な設定]
+## Configuration Files
+- `[File name]`: [Purpose and important settings]
+- `[File name]`: [Purpose and important settings]
 
-## パフォーマンス要件
-- [要件1]: [数値目標]
-- [要件2]: [数値目標]
+## Performance Requirements
+- [Requirement 1]: [Numerical target]
+- [Requirement 2]: [Numerical target]
 
-## セキュリティ考慮事項
-- [考慮事項1]
-- [考慮事項2]
+## Security Considerations
+- [Consideration 1]
+- [Consideration 2]
 
-## 已知の制約・課題
-- [制約1]: [詳細と対処法]
-- [制約2]: [詳細と対処法]
+## Known Constraints & Issues
+- [Constraint 1]: [Details and workaround]
+- [Constraint 2]: [Details and workaround]
