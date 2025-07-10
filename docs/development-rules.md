@@ -1,226 +1,226 @@
-# 開発規約（詳細版）
+# Development Rules (Detailed)
 
-## パッケージ管理
+## Package Management
 
-### 推奨ツール
-- **統一原則**: プロジェクトに応じて統一（npm/yarn/pnpm, pip/poetry/uv等）
-- **インストール**: `[tool] add package` 形式を推奨
-- **実行**: `[tool] run command` 形式を推奨
+### Recommended Tools
+- **Unification Principle**: Unify per project (npm/yarn/pnpm, pip/poetry/uv, etc.)
+- **Installation**: Recommend `[tool] add package` format
+- **Execution**: Recommend `[tool] run command` format
 
-### 禁止事項
-- 混在使用（複数のパッケージマネージャーの併用）
-- `@latest`構文の使用（バージョン固定推奨）
-- グローバルインストール（プロジェクト内で完結）
+### Prohibited Practices
+- Mixed usage (using multiple package managers together)
+- Using `@latest` syntax (recommend version pinning)
+- Global installation (keep everything within project)
 
-## コード品質基準
+## Code Quality Standards
 
-### 基本原則
-- **型注釈**: 全ての関数・変数に型情報を付与
-- **ドキュメント**: パブリックAPI・複雑な処理に必須
-- **関数設計**: 単一責任・小さな関数を心がける
-- **既存パターン**: 必ず既存コードのパターンに従う
-- **行長制限**: 80-120文字（言語・チームで統一）
+### Basic Principles
+- **Type Annotations**: Add type information to all functions and variables
+- **Documentation**: Required for public APIs and complex processes
+- **Function Design**: Aim for single responsibility and small functions
+- **Existing Patterns**: Always follow existing code patterns
+- **Line Length**: 80-120 characters (unified by language/team)
 
-## テスト要件（段階的TDD学習パス）
+## Test Requirements (Gradual TDD Learning Path)
 
-### TDD学習ステップ（未経験者向け）
+### TDD Learning Steps (For Beginners)
 
-**Phase 1 (Week 1-2): TDD体験なし**
-- 既存コードの理解・修正に集中
-- 実装後のテスト追加でもOK
-- Claude Codeの基本操作習得
+**Phase 1 (Week 1-2): No TDD Experience**
+- Focus on understanding and modifying existing code
+- Adding tests after implementation is OK
+- Master basic Claude Code operations
 
-**Phase 2 (Week 3-4): TDD体験開始**
-- 小さな機能でTDD体験（Claudeがテスト作成サポート）
-- 「まず失敗するテストを書いて」→実装→リファクタリング
-- Red-Green-Refactorサイクルを体験
+**Phase 2 (Week 3-4): Start TDD Experience**
+- Experience TDD with small features (Claude supports test creation)
+- "Write failing test first" → Implementation → Refactoring
+- Experience Red-Green-Refactor cycle
 
-**Phase 3 (Month 2-3): TDD習得**
-- 新機能開発時にTDD適用
-- 自己デバッグループ（`claude test --fix`）活用
-- TDDパターンが自然に身につく
+**Phase 3 (Month 2-3): Master TDD**
+- Apply TDD for new feature development
+- Utilize self-debugging group (`claude test --fix`)
+- TDD patterns become natural
 
-### テスト基準
-- **テストフレームワーク**: プロジェクトで統一されたものを使用
-- **カバレッジ目標**: 重要な機能は80%以上（段階的に向上）
-- **推奨テストケース**: 
-  - エッジケース（境界値・異常値）
-  - エラーハンドリング
-  - 新機能には対応するテスト（TDD習得後は先行作成）
-  - バグ修正には回帰テスト
+### Test Standards
+- **Test Framework**: Use unified framework for the project
+- **Coverage Target**: 80%+ for important features (improve gradually)
+- **Recommended Test Cases**: 
+  - Edge cases (boundary values, abnormal values)
+  - Error handling
+  - Corresponding tests for new features (create first after TDD mastery)
+  - Regression tests for bug fixes
 
-### Claude Code TDD支援機能
-- **テスト生成**: Claudeが失敗テスト作成をガイド
-- **自己デバッグ**: `claude test --fix`で自動パッチ提案
-- **学習効果**: 実際のコードでTDDパターン習得
+### Claude Code TDD Support Features
+- **Test Generation**: Claude guides failing test creation
+- **Self-debugging**: Auto-patch suggestions with `claude test --fix`
+- **Learning Effect**: Master TDD patterns with actual code
 
-## Git/PR規約
+## Git/PR Conventions
 
-### コミットメッセージ
-- **基本形式**: `[prefix]: [変更内容]`
-- **prefix一覧**:
-  - `feat`: 新機能追加
-  - `fix`: バグ修正
-  - `docs`: ドキュメント更新
-  - `style`: フォーマット・空白等（動作変更なし）
-  - `refactor`: リファクタリング（機能変更なし）
-  - `test`: テスト追加・修正
-  - `chore`: ビルド・依存関係・設定変更
+### Commit Messages
+- **Basic Format**: `[prefix]: [change description]`
+- **Prefix List**:
+  - `feat`: New feature addition
+  - `fix`: Bug fix
+  - `docs`: Documentation update
+  - `style`: Formatting, whitespace, etc. (no behavior change)
+  - `refactor`: Refactoring (no functional change)
+  - `test`: Test addition/modification
+  - `chore`: Build, dependencies, configuration changes
 
-### 必須トレーラー
+### Required Trailers
 ```bash
-# バグ報告ベースの修正
+# Bug report-based fixes
 git commit -m "fix: resolve memory leak in data processor" --trailer "Reported-by: Username"
 
-# GitHub Issue関連
+# GitHub Issue related
 git commit -m "feat: add user authentication" --trailer "Github-Issue: #123"
 ```
 
-### Pull Request規約
-- **タイトル**: コミットメッセージと同様の形式
-- **説明要件**:
-  - **背景**: なぜこの変更が必要か
-  - **変更内容**: 何を変更したか（高レベル）
-  - **影響範囲**: どこに影響するか
-  - **テスト**: どのようにテストしたか
-- **レビュー**:
-  - 適切なレビュアーを指定
-  - セルフレビューを先に実施
-- **禁止事項**:
-  - `Co-authored-by` 等のツール言及禁止
-  - 単純な作業ログの羅列
+### Pull Request Conventions
+- **Title**: Same format as commit messages
+- **Description Requirements**:
+  - **Background**: Why this change is needed
+  - **Changes**: What was changed (high level)
+  - **Impact**: Where it affects
+  - **Testing**: How it was tested
+- **Review**:
+  - Assign appropriate reviewers
+  - Conduct self-review first
+- **Prohibited**:
+  - Prohibition of tool mentions like `Co-authored-by`
+  - Simple work log listings
 
-## 実行コマンド一覧
+## Command List
 
-### 基本開発フロー
+### Basic Development Flow
 ```bash
-# プロジェクトセットアップ（初回のみ）
-[tool] install                   # 依存関係インストール
-[tool] run dev                   # 開発サーバー起動
+# Project setup (first time only)
+[tool] install                   # Install dependencies
+[tool] run dev                   # Start development server
 
-# テスト実行
-[tool] run test                  # 全テスト実行
-[tool] run test:watch           # ウォッチモード
+# Test execution
+[tool] run test                  # Run all tests
+[tool] run test:watch           # Watch mode
 
-# 品質チェック
-[tool] run format               # コードフォーマット適用
-[tool] run lint                 # リントチェック・自動修正
-[tool] run typecheck            # 型チェック実行（該当言語）
+# Quality checks
+[tool] run format               # Apply code formatting
+[tool] run lint                 # Lint check and auto-fix
+[tool] run typecheck            # Run type check (for applicable languages)
 
-# ビルド・リリース
-[tool] run build                # プロダクションビルド
-[tool] run check                # 総合チェック（CI前確認）
+# Build and release
+[tool] run build                # Production build
+[tool] run check                # Comprehensive check (pre-CI confirmation)
 ```
 
-### パッケージ管理
+### Package Management
 ```bash
-[tool] add [package-name]       # 依存関係追加
-[tool] remove [package-name]    # 依存関係削除
-[tool] update                   # 全依存関係更新
+[tool] add [package-name]       # Add dependency
+[tool] remove [package-name]    # Remove dependency
+[tool] update                   # Update all dependencies
 ```
 
-**注記**: `[tool]`はプロジェクトで使用するパッケージマネージャーに置き換え
+**Note**: Replace `[tool]` with the package manager used in the project
 - Node.js: `npm`, `yarn`, `pnpm`
 - Python: `pip`, `poetry`, `uv`
 - Rust: `cargo`
 - Go: `go`
-- その他言語の標準ツール
+- Standard tools for other languages
 
-## エラー対応ガイド
+## Error Handling Guide
 
-### 問題解決の標準順序
-エラーが発生した際は、以下の順序で対処することで効率的に問題を解決できます：
+### Standard Problem-Solving Order
+When errors occur, follow this order for efficient problem resolution:
 
-1. **フォーマットエラー** → `[tool] run format`
-2. **型エラー** → `[tool] run typecheck`
-3. **リントエラー** → `[tool] run lint:fix`
-4. **テストエラー** → `[tool] run test`
+1. **Format Errors** → `[tool] run format`
+2. **Type Errors** → `[tool] run typecheck`
+3. **Lint Errors** → `[tool] run lint:fix`
+4. **Test Errors** → `[tool] run test`
 
-### よくある問題と解決策
+### Common Problems and Solutions
 
-#### フォーマット・リント関連
-- **行長エラー**: 適切な箇所で改行、文字列は括弧で分割
-- **インポート順序**: 自動修正を使用 `[tool] run lint:fix`
-- **未使用インポート**: 不要な import を削除
+#### Format/Lint Related
+- **Line length errors**: Break at appropriate places, split strings with parentheses
+- **Import order**: Use auto-fix `[tool] run lint:fix`
+- **Unused imports**: Remove unnecessary imports
 
-#### 型チェック関連
-- **Optional型エラー**: null/undefined チェックを追加
-- **型推論エラー**: 明示的な型注釈を追加
-- **関数シグネチャ**: 引数・戻り値の型を確認
+#### Type Check Related
+- **Optional type errors**: Add null/undefined checks
+- **Type inference errors**: Add explicit type annotations
+- **Function signatures**: Verify argument and return types
 
-#### テスト関連
-- **テスト環境**: 必要な依存関係・設定を確認
-- **非同期テスト**: Promise の適切な処理を確認
-- **モック**: 外部依存関係の適切なモック化
+#### Test Related
+- **Test environment**: Verify necessary dependencies and settings
+- **Async tests**: Ensure proper Promise handling
+- **Mocks**: Appropriate mocking of external dependencies
 
-### ベストプラクティス
+### Best Practices
 
-#### 開発時の心がけ
-- **コミット前**: `[tool] run check` で総合チェック
-- **最小変更**: 一度に多くの変更を避ける
-- **既存パターン**: 既存コードの書き方に合わせる
-- **段階的修正**: 大きな変更は小さく分割
+#### Development Mindset
+- **Before commit**: Comprehensive check with `[tool] run check`
+- **Minimal changes**: Avoid many changes at once
+- **Existing patterns**: Match existing code style
+- **Gradual fixes**: Split large changes into smaller ones
 
-#### エラー対応時
-- **エラーメッセージを熟読**: 具体的な原因を特定
-- **コンテキスト確認**: エラー周辺のコードを理解
-- **ドキュメント参照**: 公式ドキュメント・チーム内資料を確認
-- **再現性確認**: 修正後に同じエラーが発生しないか確認
+#### When Handling Errors
+- **Read error messages carefully**: Identify specific causes
+- **Check context**: Understand code around the error
+- **Reference documentation**: Check official docs and team materials
+- **Verify reproducibility**: Ensure same error doesn't occur after fix
 
-#### 情報収集・質問時
-- **環境情報**: OS・言語・ツールバージョンを明記
-- **再現手順**: 具体的な操作手順を記録
-- **エラーログ**: 完全なエラーメッセージを保存
-- **試行錯誤**: 既に試した解決策を記録
+#### Information Gathering and Questions
+- **Environment info**: Specify OS, language, tool versions
+- **Reproduction steps**: Record specific operation steps
+- **Error logs**: Save complete error messages
+- **Trial and error**: Record solutions already tried
 
-## 品質ゲート
+## Quality Gates
 
-### 必須チェック項目
+### Required Check Items
 
-#### コミット前チェック
-- [ ] `[tool] run format` - コードフォーマット適用済み
-- [ ] `[tool] run lint` - リント警告解消済み
-- [ ] `[tool] run typecheck` - 型チェック通過
-- [ ] `[tool] run test` - 全テスト通過
-- [ ] Git status確認 - 意図しないファイル変更なし
+#### Pre-commit Checks
+- [ ] `[tool] run format` - Code formatting applied
+- [ ] `[tool] run lint` - Lint warnings resolved
+- [ ] `[tool] run typecheck` - Type check passed
+- [ ] `[tool] run test` - All tests passed
+- [ ] Git status check - No unintended file changes
 
-#### PR作成前チェック
-- [ ] `[tool] run check` - 総合チェック通過
-- [ ] セルフレビュー実施済み
-- [ ] 関連ドキュメント更新済み
-- [ ] テストケース追加済み（新機能・バグ修正）
-- [ ] Breaking changesの文書化（該当時）
+#### Pre-PR Checks
+- [ ] `[tool] run check` - Comprehensive check passed
+- [ ] Self-review completed
+- [ ] Related documentation updated
+- [ ] Test cases added (new features/bug fixes)
+- [ ] Breaking changes documented (if applicable)
 
-#### デプロイ前チェック
-- [ ] `[tool] run build` - ビルド成功
-- [ ] 統合テスト通過
-- [ ] パフォーマンス確認
-- [ ] セキュリティチェック
-- [ ] ロールバック手順確認
+#### Pre-deploy Checks
+- [ ] `[tool] run build` - Build successful
+- [ ] Integration tests passed
+- [ ] Performance verified
+- [ ] Security check
+- [ ] Rollback procedure confirmed
 
-### 自動化レベル
+### Automation Levels
 
-#### 完全自動化（CI/CD）
-- コードフォーマット
-- リントチェック
-- 型チェック
-- 単体テスト実行
-- ビルド検証
+#### Fully Automated (CI/CD)
+- Code formatting
+- Lint checks
+- Type checks
+- Unit test execution
+- Build verification
 
-#### 半自動化（人間が開始）
-- 統合テスト
-- E2Eテスト
-- セキュリティスキャン
-- パフォーマンステスト
+#### Semi-automated (Human-initiated)
+- Integration tests
+- E2E tests
+- Security scans
+- Performance tests
 
-#### 手動確認必須
-- コードレビュー
-- アーキテクチャ設計確認
-- ユーザビリティ確認
-- ビジネスロジック妥当性
-- データ移行影響確認
+#### Manual Verification Required
+- Code review
+- Architecture design confirmation
+- Usability verification
+- Business logic validity
+- Data migration impact confirmation
 
-### チェックリスト運用
-- **日次**: コミット前チェックを習慣化
-- **週次**: 品質メトリクス確認
-- **月次**: チェック項目の見直し・改善
+### Checklist Operations
+- **Daily**: Make pre-commit checks a habit
+- **Weekly**: Review quality metrics
+- **Monthly**: Review and improve check items

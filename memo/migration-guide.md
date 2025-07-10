@@ -1,43 +1,43 @@
-# 既存プロジェクトへの段階的マイグレーション ガイド
+# Gradual Migration Guide for Existing Projects
 
-既に運用中のプロジェクトに、前世代メモリバンクシステムから新機能を段階的に導入するための実践ガイドです。
+A practical guide for gradually introducing new features from the previous generation memory bank system to projects already in operation.
 
-## 🎯 導入可能テクニック一覧
+## 🎯 Available Techniques Overview
 
-### 🟢 即座導入可能（リスク：極低）
-1. **プロンプトキャッシュ最適化**
-2. **.gitignore強化**
-3. **誤字・一貫性修正**
-4. **セキュリティ機能導入**
-5. **AI-Friendly Logger（新機能）**
+### 🟢 Immediately Applicable (Risk: Very Low)
+1. **Prompt Cache Optimization**
+2. **Enhanced .gitignore**
+3. **Typo and Consistency Fixes**
+4. **Security Feature Implementation**
+5. **AI-Friendly Logger (New Feature)**
 
-### 🟡 段階導入推奨（リスク：低）
-6. **ADRシステム**
-7. **技術負債トラッキング**
+### 🟡 Recommended for Gradual Introduction (Risk: Low)
+6. **ADR System**
+7. **Technical Debt Tracking**
 
-### 🔴 慎重検討必要（リスク：中）
-8. **Memory Bank構造変更**
+### 🔴 Requires Careful Consideration (Risk: Medium)
+8. **Memory Bank Structure Changes**
 
 ---
 
-## 🚀 段階1: 即座導入可能（所要時間：20分）
+## 🚀 Phase 1: Immediately Applicable (Time Required: 20 minutes)
 
-### 1.1 プロンプトキャッシュ最適化
+### 1.1 Prompt Cache Optimization
 
-#### 思想
-- **90%コスト削減・85%レイテンシ短縮**の恩恵を既存プロジェクトでも享受
-- 既存ワークフローに**一切影響なし**
-- 長期安定な情報（概要、技術スタック等）の再利用効率化
+#### Philosophy
+- Enjoy **90% cost reduction and 85% latency reduction** benefits in existing projects
+- **Zero impact** on existing workflows
+- Improve reuse efficiency of long-term stable information (overview, tech stack, etc.)
 
-#### 導入手順
+#### Implementation Steps
 
-**Step 1: 環境設定ファイル作成**
+**Step 1: Create Environment Configuration File**
 ```bash
-# プロジェクトルートで実行
+# Execute in project root
 touch .claude/settings.json
 ```
 
-**Step 2: キャッシュ設定追加**
+**Step 2: Add Cache Settings**
 ```json
 // .claude/settings.json
 {
@@ -47,8 +47,8 @@ touch .claude/settings.json
 }
 ```
 
-**Step 3: cache_control適用**
-以下のファイルに `cache_control` を追加（存在する場合のみ）：
+**Step 3: Apply cache_control**
+Add `cache_control` to the following files (if they exist):
 
 ```yaml
 ---
@@ -56,37 +56,37 @@ cache_control: {"type": "ephemeral"}
 ---
 ```
 
-**適用対象ファイル**：
-- プロジェクト概要系（overview.md、README系）
-- 技術仕様系（tech.md、requirements.md）
-- テンプレート・パターン集
+**Target Files**:
+- Project overview files (overview.md, README files)
+- Technical specification files (tech.md, requirements.md)
+- Template and pattern collections
 
-**Step 4: .gitignore更新**
+**Step 4: Update .gitignore**
 ```gitignore
-# Claude Code キャッシュファイル
+# Claude Code cache files
 .ccache/
 *.cache
 ```
 
-#### 期待効果
-- **即座**: 同一プロンプト再実行で大幅コスト削減
-- **累積**: 長期運用でのトークン使用量最適化
+#### Expected Benefits
+- **Immediate**: Significant cost reduction with identical prompt re-execution
+- **Cumulative**: Token usage optimization in long-term operation
 
-### 1.2 .gitignore強化
+### 1.2 Enhanced .gitignore
 
-#### 思想
-- キャッシュファイルの適切な除外
-- 開発環境の整理・統一
+#### Philosophy
+- Proper exclusion of cache files
+- Development environment organization and unification
 
-#### 導入手順
-既存の`.gitignore`に以下を追加：
+#### Implementation Steps
+Add the following to existing `.gitignore`:
 
 ```gitignore
-# Claude Code 関連
+# Claude Code related
 .ccache/
 *.cache
 
-# 共通除外パターン（必要に応じて）
+# Common exclusion patterns (as needed)
 .DS_Store
 *.swp
 *.tmp
@@ -94,41 +94,41 @@ cache_control: {"type": "ephemeral"}
 .vscode/settings.json
 ```
 
-### 1.3 誤字・一貫性修正
+### 1.3 Typo and Consistency Fixes
 
-#### 思想
-- 文書品質の向上
-- チーム内コミュニケーションの改善
+#### Philosophy
+- Improve document quality
+- Enhance team communication
 
-#### 導入手順
-以下の用語を統一：
-- 「連用」→「運用」
-- 「遵用」→「運用」
-- カスタムコマンド説明の詳細度統一
+#### Implementation Steps
+Unify the following terms:
+- "連用" → "運用" (operation)
+- "遵用" → "運用" (operation)
+- Unify detail level of custom command descriptions
 
-### 1.4 セキュリティ機能導入
+### 1.4 Security Feature Implementation
 
-#### 思想
-- **危険コマンドの自動ブロック**でセキュリティリスクを減少
-- 開発効率を保ちながら安全性を向上
-- 既存ワークフローへの影響最小限
+#### Philosophy
+- Reduce security risks with **automatic blocking of dangerous commands**
+- Improve safety while maintaining development efficiency
+- Minimal impact on existing workflows
 
-#### 導入手順
+#### Implementation Steps
 
-**Step 1: セキュリティスクリプトディレクトリ作成**
+**Step 1: Create Security Script Directory**
 ```bash
 mkdir -p .claude/scripts
 ```
 
-**Step 2: セキュリティスクリプト設置**
-[セキュリティスクリプトをコピー - .claude/scripts/deny-check.sh, allow-check.sh]
+**Step 2: Install Security Scripts**
+[Copy security scripts - .claude/scripts/deny-check.sh, allow-check.sh]
 
-**Step 3: 実行権付与**
+**Step 3: Grant Execution Permissions**
 ```bash
 chmod +x .claude/scripts/*.sh
 ```
 
-**Step 4: settings.jsonにセキュリティ設定追加**
+**Step 4: Add Security Settings to settings.json**
 ```json
 {
   "env": {
@@ -150,43 +150,43 @@ chmod +x .claude/scripts/*.sh
 }
 ```
 
-**Step 5: セキュリティテスト実行**
+**Step 5: Run Security Tests**
 ```bash
 .claude/scripts/test-security.sh
 ```
 
-#### 期待効果
-- **即座**: 危険コマンドの自動ブロック
-- **継続**: 安全な開発環境の維持
-- **ログ**: コマンド実行履歴の追跡可能
+#### Expected Benefits
+- **Immediate**: Automatic blocking of dangerous commands
+- **Continuous**: Maintain safe development environment
+- **Logging**: Trackable command execution history
 
-### 1.5 AI-Friendly Logger導入（新機能）
+### 1.5 AI-Friendly Logger Implementation (New Feature)
 
-#### 思想
-- **AI分析に最適化されたログ形式**でデバッグ効率向上
-- **Vibe Logger概念採用**によるAI駆動開発（VibeCoding）の実現
-- 既存ログシステムとの並行動作で段階的移行可能
+#### Philosophy
+- Improve debugging efficiency with **log format optimized for AI analysis**
+- Realize AI-driven development (VibeCoding) by adopting **Vibe Logger concept**
+- Enable gradual migration with parallel operation alongside existing log system
 
-#### 導入手順
+#### Implementation Steps
 
-**Step 1: スクリプトディレクトリ確認**
+**Step 1: Verify Script Directory**
 ```bash
 mkdir -p .claude/scripts
 ```
 
-**Step 2: AI Logger スクリプトのダウンロード**
-最新テンプレートから以下のファイルをコピー：
+**Step 2: Download AI Logger Scripts**
+Copy the following files from the latest template:
 - `.claude/scripts/ai-logger.sh`
 - `.claude/scripts/analyze-ai-logs.py`
 - `.claude/ai-logger-README.md`
 
-**Step 3: 実行権限付与**
+**Step 3: Grant Execution Permissions**
 ```bash
 chmod +x .claude/scripts/ai-logger.sh
 chmod +x .claude/scripts/analyze-ai-logs.py
 ```
 
-**Step 4: settings.jsonにAI Logger追加**
+**Step 4: Add AI Logger to settings.json**
 ```json
 {
   "hooks": {
@@ -209,208 +209,208 @@ chmod +x .claude/scripts/analyze-ai-logs.py
 }
 ```
 
-**Step 5: 動作確認**
+**Step 5: Verify Operation**
 ```bash
-# テストファイル作成・削除
+# Test file creation and deletion
 echo "test" > test.txt && rm test.txt
 
-# AIログ生成確認
+# Verify AI log generation
 ls -la ~/.claude/ai-activity.jsonl
 
-# ログ解析テスト
+# Test log analysis
 .claude/scripts/analyze-ai-logs.py --format summary
 ```
 
-#### 期待効果
-- **即座**: 構造化ログによるデバッグ情報の充実
-- **短期**: エラーパターンの可視化・分析
-- **長期**: AI支援によるデバッグ効率の大幅向上
+#### Expected Benefits
+- **Immediate**: Enriched debug information through structured logs
+- **Short-term**: Visualization and analysis of error patterns
+- **Long-term**: Significantly improved debugging efficiency with AI support
 
-#### 参考
+#### References
 - [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
-- [AIエージェント向けログシステム「Vibe Logger」の提案](https://note.com/fladdict/n/n5046f72bdadd)
+- [Proposal for AI Agent Logging System "Vibe Logger"](https://note.com/fladdict/n/n5046f72bdadd)
 
 ---
 
-## 📈 段階2: 段階導入推奨（所要時間：30分）
+## 📈 Phase 2: Recommended for Gradual Introduction (Time Required: 30 minutes)
 
-### 2.1 ADRシステム導入
+### 2.1 ADR System Implementation
 
-#### 思想
-- **技術的意思決定の透明化**
-- 将来の変更・保守での「なぜその技術を選んだか」の明確化
-- チーム知識の蓄積・継承
+#### Philosophy
+- **Transparency of technical decision-making**
+- Clarify "why that technology was chosen" for future changes and maintenance
+- Team knowledge accumulation and inheritance
 
-#### 導入手順
+#### Implementation Steps
 
-**Step 1: ディレクトリ作成**
+**Step 1: Create Directory**
 ```bash
 mkdir -p docs/adr
 ```
 
-**Step 2: テンプレート配置**
-[ADRテンプレート内容をコピー - docs/adr/template.md]
+**Step 2: Place Template**
+[Copy ADR template content - docs/adr/template.md]
 
-**Step 3: 既存決定の遡及記録**
+**Step 3: Retroactive Recording of Existing Decisions**
 ```bash
-# 過去の重要決定を1つずつ記録
+# Record past important decisions one by one
 cp docs/adr/template.md docs/adr/0001-initial-tech-stack.md
-# 内容を過去の決定に合わせて編集
+# Edit content to match past decisions
 ```
 
-#### 推奨運用
-- **新規技術導入時**: 必ずADR作成
-- **アーキテクチャ変更時**: 背景・理由を明文化
-- **月1回**: ADRレビューで決定の妥当性確認
+#### Recommended Operations
+- **When introducing new technology**: Always create ADR
+- **When changing architecture**: Document background and reasons
+- **Monthly**: Review ADRs to confirm decision validity
 
-#### 期待効果
-- **即時**: 技術選択の根拠明確化
-- **長期**: 技術負債化の予防
+#### Expected Benefits
+- **Immediate**: Clarify rationale for technical choices
+- **Long-term**: Prevent technical debt
 
-### 2.2 技術負債トラッキング
+### 2.2 Technical Debt Tracking
 
-#### 思想
-- **見える化による負債管理**
-- 優先度付けによる効率的解決
-- キャッシュ影響を考慮したコスト管理
+#### Philosophy
+- **Debt management through visualization**
+- Efficient resolution through prioritization
+- Cost management considering cache impact
 
-#### 導入手順
+#### Implementation Steps
 
-**Step 1: 負債ログファイル作成**
+**Step 1: Create Debt Log File**
 ```bash
 touch .claude/context/debt.md
 ```
 
-**Step 2: 既存負債の棚卸し**
+**Step 2: Inventory Existing Debt**
 ```markdown
-# 現在認識している技術負債をリストアップ
-### 高優先度 🔥
-| 負債内容 | 推定コスト | 期限 | 影響範囲 |
-|---------|-----------|------|---------|
-| 古いライブラリ依存 | 4時間 | 来月末 | 全体 |
+# List currently recognized technical debt
+### High Priority 🔥
+| Debt Content | Estimated Cost | Deadline | Impact Range |
+|--------------|----------------|----------|--------------|
+| Old library dependencies | 4 hours | End of next month | Overall |
 ```
 
-**Step 3: 運用ルール策定**
-- **新機能開発時**: 発生可能性のある負債を事前記録
-- **スプリント終了時**: 実際に発生した負債の優先度付け
-- **月1回**: 負債全体の見直し
+**Step 3: Establish Operating Rules**
+- **During new feature development**: Pre-record potential debt
+- **At sprint end**: Prioritize actually incurred debt
+- **Monthly**: Review overall debt
 
-#### 期待効果
-- **即時**: 負債の可視化・優先度明確化
-- **中期**: 計画的な負債解決
-- **長期**: 負債発生の予防
+#### Expected Benefits
+- **Immediate**: Debt visualization and priority clarification
+- **Medium-term**: Planned debt resolution
+- **Long-term**: Debt occurrence prevention
 
 ---
 
-## ⚠️ 段階3: 慎重検討必要（所要時間：1-2時間）
+## ⚠️ Phase 3: Requires Careful Consideration (Time Required: 1-2 hours)
 
-### 3.1 Memory Bank構造変更
+### 3.1 Memory Bank Structure Changes
 
-#### 思想
-- **階層化による効率化**
-- **コンテキスト使用量の最小化**
+#### Philosophy
+- **Efficiency through hierarchization**
+- **Minimize context usage**
 
-#### 注意点
-- 既存ワークフローへの影響大
-- チーム全体での合意必要
-- 段階的移行推奨
+#### Cautions
+- Major impact on existing workflows
+- Requires team-wide consensus
+- Gradual migration recommended
 
-#### 導入判断基準
-以下の条件が揃った場合のみ実施：
-- [ ] チーム全体での合意取得済み
-- [ ] 現在のシステムでの不便を実感
-- [ ] 移行期間（1-2週間）の確保可能
-- [ ] ロールバック手順の準備完了
+#### Implementation Criteria
+Implement only when all conditions are met:
+- [ ] Team-wide consensus obtained
+- [ ] Experiencing inconvenience with current system
+- [ ] Migration period (1-2 weeks) can be secured
+- [ ] Rollback procedures prepared
 
-#### 導入手順（合意後）
+#### Implementation Steps (After Consensus)
 ```bash
-# 既存ファイルのバックアップ
+# Backup existing files
 cp -r .claude .claude.backup
 
-# 新構造ディレクトリ作成
+# Create new structure directories
 mkdir -p .claude/context
 mkdir -p .claude/debug  
 mkdir -p .claude/commands
 
-# 段階的移行
-# 1週間ごとに1つずつ移動
+# Gradual migration
+# Move one item per week
 ```
 
 ---
 
-## 📋 導入チェックリスト
+## 📋 Implementation Checklist
 
-### Phase 1（即座導入）
-- [ ] .claude/settings.json作成
-- [ ] cache_control適用（対象ファイル特定・追加）
-- [ ] .gitignore更新
-- [ ] 用語統一（誤字修正）
-- [ ] セキュリティ機能導入（スクリプト設置・テスト実行）
-- [ ] AI Logger導入（スクリプト設置・動作確認）
-- [ ] キャッシュ効果確認（コスト削減実感）
+### Phase 1 (Immediate Implementation)
+- [ ] Create .claude/settings.json
+- [ ] Apply cache_control (identify and add to target files)
+- [ ] Update .gitignore
+- [ ] Unify terminology (fix typos)
+- [ ] Implement security features (install scripts and run tests)
+- [ ] Implement AI Logger (install scripts and verify operation)
+- [ ] Verify cache effectiveness (experience cost reduction)
 
-### Phase 2（段階導入）
-- [ ] ADRディレクトリ・テンプレート作成
-- [ ] 過去の技術決定1-2件をADR化
-- [ ] 負債ログファイル作成
-- [ ] 既存負債の棚卸し完了
-- [ ] 運用ルール設定・チーム共有
+### Phase 2 (Gradual Implementation)
+- [ ] Create ADR directory and template
+- [ ] Document 1-2 past technical decisions as ADRs
+- [ ] Create debt log file
+- [ ] Complete existing debt inventory
+- [ ] Set operating rules and share with team
 
-### Phase 3（慎重検討）
-- [ ] チーム合意取得
-- [ ] 移行計画策定
-- [ ] バックアップ取得
-- [ ] 段階的移行実施
-
----
-
-## 🎯 成功パターン事例
-
-### ケース1: 小規模個人プロジェクト
-**適用**: Phase 1 + ADRシステム
-**結果**: 30%のコスト削減、技術選択の記録化
-**期間**: 1日
-
-### ケース2: 中規模チームプロジェクト  
-**適用**: Phase 1 + Phase 2 完全実施
-**結果**: 50%のコスト削減、負債の計画的解決
-**期間**: 2週間（段階的導入）
-
-### ケース3: 大規模プロジェクト
-**適用**: Phase 1のみ
-**結果**: 安全確実なコスト削減のみ実現
-**期間**: 半日
+### Phase 3 (Careful Consideration)
+- [ ] Obtain team consensus
+- [ ] Develop migration plan
+- [ ] Take backups
+- [ ] Implement gradual migration
 
 ---
 
-## ⚡ トラブルシューティング
+## 🎯 Success Pattern Examples
 
-### よくある問題
+### Case 1: Small Personal Project
+**Applied**: Phase 1 + ADR System
+**Result**: 30% cost reduction, technical choice documentation
+**Duration**: 1 day
 
-**Q: cache_controlを追加後、エラーが発生**
-A: YAMLフロントマターの形式確認。既存内容との衝突チェック
+### Case 2: Medium-sized Team Project
+**Applied**: Phase 1 + Complete Phase 2 implementation
+**Result**: 50% cost reduction, planned debt resolution
+**Duration**: 2 weeks (gradual introduction)
 
-**Q: キャッシュ効果が実感できない**  
-A: 同一プロンプトの再実行確認。cache_control対象ファイルの使用頻度確認
-
-**Q: ADRが続かない**
-A: 最初は重要決定のみ。完璧を求めず継続重視
-
-**Q: 負債ログが形骸化**
-A: 月1回のレビュー必須。優先度の見直し定期実施
+### Case 3: Large-scale Project
+**Applied**: Phase 1 only
+**Result**: Safe and certain cost reduction only
+**Duration**: Half day
 
 ---
 
-## 📊 効果測定指標
+## ⚡ Troubleshooting
 
-### 定量指標
-- **コスト削減率**: キャッシュヒット時の課金比較
-- **レスポンス短縮**: 同一プロンプト実行時間比較  
-- **負債解決率**: 月次での負債完了件数
+### Common Issues
 
-### 定性指標
-- **技術選択の透明性**: ADR活用による意思決定品質
-- **チーム知識共有**: 新メンバーのオンボーディング速度
-- **開発効率**: 負債起因の作業中断回数
+**Q: Error occurs after adding cache_control**
+A: Check YAML frontmatter format. Check for conflicts with existing content
 
-この段階的導入により、既存プロジェクトでも新テンプレートの恩恵を安全確実に享受できます。
+**Q: Cannot feel cache effect**
+A: Verify identical prompt re-execution. Check usage frequency of cache_control target files
+
+**Q: ADR doesn't continue**
+A: Start with important decisions only. Focus on continuation rather than perfection
+
+**Q: Debt log becomes a formality**
+A: Monthly review is essential. Regularly review priorities
+
+---
+
+## 📊 Effectiveness Measurement Metrics
+
+### Quantitative Metrics
+- **Cost reduction rate**: Billing comparison with cache hits
+- **Response time reduction**: Identical prompt execution time comparison
+- **Debt resolution rate**: Monthly debt completion count
+
+### Qualitative Metrics
+- **Technical choice transparency**: Decision quality through ADR utilization
+- **Team knowledge sharing**: New member onboarding speed
+- **Development efficiency**: Work interruption frequency due to debt
+
+This gradual introduction allows existing projects to safely and certainly enjoy the benefits of the new template.

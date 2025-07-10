@@ -1,75 +1,75 @@
-# ADR-[番号]: [決定タイトル]
+# ADR-[Number]: [Decision Title]
 
-日付: [YYYY-MM-DD]  
-ステータス: [Proposed | Accepted | Deprecated | Superseded]  
-決定者: [決定者名]
+Date: [YYYY-MM-DD]  
+Status: [Proposed | Accepted | Deprecated | Superseded]  
+Deciders: [Decision maker names]
 
-## 背景・コンテキスト
+## Context and Background
 
-[なぜこの決定が必要だったか？どのような状況・課題があったか？]
+[Why was this decision needed? What situation or challenges existed?]
 
-## 検討した選択肢
+## Options Considered
 
-### 選択肢 1: [選択肢名]
-- **概要**: [選択肢の説明]
-- **メリット**: 
-  - [メリット1]
-  - [メリット2]
-- **デメリット**: 
-  - [デメリット1]
-  - [デメリット2]
+### Option 1: [Option Name]
+- **Overview**: [Option description]
+- **Pros**: 
+  - [Advantage 1]
+  - [Advantage 2]
+- **Cons**: 
+  - [Disadvantage 1]
+  - [Disadvantage 2]
 
-### 選択肢 2: [選択肢名]
-- **概要**: [選択肢の説明]
-- **メリット**: 
-  - [メリット1]
-  - [メリット2]
-- **デメリット**: 
-  - [デメリット1]
-  - [デメリット2]
+### Option 2: [Option Name]
+- **Overview**: [Option description]
+- **Pros**: 
+  - [Advantage 1]
+  - [Advantage 2]
+- **Cons**: 
+  - [Disadvantage 1]
+  - [Disadvantage 2]
 
-## 決定
+## Decision
 
-**選択**: [選択した選択肢]
+**Choice**: [Selected option]
 
-**理由**: 
-- [選択した理由1]
-- [選択した理由2]
-- [選択した理由3]
+**Reasons**: 
+- [Reason for selection 1]
+- [Reason for selection 2]
+- [Reason for selection 3]
 
-## 影響・結果
+## Consequences
 
-### ポジティブな影響
-- [期待される良い影響1]
-- [期待される良い影響2]
+### Positive Consequences
+- [Expected positive impact 1]
+- [Expected positive impact 2]
 
-### ネガティブな影響・リスク
-- [潜在的なリスク1]
-- [潜在的なリスク2]
+### Negative Consequences/Risks
+- [Potential risk 1]
+- [Potential risk 2]
 
-### 技術的影響
-- [技術スタックへの影響]
-- [既存コードへの影響]
-- [パフォーマンスへの影響]
+### Technical Impact
+- [Impact on technology stack]
+- [Impact on existing code]
+- [Impact on performance]
 
-## 実装計画
+## Implementation Plan
 
-- [ ] [実装ステップ1]
-- [ ] [実装ステップ2] 
-- [ ] [実装ステップ3]
+- [ ] [Implementation step 1]
+- [ ] [Implementation step 2] 
+- [ ] [Implementation step 3]
 
-## フォローアップ
+## Follow-up
 
-- **レビュー予定**: [いつ決定をレビューするか]
-- **成功指標**: [決定が成功したかを測る指標]
-- **関連Issue**: #[Issue番号]
+- **Review Schedule**: [When to review the decision]
+- **Success Metrics**: [Metrics to measure decision success]
+- **Related Issues**: #[Issue number]
 
-## 参考資料
+## References
 
-- [参考文献1]
-- [参考文献2]
-- [関連するADR]: ADR-[番号]
+- [Reference 1]
+- [Reference 2]
+- [Related ADR]: ADR-[Number]
 
 ---
 
-**注記**: このADRは将来の技術選択に影響を与える重要な決定を記録します。変更や廃止の際は新しいADRで理由を明記してください。
+**Note**: This ADR records an important decision that will affect future technical choices. When changing or deprecating, clearly state the reasons in a new ADR.

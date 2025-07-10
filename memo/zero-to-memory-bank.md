@@ -1,72 +1,72 @@
-# メモリバンクシステム未導入プロジェクトへの導入手順書
+# Implementation Guide for Projects Without Memory Bank System
 
-既に稼働中だが、Claude Code Memory Bankシステムを一切使用していないプロジェクトに、ゼロから体系的にシステムを導入するための実践ガイドです。
+A practical guide for systematically introducing the Claude Code Memory Bank system from scratch to projects already in operation but not using any Memory Bank system.
 
-## 🎯 対象プロジェクト
+## 🎯 Target Projects
 
-### 適用条件
-- [ ] 既に開発・運用が進行中
-- [ ] Claude Codeを使用しているが、Memory Bankは未活用
-- [ ] プロジェクト固有の知識が散在・未整理
-- [ ] 技術決定の経緯が不明確
-- [ ] 新メンバーのオンボーディングに時間がかかる
+### Application Criteria
+- [ ] Already in development/operation
+- [ ] Using Claude Code but not utilizing Memory Bank
+- [ ] Project-specific knowledge is scattered and unorganized
+- [ ] Technical decision history is unclear
+- [ ] New member onboarding takes time
 
-### 導入効果予測
-- **短期（1-2週間）**: 情報集約・可視化・AIデバッグ支援強化
-- **中期（1-2ヶ月）**: 開発効率向上・コスト削減・エラーパターン分析
-- **長期（3ヶ月以降）**: 知識資産化・技術負債管理・AI駆動開発実現
+### Expected Implementation Benefits
+- **Short-term (1-2 weeks)**: Information consolidation, visualization, enhanced AI debugging support
+- **Medium-term (1-2 months)**: Improved development efficiency, cost reduction, error pattern analysis
+- **Long-term (3+ months)**: Knowledge asset creation, technical debt management, AI-driven development realization
 
 ---
 
-## 📋 事前準備・現状分析
+## 📋 Preparation & Current State Analysis
 
-### Phase 0: 現状把握（所要時間：30分）
+### Phase 0: Current State Assessment (Time Required: 30 minutes)
 
-#### 現状分析チェックリスト
+#### Current State Analysis Checklist
 ```bash
-# プロジェクト構造確認
+# Check project structure
 find . -name "*.md" -type f | head -20
 find . -name "README*" -type f
 find . -name "docs" -type d
-ls -la .claude/ 2>/dev/null || echo "Memory Bank未導入"
+ls -la .claude/ 2>/dev/null || echo "Memory Bank not implemented"
 ```
 
-#### 情報散在度調査
-- [ ] README.mdの情報量・網羅性
-- [ ] docs/ディレクトリの有無・内容
-- [ ] コメント・ドキュメントの充実度
-- [ ] 技術選択理由の記録状況
-- [ ] 新メンバー向け情報の整備状況
+#### Information Dispersion Survey
+- [ ] README.md information volume and comprehensiveness
+- [ ] Existence and content of docs/ directory
+- [ ] Richness of comments and documentation
+- [ ] Recording status of technical choice reasons
+- [ ] Preparation status of information for new members
 
-#### チーム状況確認
-- [ ] プロジェクトメンバー数
-- [ ] Claude Code使用経験レベル
-- [ ] 文書化への意識・習慣
-- [ ] 変更への抵抗感
+#### Team Situation Confirmation
+- [ ] Number of project members
+- [ ] Claude Code experience level
+- [ ] Awareness and habits regarding documentation
+- [ ] Resistance to change
 
 ---
 
-## 🚀 段階的導入戦略
+## 🚀 Gradual Implementation Strategy
 
-### Stage 1: 基盤構築（Week 1）- 影響度：極小
+### Stage 1: Foundation Building (Week 1) - Impact: Minimal
 
-#### 1.1 ディレクトリ構造作成
+#### 1.1 Create Directory Structure
 ```bash
-# Memory Bank基本構造
+# Basic Memory Bank structure
 mkdir -p .claude/core
 mkdir -p .claude/context
 mkdir -p .claude/scripts
 mkdir -p docs
 
-# 段階的に追加（後日）
+# Add gradually (later)
 # mkdir -p .claude/debug
 # mkdir -p .claude/commands
 # mkdir -p docs/adr
 ```
 
-#### 1.2 最小限の設定ファイル導入
+#### 1.2 Introduce Minimal Configuration Files
 ```bash
-# キャッシュ設定 + セキュリティ設定（即座効果）
+# Cache settings + security settings (immediate effect)
 cat > .claude/settings.json << 'EOF'
 {
   "env": {
@@ -88,353 +88,353 @@ cat > .claude/settings.json << 'EOF'
 }
 EOF
 
-# .gitignore更新
+# Update .gitignore
 echo ".ccache/" >> .gitignore
 echo "*.cache" >> .gitignore
 ```
 
-#### 1.2.1 セキュリティ機能導入
+#### 1.2.1 Security Feature Implementation
 ```bash
-# セキュリティスクリプト設置（テンプレートからコピー）
-# deny-check.sh, allow-check.sh, test-security.shを配置
+# Install security scripts (copy from template)
+# Place deny-check.sh, allow-check.sh, test-security.sh
 chmod +x .claude/scripts/*.sh
 
-# セキュリティテスト実行
+# Run security tests
 .claude/scripts/test-security.sh
 ```
 
-#### 1.2.2 AI Logger機能導入（推奨）
+#### 1.2.2 AI Logger Feature Implementation (Recommended)
 ```bash
-# AI Logger スクリプト設置（テンプレートからコピー）
-# ai-logger.sh, analyze-ai-logs.py, ai-logger-README.md を配置
+# Install AI Logger scripts (copy from template)
+# Place ai-logger.sh, analyze-ai-logs.py, ai-logger-README.md
 chmod +x .claude/scripts/ai-logger.sh
 chmod +x .claude/scripts/analyze-ai-logs.py
 
-# settings.json に AI Logger を追加
-# PostToolUse セクションに以下を追加：
+# Add AI Logger to settings.json
+# Add the following to PostToolUse section:
 # {
 #   "type": "command",
 #   "command": ".claude/scripts/ai-logger.sh"
 # }
 
-# 動作確認
+# Verify operation
 echo "test" > test.txt && rm test.txt
 ls -la ~/.claude/ai-activity.jsonl
 ```
 
-**AI Logger のメリット**：
-- 構造化ログでAIがエラーを効果的に分析
-- プロジェクト・環境情報の自動収集
-- 既存ログシステムとの並行動作
-- 参考: [Vibe Logger](https://github.com/fladdict/vibe-logger)
+**AI Logger Benefits**:
+- AI effectively analyzes errors with structured logs
+- Automatic collection of project and environment information
+- Parallel operation with existing log systems
+- Reference: [Vibe Logger](https://github.com/fladdict/vibe-logger)
 
-#### 1.3 現状のスナップショット作成
+#### 1.3 Create Current State Snapshot
 ```markdown
 # .claude/core/overview.md
 ---
 cache_control: {"type": "ephemeral"}
 ---
-# プロジェクト概要（暫定版）
+# Project Overview (Provisional)
 
-## 基本情報
-- **開始日**: [記録されている開始日]
-- **メンバー**: [現在のメンバー数・役割]
-- **技術スタック**: [現在使用している技術]
+## Basic Information
+- **Start Date**: [Recorded start date]
+- **Members**: [Current member count and roles]
+- **Technology Stack**: [Currently used technologies]
 
-## 現状
-- **進捗**: [大まかな進捗状況]
-- **直近の課題**: [認識している問題]
-- **次の予定**: [今後の予定]
+## Current Status
+- **Progress**: [Rough progress status]
+- **Recent Issues**: [Recognized problems]
+- **Next Plans**: [Future plans]
 
-※この文書は導入初期版です。段階的に詳細化します。
+*This document is an initial implementation version. It will be detailed gradually.
 ```
 
-#### 期待効果
-- **即座**: プロンプトキャッシュによる90%コスト削減
-- **心理**: 「情報整理の場所」の確保
-- **デバッグ**: AI分析に最適化されたログでエラー解決効率向上
+#### Expected Benefits
+- **Immediate**: 90% cost reduction through prompt caching
+- **Psychological**: Securing a "place for information organization"
+- **Debugging**: Improved error resolution efficiency with AI-optimized logs
 
-### Stage 2: 情報集約（Week 2-3）- 影響度：小
+### Stage 2: Information Consolidation (Week 2-3) - Impact: Small
 
-#### 2.1 既存情報の移行・整理
+#### 2.1 Migration and Organization of Existing Information
 ```bash
-# 既存READMEからの情報抽出
-# 手動で重要部分を.claude/core/overview.mdに統合
+# Extract information from existing README
+# Manually integrate important parts into .claude/core/overview.md
 
-# 既存docs/からの情報整理
-# 重要な技術情報を.claude/context/tech.mdに集約
+# Organize information from existing docs/
+# Consolidate important technical information into .claude/context/tech.md
 ```
 
-#### 2.2 技術情報の体系化
+#### 2.2 Systematization of Technical Information
 ```markdown
 # .claude/context/tech.md
 ---
 cache_control: {"type": "ephemeral"}
 ---
-# 技術詳細
+# Technical Details
 
-## 現在の技術スタック
-[既存システムから抽出した技術情報]
+## Current Technology Stack
+[Technical information extracted from existing system]
 
-## 開発環境
-[セットアップ手順を既存から収集]
+## Development Environment
+[Setup procedures collected from existing sources]
 
-## 運用情報
-[デプロイ・監視方法]
+## Operation Information
+[Deployment and monitoring methods]
 ```
 
-#### 2.3 履歴・経緯の記録開始
+#### 2.3 Start Recording History and Background
 ```markdown
 # .claude/context/history.md
-# プロジェクト履歴
+# Project History
 
-## 重要な決定事項（遡及記録）
-### [日付] [タイトル]
-- **背景**: [可能な範囲で]
-- **決定**: [現在の状況から推測]
-- **影響**: [現在への影響]
+## Important Decisions (Retroactive Recording)
+### [Date] [Title]
+- **Background**: [To the extent possible]
+- **Decision**: [Inferred from current situation]
+- **Impact**: [Impact on present]
 
-※情報が不完全な部分は今後の決定で補完
+*Incomplete information will be supplemented with future decisions
 ```
 
-#### 期待効果
-- **情報集約**: 散在情報の一元化
-- **可視化**: プロジェクト全体像の明確化
+#### Expected Benefits
+- **Information consolidation**: Centralization of scattered information
+- **Visualization**: Clarification of overall project picture
 
-### Stage 3: 運用定着（Week 4-6）- 影響度：中
+### Stage 3: Operation Establishment (Week 4-6) - Impact: Medium
 
-#### 3.1 日常ワークフローへの統合
+#### 3.1 Integration into Daily Workflow
 ```markdown
 # .claude/core/current.md
-# 現在の状況
+# Current Status
 
-## 今週の重点
-- [優先度1] [タスク名]
-- [優先度2] [タスク名]
+## This Week's Focus
+- [Priority 1] [Task name]
+- [Priority 2] [Task name]
 
-## 進行中の課題
-- **[課題名]**: [状況] - [次のアクション]
+## Ongoing Issues
+- **[Issue name]**: [Status] - [Next action]
 
-※週1回更新を習慣化
+*Make weekly updates a habit
 ```
 
-#### 3.2 次アクション管理
+#### 3.2 Next Action Management
 ```markdown
 # .claude/core/next.md
-# 次のアクション
+# Next Actions
 
-## 今日やること
-1. [具体的タスク1]
-2. [具体的タスク2]
-3. [具体的タスク3]
+## Today's Tasks
+1. [Specific task 1]
+2. [Specific task 2]
+3. [Specific task 3]
 
-## 今週のゴール
-- [週次目標]
+## This Week's Goal
+- [Weekly goal]
 
-※日次で簡単更新
+*Simple daily updates
 ```
 
-#### 3.3 カスタムコマンド導入
+#### 3.3 Custom Command Introduction
 ```markdown
 # .claude/core/templates.md
 ---
 cache_control: {"type": "ephemeral"}
 ---
-# クイックテンプレート
+# Quick Templates
 
-## 基本パターン
-### `/project:plan` - 計画立案
-[プロジェクト固有の計画テンプレート]
+## Basic Patterns
+### `/project:plan` - Planning
+[Project-specific planning template]
 
-### `/project:daily` - 日次更新
-[current.md更新の簡単フォーマット]
+### `/project:daily` - Daily Update
+[Simple format for current.md updates]
 ```
 
-#### 期待効果
-- **習慣化**: Memory Bank更新の日常化
-- **効率化**: 定型作業の簡素化
+#### Expected Benefits
+- **Habituation**: Making Memory Bank updates routine
+- **Efficiency**: Simplification of routine work
 
-### Stage 4: 高度機能導入（Week 7-8）- 影響度：中-高
+### Stage 4: Advanced Feature Introduction (Week 7-8) - Impact: Medium-High
 
-#### 4.1 ADRシステム導入
+#### 4.1 ADR System Implementation
 ```bash
 mkdir -p docs/adr
 cp [template-path]/docs/adr/template.md docs/adr/
 ```
 
-#### 4.2 技術負債管理開始
+#### 4.2 Start Technical Debt Management
 ```markdown
 # .claude/context/debt.md
 ---
 cache_control: {"type": "ephemeral"}
 ---
-# 技術負債トラッキング
+# Technical Debt Tracking
 
-## 現在認識している負債
-[既存の「なんとなく気になること」を体系化]
+## Currently Recognized Debt
+[Systematize existing "things that somewhat concern me"]
 
-### 高優先度 🔥
-| 負債内容 | 推定コスト | 影響範囲 |
-|---------|-----------|---------|
-| [具体的な問題] | [時間] | [範囲] |
+### High Priority 🔥
+| Debt Content | Estimated Cost | Impact Range |
+|--------------|----------------|--------------|
+| [Specific problem] | [Time] | [Range] |
 ```
 
-#### 4.3 チーム全体への展開
-- Memory Bank活用の共有セッション（30分）
-- 更新ルール・責任の明確化
-- 継続的な改善サイクルの確立
+#### 4.3 Deployment to Entire Team
+- Memory Bank utilization sharing session (30 minutes)
+- Clarification of update rules and responsibilities
+- Establishment of continuous improvement cycle
 
 ---
 
-## 👥 チーム導入戦略
+## 👥 Team Implementation Strategy
 
-### 抵抗最小化アプローチ
+### Resistance Minimization Approach
 
-#### 段階的メンバー巻き込み
-1. **Week 1-2**: 主担当者のみで基盤構築
-2. **Week 3-4**: コア開発者（2-3名）に共有・フィードバック
-3. **Week 5-6**: チーム全体への展開
-4. **Week 7-8**: 運用定着・ルール策定
+#### Gradual Member Involvement
+1. **Week 1-2**: Foundation building by main person only
+2. **Week 3-4**: Share with core developers (2-3 people) for feedback
+3. **Week 5-6**: Deployment to entire team
+4. **Week 7-8**: Operation establishment and rule creation
 
-#### 価値実感の演出
-- **即座価値**: キャッシュ効果によるコスト削減を数値で共有
-- **情報価値**: 「あの件って何だっけ？」への即座回答
-- **効率価値**: 新メンバーオンボーディング時間短縮
+#### Value Realization Presentation
+- **Immediate value**: Share cost reduction from cache effect numerically
+- **Information value**: Immediate answers to "What was that thing?"
+- **Efficiency value**: Reduced new member onboarding time
 
-### 継続的改善サイクル
+### Continuous Improvement Cycle
 
-#### 週次レビュー（10分）
-- Memory Bankの使用状況確認
-- 不便な点・改善点の収集
-- 次週の改善アクション決定
+#### Weekly Review (10 minutes)
+- Check Memory Bank usage status
+- Collect inconveniences and improvement points
+- Decide next week's improvement actions
 
-#### 月次最適化（30分）
-- 使用頻度の低いファイルのアーカイブ
-- 新しいテンプレート・パターンの追加
-- チーム固有のカスタマイズ
-
----
-
-## 🎯 導入判断基準
-
-### 導入GO判断
-以下の条件が2つ以上当てはまる場合、導入推奨：
-- [ ] プロジェクト期間が3ヶ月以上残っている
-- [ ] チームサイズが2名以上
-- [ ] 新メンバー参加の予定がある
-- [ ] 技術的複雑性が中程度以上
-- [ ] ドキュメント不足を実感している
-
-### 導入見送り判断
-以下の場合は導入を見送り：
-- [ ] プロジェクト終了まで1ヶ月未満
-- [ ] チーム全体がClaude Code未経験
-- [ ] 現在、重大な納期プレッシャー下
-- [ ] 文書化への強い抵抗感がある
+#### Monthly Optimization (30 minutes)
+- Archive low-frequency files
+- Add new templates and patterns
+- Team-specific customization
 
 ---
 
-## 📊 成功指標・効果測定
+## 🎯 Implementation Decision Criteria
 
-### 定量指標（月次測定）
+### GO Decision for Implementation
+Recommend implementation if 2 or more conditions apply:
+- [ ] Project duration has 3+ months remaining
+- [ ] Team size is 2+ people
+- [ ] New members expected to join
+- [ ] Technical complexity is medium or higher
+- [ ] Experiencing documentation shortage
 
-#### コスト・効率
-- **Claude Code課金額**: 導入前後比較
-- **重複質問回数**: 「あれってどうだっけ？」の頻度
-- **オンボーディング時間**: 新メンバーの立ち上がり期間
-
-#### 活用度
-- **Memory Bank更新頻度**: 週次更新率
-- **参照頻度**: Memory Bankファイルへのアクセス
-- **cache_controlヒット率**: キャッシュ効果実感
-
-### 定性指標（月次チーム振り返り）
-
-#### チーム状況
-- **情報アクセシビリティ**: 必要情報の見つけやすさ
-- **技術的透明性**: 技術選択理由の理解度
-- **知識共有**: チーム内での情報共有の質
+### Decision to Postpone Implementation
+Postpone implementation in these cases:
+- [ ] Less than 1 month until project completion
+- [ ] Entire team inexperienced with Claude Code
+- [ ] Currently under severe deadline pressure
+- [ ] Strong resistance to documentation
 
 ---
 
-## ⚡ よくある課題と対処法
+## 📊 Success Metrics & Effect Measurement
 
-### 導入初期の課題
+### Quantitative Metrics (Monthly Measurement)
 
-**Q: 「何を書けばいいかわからない」**
-A: 完璧を求めず、現状を書くことから開始。「現在困っていること」「よく聞かれること」を箇条書きで
+#### Cost & Efficiency
+- **Claude Code billing**: Before/after comparison
+- **Duplicate question frequency**: Frequency of "What was that again?"
+- **Onboarding time**: New member ramp-up period
 
-**Q: 「更新が続かない」**
-A: 週1回、5分間の「Memory Bank更新タイム」を設定。完璧よりも継続を重視
+#### Utilization
+- **Memory Bank update frequency**: Weekly update rate
+- **Reference frequency**: Access to Memory Bank files
+- **cache_control hit rate**: Cache effect realization
 
-**Q: 「チームメンバーが使ってくれない」**
-A: 「便利さ」の実感が重要。具体的な価値体験（即座回答、コスト削減）を共有
+### Qualitative Metrics (Monthly Team Retrospective)
 
-### 運用中の課題
-
-**Q: 「情報が古くなる」**
-A: cache_control適用ファイル（長期安定）と頻繁更新ファイルの分離。定期レビュー設定
-
-**Q: 「Memory Bankが肥大化」**
-A: アーカイブルールの設定。「3ヶ月参照なし」でarchive/に移動
-
-**Q: 「形骸化してしまった」**
-A: 利用価値の再確認。新機能・改善の継続的導入
+#### Team Situation
+- **Information accessibility**: Ease of finding necessary information
+- **Technical transparency**: Understanding of technical choice reasons
+- **Knowledge sharing**: Quality of information sharing within team
 
 ---
 
-## 🔄 長期的な進化パス
+## ⚡ Common Issues and Solutions
 
-### 3ヶ月後の姿
-- Memory Bank習慣の完全定着
-- プロジェクト固有のテンプレート・パターン確立
-- 新メンバーオンボーディングの体系化
+### Early Implementation Issues
 
-### 6ヶ月後の姿
-- 他プロジェクトへの展開・ノウハウ共有
-- より高度なADR・負債管理の活用
-- チーム固有の最適化完了
+**Q: "I don't know what to write"**
+A: Start by writing the current state without seeking perfection. List "current problems" and "frequently asked questions" in bullet points
 
-### 1年後の姿
-- 組織レベルでのMemory Bank文化の浸透
-- ベストプラクティスの他チームへの横展開
-- 継続的改善サイクルの自動化
+**Q: "Updates don't continue"**
+A: Set up weekly 5-minute "Memory Bank update time". Focus on continuation rather than perfection
+
+**Q: "Team members don't use it"**
+A: Experiencing "convenience" is important. Share specific value experiences (immediate answers, cost reduction)
+
+### Operational Issues
+
+**Q: "Information becomes outdated"**
+A: Separate cache_control applied files (long-term stable) from frequently updated files. Set regular reviews
+
+**Q: "Memory Bank becomes bloated"**
+A: Set archive rules. Move to archive/ after "3 months without reference"
+
+**Q: "It became a formality"**
+A: Reconfirm usage value. Continuous introduction of new features and improvements
 
 ---
 
-## 📋 導入チェックリスト
+## 🔄 Long-term Evolution Path
 
-### 導入準備
-- [ ] 現状分析完了（プロジェクト情報・チーム状況）
-- [ ] 導入判断基準での評価完了
-- [ ] チーム合意取得（最低限のキーメンバー）
-- [ ] 導入スケジュール策定
+### After 3 Months
+- Complete establishment of Memory Bank habits
+- Establishment of project-specific templates and patterns
+- Systematization of new member onboarding
 
-### Stage 1（基盤構築）
-- [ ] .claude/ディレクトリ構造作成
-- [ ] settings.json作成・キャッシュ設定
-- [ ] .gitignore更新
-- [ ] overview.md暫定版作成
-- [ ] セキュリティ機能導入（オプション）
-- [ ] AI Logger導入（推奨）
-- [ ] キャッシュ効果確認
+### After 6 Months
+- Deployment to other projects and know-how sharing
+- Utilization of more advanced ADR and debt management
+- Completion of team-specific optimization
 
-### Stage 2（情報集約）
-- [ ] 既存情報のtech.md移行
-- [ ] history.md遡及記録
-- [ ] 重要情報のcache_control適用
-- [ ] 初期Memory Bank完成
+### After 1 Year
+- Penetration of Memory Bank culture at organizational level
+- Horizontal deployment of best practices to other teams
+- Automation of continuous improvement cycle
 
-### Stage 3（運用定着）
-- [ ] current.md・next.md運用開始
-- [ ] 週次更新ルール策定
-- [ ] templates.md・カスタムコマンド作成
-- [ ] チーム共有・フィードバック収集
+---
 
-### Stage 4（高度機能）
-- [ ] ADRシステム導入
-- [ ] 技術負債管理開始
-- [ ] チーム全体展開
-- [ ] 継続改善サイクル確立
+## 📋 Implementation Checklist
 
-この段階的アプローチにより、メモリバンクシステム未経験のプロジェクトでも、確実かつ安全にシステム導入が可能になります。
+### Implementation Preparation
+- [ ] Current state analysis completed (project information, team situation)
+- [ ] Evaluation with implementation decision criteria completed
+- [ ] Team consensus obtained (minimum key members)
+- [ ] Implementation schedule created
+
+### Stage 1 (Foundation Building)
+- [ ] .claude/ directory structure created
+- [ ] settings.json created with cache settings
+- [ ] .gitignore updated
+- [ ] overview.md provisional version created
+- [ ] Security features implemented (optional)
+- [ ] AI Logger implemented (recommended)
+- [ ] Cache effect verified
+
+### Stage 2 (Information Consolidation)
+- [ ] Existing information migrated to tech.md
+- [ ] history.md retroactive recording
+- [ ] cache_control applied to important information
+- [ ] Initial Memory Bank completed
+
+### Stage 3 (Operation Establishment)
+- [ ] current.md and next.md operation started
+- [ ] Weekly update rules established
+- [ ] templates.md and custom commands created
+- [ ] Team sharing and feedback collection
+
+### Stage 4 (Advanced Features)
+- [ ] ADR system implemented
+- [ ] Technical debt management started
+- [ ] Entire team deployment
+- [ ] Continuous improvement cycle established
+
+This gradual approach enables certain and safe system implementation even for projects with no Memory Bank system experience.
