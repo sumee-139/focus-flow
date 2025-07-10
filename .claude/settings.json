@@ -81,6 +81,10 @@
           {
             "type": "command",
             "command": ".claude/scripts/activity-logger.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/scripts/ai-logger.sh"
           }
         ]
       }

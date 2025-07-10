@@ -54,7 +54,15 @@
 - **セキュリティ**: 危険コマンド（`rm -rf /`, `chmod 777`等）の自動ブロック
 - **自動フォーマット**: ファイル編集後のコード整形（Python/JS/TS/Rust/Go/JSON対応）
 - **活動ログ**: 開発活動の自動記録・メトリクス収集
+- **AIログ**: Vibe Logger概念採用・構造化JSON形式でAI分析最適化
 - **セッション管理**: 作業終了時の自動サマリー・Git状況記録
+
+### AI-Friendly Logger (NEW)
+- **構造化ログ**: AI分析に最適化されたJSON形式（@~/.claude/ai-activity.jsonl）
+- **豊富なコンテキスト**: プロジェクト・環境・ファイル情報を自動収集
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクション付与
+- **解析ツール**: `.claude/scripts/analyze-ai-logs.py`でパターン分析・洞察生成
+- **詳細**: @.claude/ai-logger-README.md
 
 ### Hooks確認・テスト
 ```bash
@@ -135,6 +143,7 @@ tail -f ~/.claude/activity.log
 - 開発ガイドライン: @.claude/guidelines/development.md
 - Hooksシステム: @.claude/hooks-README.md
 - セキュリティ設定: @.claude/security-README.md
+- AIロガーシステム: @.claude/ai-logger-README.md
 - 要求仕様書: @docs/requirements.md
 - ADRテンプレート: @docs/adr/template.md
 - 移行ガイド: @memo/migration-guide.md

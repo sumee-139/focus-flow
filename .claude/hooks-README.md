@@ -129,6 +129,9 @@ tail -f ~/.claude/security.log
 
 ### トラブルシューティング
 
+#### 「Tool: unknown」がログに記録される場合
+Claude Codeが環境変数`CLAUDE_TOOL_NAME`を正しく渡していない場合があります。これはClaude Code本体の動作に関わる問題で、ログ機能は正常に動作しています。将来のアップデートで改善される可能性があります。
+
 #### Hooksが動作しない場合
 1. スクリプトの実行権限確認: `chmod +x .claude/scripts/*.sh`
 2. 設定ファイル確認: `.claude/settings.json` の構文チェック
