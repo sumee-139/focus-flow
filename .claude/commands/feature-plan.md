@@ -6,6 +6,8 @@ description: "New feature design mode - 新機能設計モード"
 
 Start working in a context specialized for new feature planning, requirements definition, and design phase.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Understand Overall Project**

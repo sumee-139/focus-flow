@@ -1,5 +1,7 @@
 # Claude Code Lightweight Project Template v1.2.0
 
+🌐 **[日本語版](README_TEMPLATE_ja.md)** | **English**
+
 **The Next-Generation Knowledge Management System Designed for AI-Native Development**
 
 ## 🚀 Why This Template is Revolutionary
@@ -134,6 +136,18 @@ Tag search: #urgent #bug #feature #completed  # Fast search for related info
 - Planning: Within 5 minutes
 - Daily updates: Within 3 minutes
 - Memory Bank updates: Only when necessary
+
+## 🤖 Claude Friends Multi-Agent System
+
+Transform your solo development into a team experience with AI agents:
+
+### Agent Commands
+| Command | Purpose | Details |
+|---------|---------|---------|
+| `/agent:planner` | Switch to strategic planning mode | Plan phases, organize tasks |
+| `/agent:builder` | Switch to implementation mode | Code, test, debug |
+
+**[→ Full Claude Friends Guide](.claude/claude-friends-guide.md)**
 
 ## 🛠 Custom Commands
 

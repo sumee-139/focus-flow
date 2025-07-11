@@ -1,5 +1,7 @@
 # Git Workflow & ADR
 
+🌐 **English** | **[日本語](git-workflow_ja.md)**
+
 ## Git/PR Conventions
 
 ### Commit Messages

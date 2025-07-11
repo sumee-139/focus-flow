@@ -1,6 +1,33 @@
 # Development Guidelines
 
-## 1. Package Management
+🌐 **English** | **[日本語](development_ja.md)**
+
+## Claude Friends Agent Operation Rules
+
+### Agent Role Division
+- **Planner**: Strategy, planning, Phase management
+- **Builder**: Implementation, testing, technical solutions
+
+### Agent Switching Timing
+1. **Planner → Builder**
+   - When planning is complete and ready for implementation
+   - When specific ToDos are clarified
+
+2. **Builder → Planner**
+   - When implementation reaches a milestone
+   - When major design changes are needed
+   - When next Phase planning is required
+
+### Handover Rules
+- **Required**: Create handover.md before agent switching
+- **Content**: Clearly state completed items, next tasks, and notes
+- **Storage**: Move to archive after 1 week
+
+### Interrupt Handling
+- Create `handover-interrupt-[datetime].md` for emergencies
+- Document detailed resumption instructions for interrupted work
+
+## Package Management
 - **Recommended Tools**: Unify per project (npm/yarn/pnpm, pip/poetry/uv, etc.)
 - **Installation**: Recommend `[tool] add package` format
 - **Execution**: Recommend `[tool] run command` format
@@ -9,14 +36,14 @@
   - Using `@latest` syntax (version pinning recommended)
   - Global installation (keep everything within project)
 
-## 2. Code Quality Standards
+## Code Quality Standards
 - **Type Annotations**: Add type information to all functions and variables
 - **Documentation**: Required for public APIs and complex processes
 - **Function Design**: Aim for single responsibility and small functions
 - **Existing Patterns**: Always follow existing code patterns
 - **Line Length**: 80-120 characters (unified by language/team)
 
-## 3. Command List
+## Command List
 
 ### Basic Development Flow
 ```bash
@@ -52,7 +79,7 @@
 - Go: `go`
 - Standard tools for other languages
 
-## 4. Error Handling Guide
+## Error Handling Guide
 
 ### Standard Problem-Solving Order
 1. **Format Errors** → `[tool] run format`
@@ -65,7 +92,7 @@
 - **Import order**: Use auto-fix
 - **Type errors**: Add explicit type annotations
 
-## 5. Quality Gates
+## Quality Gates
 
 ### Pre-commit Checks
 - [ ] `[tool] run format` - Formatting applied

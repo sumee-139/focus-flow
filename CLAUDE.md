@@ -8,9 +8,21 @@
 - **cache_control**: Applied to long-term stable information
 - **Settings**: See `.claude/settings.json`
 
+## Claude Friends System (NEW!)
+**Sequential Multi-Agent System** - AI開発チームをシミュレート
+- **Planner Agent**: 戦略立案・Phase/ToDo管理
+- **Builder Agent**: 実装・テスト・デバッグ
+- **Smooth Handoff**: エージェント間の引き継ぎシステム
+
+### Agent Structure
+- Active agent: @.claude/agents/active.md
+- Planner workspace: @.claude/planner/
+- Builder workspace: @.claude/builder/
+- Shared resources: @.claude/shared/
+
 ## Memory Bank Structure
 ### Core (Always Referenced)
-- Current status: @.claude/core/current.md
+- Current status: @.claude/core/current.md (DEPRECATED - use agent notes)
 - Next actions: @.claude/core/next.md
 - Project overview: @.claude/core/overview.md
 - Quick templates: @.claude/core/templates.md
@@ -20,6 +32,12 @@
 - History & decisions: @.claude/context/history.md
 - Technical debt: @.claude/context/debt.md
 
+### Agent Workspaces (Claude Friends)
+- Planner notes: @.claude/planner/notes.md
+- Builder notes: @.claude/builder/notes.md
+- Phase/ToDo tracking: @.claude/shared/phase-todo.md
+- Project constraints: @.claude/shared/constraints.md
+
 ### Others
 - Debug information: @.claude/debug/latest.md
 - Custom commands: @.claude/commands/
@@ -28,6 +46,12 @@
 - Archive: @.claude/archive/
 
 ## Custom Commands
+
+### Claude Friends Commands (NEW!)
+| Command | Purpose | Time Required | Details |
+|---------|---------|---------------|---------|
+| `/agent:planner` | Switch to Planner mode | Immediate | @.claude/commands/agent-planner.md |
+| `/agent:builder` | Switch to Builder mode | Immediate | @.claude/commands/agent-builder.md |
 
 ### Basic Commands
 | Command | Purpose | Time Required | Details |

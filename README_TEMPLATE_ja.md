@@ -1,5 +1,7 @@
 # Claude Code 軽量プロジェクトテンプレート v1.2.0
 
+🌐 **日本語** | **[English](README_TEMPLATE.md)**
+
 **AIネイティブ開発のために設計された次世代知識管理システム**
 
 ## 🚀 なぜこのテンプレートが革新的なのか
@@ -90,6 +92,11 @@ docs/adr/template.md         # ADRテンプレート
 cp -r claude_file_template/ your-project/
 cd your-project/
 
+# 日本語版ファイルを使用（推奨）
+mv CLAUDE_ja.md CLAUDE.md
+mv README_TEMPLATE_ja.md README.md
+# 必要に応じて他の_jaファイルも同様に置き換え
+
 # プロジェクト情報をカスタマイズ
 # - CLAUDE.md の [プロジェクト名] を置換
 # - docs/requirements.md を記入
@@ -134,6 +141,18 @@ cd your-project/
 - 計画立案: 5分以内
 - 日次更新: 3分以内
 - Memory Bank更新: 必要時のみ
+
+## 🤖 Claude Friends マルチエージェントシステム
+
+ひとり開発をAIエージェントとのチーム開発体験に変えます：
+
+### エージェントコマンド
+| コマンド | 用途 | 詳細 |
+|---------|------|------|
+| `/agent:planner` | 戦略的計画モードに切り替え | フェーズ計画、タスク整理 |
+| `/agent:builder` | 実装モードに切り替え | コード作成、テスト、デバッグ |
+
+**[→ Claude Friends 完全ガイド](.claude/claude-friends-guide_ja.md)**
 
 ## 🛠 カスタムコマンド
 

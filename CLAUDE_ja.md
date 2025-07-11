@@ -8,9 +8,23 @@
 - **cache_control**: 長期安定情報に適用済み
 - **設定**: `.claude/settings.json`参照
 
+## Claude Friendsシステム (NEW!)
+**シーケンシャル・マルチエージェントシステム** - AI開発チームをシミュレート
+- **Plannerエージェント**: 戦略立案・Phase/ToDo管理
+- **Builderエージェント**: 実装・テスト・デバッグ
+- **スムーズな引き継ぎ**: エージェント間の引き継ぎシステム
+
+### エージェント構造
+- アクティブエージェント: @.claude/agents/active.md
+- Plannerワークスペース: @.claude/planner/
+- Builderワークスペース: @.claude/builder/
+- 共有リソース: @.claude/shared/
+
+**[→ 運用ガイド](.claude/claude-friends-guide_ja.md)**
+
 ## Memory Bank構造
 ### コア（常時参照）
-- 現在の状況: @.claude/core/current.md
+- 現在の状況: @.claude/core/current.md (DEPRECATED - エージェントnotesを使用)
 - 次のアクション: @.claude/core/next.md
 - プロジェクト概要: @.claude/core/overview.md
 - クイックテンプレート: @.claude/core/templates.md
@@ -20,6 +34,12 @@
 - 履歴・決定事項: @.claude/context/history.md
 - 技術負債: @.claude/context/debt.md
 
+### エージェントワークスペース（Claude Friends）
+- Plannerノート: @.claude/planner/notes.md
+- Builderノート: @.claude/builder/notes.md
+- Phase/ToDoトラッキング: @.claude/shared/phase-todo.md
+- プロジェクト制約: @.claude/shared/constraints.md
+
 ### その他
 - デバッグ情報: @.claude/debug/latest.md
 - カスタムコマンド: @.claude/commands/
@@ -28,6 +48,12 @@
 - アーカイブ: @.claude/archive/
 
 ## カスタムコマンド
+
+### Claude Friendsコマンド (NEW!)
+| コマンド | 用途 | 所要時間 | 詳細 |
+|---------|----- |-----------|------|
+| `/agent:planner` | Plannerモードに切り替え | 即座 | @.claude/commands/agent-planner.md |
+| `/agent:builder` | Builderモードに切り替え | 即座 | @.claude/commands/agent-builder.md |
 
 ### 基本コマンド
 | コマンド | 用途 | 所要時間 | 詳細 |
@@ -62,7 +88,7 @@
 - **豊富なコンテキスト**: プロジェクト・環境・ファイル情報を自動収集
 - **AIメタデータ**: デバッグヒント・優先度・推奨アクション付与
 - **解析ツール**: `.claude/scripts/analyze-ai-logs.py`でパターン分析・洞察生成
-- **詳細**: @.claude/ai-logger-README.md
+- **詳細**: @.claude/ai-logger-README_ja.md
 
 ### Hooks確認・テスト
 ```bash
@@ -76,7 +102,7 @@
 tail -f ~/.claude/activity.log
 ```
 
-詳細設定: @.claude/hooks-README.md | @.claude/security-README.md
+詳細設定: @.claude/hooks-README_ja.md | @.claude/security-README_ja.md
 
 ## 開発規約（要点）
 
@@ -141,9 +167,9 @@ tail -f ~/.claude/activity.log
 ## 関連ドキュメント
 - 開発規約詳細: @docs/development-rules.md
 - 開発ガイドライン: @.claude/guidelines/development.md
-- Hooksシステム: @.claude/hooks-README.md
-- セキュリティ設定: @.claude/security-README.md
-- AIロガーシステム: @.claude/ai-logger-README.md
+- Hooksシステム: @.claude/hooks-README_ja.md
+- セキュリティ設定: @.claude/security-README_ja.md
+- AIロガーシステム: @.claude/ai-logger-README_ja.md
 - 要求仕様書: @docs/requirements.md
 - ADRテンプレート: @docs/adr/template.md
 - 移行ガイド: @memo/migration-guide.md

@@ -6,6 +6,8 @@ description: "Work planning - 作業計画の立案"
 
 To create an efficient plan, load the Memory Bank progressively and develop a work plan.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Core Information Analysis**

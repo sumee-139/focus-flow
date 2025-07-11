@@ -1,20 +1,22 @@
 # AI-Friendly Logger System
 
-このプロジェクトにVibe Logger概念を取り入れたAI最適化ログシステムを実装しました。
+🌐 **English** | **[日本語](ai-logger-README_ja.md)**
 
-## 🌟 概要
+This project implements an AI-optimized logging system incorporating the Vibe Logger concept.
 
-**Vibe Logger**の思想：
-> "VibeCoding (AI駆動開発)では、デバッグの質はLLMにどれだけコンテキストを提供できるかで決まる"
+## 🌟 Overview
 
-このシステムは、従来の人間向けログから、**AI分析に最適化された構造化ログ**への転換を実現します。
+**Vibe Logger Philosophy**:
+> "In VibeCoding (AI-driven development), debugging quality depends on how much context you can provide to the LLM"
 
-## 🚀 主要機能
+This system realizes the transition from traditional human-oriented logs to **structured logs optimized for AI analysis**.
 
-### 1. 構造化JSONログ形式
+## 🚀 Key Features
+
+### 1. Structured JSON Log Format
 ```json
 {
-  "timestamp": "2025-07-10T08:30:00.123Z",
+  "timestamp": "2025-01-10T08:30:00.123Z",
   "correlation_id": "unique-id",
   "operation": {
     "tool": "Edit",
@@ -53,22 +55,22 @@
 }
 ```
 
-### 2. AI向けメタデータ
-- **ai_hint**: AIがログを解析する際のヒント
-- **human_note**: 人間による補足説明
-- **debug_priority**: デバッグ優先度（high/normal）
-- **suggested_action**: 推奨される次のアクション
+### 2. AI-Oriented Metadata
+- **ai_hint**: Hints for AI when analyzing logs
+- **human_note**: Supplementary explanation by humans
+- **debug_priority**: Debug priority (high/normal)
+- **suggested_action**: Recommended next action
 
-### 3. 豊富なコンテキスト情報
-- プロジェクト情報（名前、ルート、Gitブランチ、コミット）
-- 環境情報（ユーザー、ホスト、作業ディレクトリ）
-- ファイル情報（パス、サイズ、拡張子、行数）
+### 3. Rich Context Information
+- Project information (name, root, Git branch, commit)
+- Environment information (user, host, working directory)
+- File information (path, size, extension, lines)
 
-## 📦 導入方法
+## 📦 Implementation Method
 
-### 既存システムとの統合
+### Integration with Existing System
 
-現在の設定ファイル（`.claude/settings.json`）に以下を追加：
+Add the following to current configuration file (`.claude/settings.json`):
 
 ```json
 {
@@ -92,100 +94,100 @@
 }
 ```
 
-これにより、既存のログシステムと並行してAIログが生成されます。
+This generates AI logs in parallel with the existing log system.
 
-## 🔍 ログ解析
+## 🔍 Log Analysis
 
-### 基本的な使用方法
+### Basic Usage
 
 ```bash
-# サマリー表示
+# Display summary
 .claude/scripts/analyze-ai-logs.py
 
-# JSON形式で詳細表示
+# Detailed display in JSON format
 .claude/scripts/analyze-ai-logs.py --format json
 
-# エラーのみ表示
+# Display errors only
 .claude/scripts/analyze-ai-logs.py --errors-only
 ```
 
-### 解析レポートの内容
+### Analysis Report Contents
 
-1. **サマリー情報**
-   - 総操作数
-   - エラー数
-   - 操作タイプ別内訳
-   - 時間範囲
+1. **Summary Information**
+   - Total operations
+   - Error count
+   - Breakdown by operation type
+   - Time range
 
-2. **エラー分析**
-   - エラーパターン
-   - AIヒント
-   - 推奨アクション
+2. **Error Analysis**
+   - Error patterns
+   - AI hints
+   - Recommended actions
 
-3. **パターン検出**
-   - 頻繁な操作
-   - エラー率の高い操作
-   - ファイルアクティビティ
+3. **Pattern Detection**
+   - Frequent operations
+   - High error rate operations
+   - File activity
 
-4. **AI洞察**
-   - 高エラー率の警告
-   - 繰り返し操作の最適化提案
+4. **AI Insights**
+   - High error rate warnings
+   - Optimization suggestions for repeated operations
 
-5. **デバッグヒント**
-   - エラーコンテキスト
-   - AI向け指示
-   - 人間の注記
+5. **Debug Hints**
+   - Error context
+   - AI-oriented instructions
+   - Human notes
 
-## 🎯 利点
+## 🎯 Benefits
 
-### 開発効率の向上
-- **コンテキスト豊富なデバッグ**: AIが問題の根本原因を素早く特定
-- **パターン認識**: 繰り返しのエラーや非効率な操作の発見
-- **予防的分析**: 問題が大きくなる前に検出
+### Improved Development Efficiency
+- **Context-rich debugging**: AI quickly identifies root causes
+- **Pattern recognition**: Discovery of repeated errors and inefficient operations
+- **Preventive analysis**: Detection before problems grow
 
-### AI支援の最大化
-- **構造化データ**: AIが理解しやすい形式
-- **明示的な指示**: human_noteとai_todoフィールド
-- **優先度付け**: 重要な問題から対処
+### Maximizing AI Support
+- **Structured data**: Format easy for AI to understand
+- **Explicit instructions**: human_note and ai_todo fields
+- **Prioritization**: Address important issues first
 
-### 既存システムとの共存
-- 従来のactivity.logも継続生成
-- 段階的な移行が可能
-- 後方互換性を維持
+### Coexistence with Existing System
+- Traditional activity.log continues to be generated
+- Gradual migration possible
+- Maintains backward compatibility
 
-## 📊 活用例
+## 📊 Use Cases
 
-### デバッグセッション
+### Debug Session
 ```bash
-# エラーが発生した場合
+# When errors occur
 .claude/scripts/analyze-ai-logs.py --errors-only > debug_report.json
 
-# AIに分析を依頼
-"このdebug_report.jsonを分析して、エラーの原因と解決策を提案してください"
+# Request AI analysis
+"Please analyze this debug_report.json and suggest causes and solutions for errors"
 ```
 
-### パフォーマンス分析
+### Performance Analysis
 ```bash
-# 全体の活動パターンを確認
+# Check overall activity patterns
 .claude/scripts/analyze-ai-logs.py --format json | jq '.patterns'
 
-# 頻繁に編集されるファイルを特定
+# Identify frequently edited files
 .claude/scripts/analyze-ai-logs.py --format json | jq '.patterns.file_activity'
 ```
 
-### 定期レビュー
+### Periodic Review
 ```bash
-# 週次レポート生成
+# Generate weekly report
 .claude/scripts/analyze-ai-logs.py > weekly_report.txt
 
-# AIに改善提案を依頼
-"このweekly_report.txtを基に、開発プロセスの改善点を提案してください"
+# Request improvement suggestions from AI
+"Based on this weekly_report.txt, please suggest improvements to the development process"
 ```
 
-## 🔧 カスタマイズ
+## 🔧 Customization
 
-### 新しい操作タイプの追加
-`ai-logger.sh`のcase文に追加：
+### Adding New Operation Types
+Add to case statement in `ai-logger.sh`:
 ```bash
 "NewTool")
     operation_type="NEW_OPERATION"
@@ -194,34 +196,34 @@
     ;;
 ```
 
-### カスタムメタデータ
-ログエントリにプロジェクト固有の情報を追加可能
+### Custom Metadata
+Project-specific information can be added to log entries
 
-## 📈 今後の拡張
+## 📈 Future Extensions
 
-1. **リアルタイムアラート**: エラー率が閾値を超えた場合の通知
-2. **視覚化ダッシュボード**: ログデータのグラフ表示
-3. **AI自動分析**: 定期的な自動レポート生成
-4. **他言語サポート**: TypeScript版の実装
+1. **Real-time alerts**: Notifications when error rate exceeds threshold
+2. **Visualization dashboard**: Graphical display of log data
+3. **AI auto-analysis**: Periodic automatic report generation
+4. **Multi-language support**: TypeScript implementation
 
-## 🤝 移行戦略
+## 🤝 Migration Strategy
 
-1. **Phase 1**: 既存システムと並行運用（現在）
-2. **Phase 2**: AIログの活用度を徐々に増加
-3. **Phase 3**: 完全移行（オプション）
+1. **Phase 1**: Parallel operation with existing system (current)
+2. **Phase 2**: Gradually increase AI log utilization
+3. **Phase 3**: Complete migration (optional)
 
-このAIログシステムにより、Vibe Codingの概念を実現し、AIとの協調による効率的な開発が可能になります。
+This AI log system realizes the Vibe Coding concept, enabling efficient development through AI collaboration.
 
-## 📚 参考情報・謝辞
+## 📚 References & Acknowledgments
 
-### Vibe Logger - 本システムのインスピレーション
-- **プロジェクト**: [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
-- **解説記事**: [AIエージェント向けログシステム「Vibe Logger」の提案](https://note.com/fladdict/n/n5046f72bdadd)
+### Vibe Logger - Inspiration for This System
+- **Project**: [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
+- **Article**: [Proposal for AI Agent Logging System "Vibe Logger"](https://note.com/fladdict/n/n5046f72bdadd)
 
-### Vibe Loggerから採用した主要概念
-1. **構造化ログ形式**: AI解析に最適化されたJSON構造
-2. **コンテキスト豊富なメタデータ**: プロジェクト・環境・Git情報の自動収集
-3. **AIヒント機構**: デバッグヒント・優先度・推奨アクションの明示化
-4. **VibeCoding思想**: 「推測と確認」から「分析と解決」への転換
+### Key Concepts Adopted from Vibe Logger
+1. **Structured log format**: JSON structure optimized for AI analysis
+2. **Context-rich metadata**: Automatic collection of project, environment, and Git information
+3. **AI hint mechanism**: Explicit debug hints, priorities, and recommended actions
+4. **VibeCoding philosophy**: Transition from "guessing and checking" to "analysis and resolution"
 
-本システムはVibe Loggerの革新的なアイデアを基に、既存のClaude Codeプロジェクトに統合しやすい形で実装しました。
+This system is implemented based on Vibe Logger's innovative ideas in a form that is easy to integrate with existing Claude Code projects.

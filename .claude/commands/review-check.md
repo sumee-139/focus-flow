@@ -6,6 +6,8 @@ description: "Code review mode - コードレビューモード"
 
 Start working in a context specialized for code review, quality checking, and refactoring.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Review Past Insights**

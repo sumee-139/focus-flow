@@ -6,6 +6,8 @@ description: "Debug-focused mode - デバッグ特化モード"
 
 Start working in a context specialized for bug investigation, error analysis, and problem solving.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Understand Current Situation**

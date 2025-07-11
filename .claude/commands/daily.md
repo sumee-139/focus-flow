@@ -6,6 +6,8 @@ description: "Daily retrospective - 日次振り返り"
 
 Complete daily lightweight status updates within 3 minutes.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Health Check Feature (Optional)
 
 Check the following metrics weekly:

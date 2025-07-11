@@ -1,5 +1,7 @@
 # Testing, Quality & Technical Debt Management
 
+🌐 **English** | **[日本語](testing-quality_ja.md)**
+
 ## Test Requirements (Gradual TDD Learning Path)
 
 ### TDD Learning Steps

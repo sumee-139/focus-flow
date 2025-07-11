@@ -1,56 +1,58 @@
-# Claude Code Hooks システム
+# Claude Code Hooks System
 
-このプロジェクトには開発効率向上のため、Claude Code hooksが統合されています。
+🌐 **English** | **[日本語](hooks-README_ja.md)**
 
-## 実装済みHooks機能
+This project integrates Claude Code hooks to improve development efficiency.
 
-### 1. セキュリティHooks（PreToolUse）
-**スクリプト**: `.claude/scripts/deny-check.sh`
-- **目的**: 危険なBashコマンドの実行前チェック
-- **対象**: `rm -rf /`, `chmod 777`, `curl | sh` 等の破壊的コマンド
-- **動作**: 危険と判定されたコマンドは実行前に自動ブロック
+## Implemented Hooks Features
 
-### 2. 自動フォーマットHooks（PostToolUse）
-**スクリプト**: `.claude/scripts/auto-format.sh`
-- **目的**: ファイル編集後の自動コードフォーマット
-- **対象**: `.py`, `.js`, `.ts`, `.rs`, `.go`, `.json` ファイル
-- **動作**: 
-  - Python: `ruff format` または `black`
+### 1. Security Hooks (PreToolUse)
+**Script**: `.claude/scripts/deny-check.sh`
+- **Purpose**: Pre-execution check for dangerous Bash commands
+- **Target**: Destructive commands like `rm -rf /`, `chmod 777`, `curl | sh`
+- **Action**: Commands deemed dangerous are automatically blocked before execution
+
+### 2. Auto-format Hooks (PostToolUse)
+**Script**: `.claude/scripts/auto-format.sh`
+- **Purpose**: Automatic code formatting after file edits
+- **Target**: `.py`, `.js`, `.ts`, `.rs`, `.go`, `.json` files
+- **Action**: 
+  - Python: `ruff format` or `black`
   - JavaScript/TypeScript: `prettier`
   - Rust: `rustfmt`
   - Go: `gofmt`
   - JSON: `jq`
 
-### 3. 活動ログHooks（PostToolUse）
-**スクリプト**: `.claude/scripts/activity-logger.sh`
-- **目的**: 開発活動の自動記録・追跡
-- **ログファイル**: `~/.claude/activity.log`, `~/.claude/metrics.log`
-- **記録内容**: 
-  - 使用ツール名・実行時刻
-  - 編集対象ファイル・サイズ・拡張子
-  - 操作種別の分類（CODE_EDIT, FILE_READ, COMMAND_EXEC等）
+### 3. Activity Log Hooks (PostToolUse)
+**Script**: `.claude/scripts/activity-logger.sh`
+- **Purpose**: Automatic recording and tracking of development activities
+- **Log files**: `~/.claude/activity.log`, `~/.claude/metrics.log`
+- **Records**: 
+  - Tool name and execution time
+  - Edited files, sizes, and extensions
+  - Operation type classification (CODE_EDIT, FILE_READ, COMMAND_EXEC, etc.)
 
-### 4. セッション完了Hooks（Stop）
-**スクリプト**: `.claude/scripts/session-complete.sh`
-- **目的**: 作業セッション終了時の状況サマリー
-- **ログファイル**: `~/.claude/session.log`
-- **記録内容**:
-  - Git状況（変更ファイル数、ブランチ情報）
-  - セッション中の活動サマリー
-  - ツール使用統計
+### 4. Session Complete Hooks (Stop)
+**Script**: `.claude/scripts/session-complete.sh`
+- **Purpose**: Status summary at end of work session
+- **Log file**: `~/.claude/session.log`
+- **Records**:
+  - Git status (changed files, branch info)
+  - Session activity summary
+  - Tool usage statistics
 
-## ログファイル構成
+## Log File Structure
 
 ```
 ~/.claude/
-├── activity.log      # 詳細な活動ログ
-├── metrics.log       # 操作種別メトリクス
-├── session.log       # セッションサマリー
-├── format.log        # フォーマット実行ログ
-└── security.log      # セキュリティブロックログ
+├── activity.log      # Detailed activity log
+├── metrics.log       # Operation type metrics
+├── session.log       # Session summary
+├── format.log        # Format execution log
+└── security.log      # Security block log
 ```
 
-## Hooks設定（.claude/settings.json）
+## Hooks Configuration (.claude/settings.json)
 
 ```json
 {
@@ -104,76 +106,76 @@
 }
 ```
 
-## テスト・運用
+## Testing & Operations
 
-### Hooksテスト実行
+### Hooks Test Execution
 ```bash
-# 全hooks機能のテスト
+# Test all hooks features
 .claude/scripts/test-hooks.sh
 
-# セキュリティ機能のみテスト
+# Test security features only
 .claude/scripts/test-security.sh
 ```
 
-### ログ確認
+### Log Monitoring
 ```bash
-# 活動ログの確認
+# Monitor activity log
 tail -f ~/.claude/activity.log
 
-# セッション履歴の確認
+# View session history
 cat ~/.claude/session.log
 
-# セキュリティログの確認
+# Check security log
 tail -f ~/.claude/security.log
 ```
 
-### トラブルシューティング
+### Troubleshooting
 
-#### 「Tool: unknown」がログに記録される場合
-Claude Codeが環境変数`CLAUDE_TOOL_NAME`を正しく渡していない場合があります。これはClaude Code本体の動作に関わる問題で、ログ機能は正常に動作しています。将来のアップデートで改善される可能性があります。
+#### "Tool: unknown" is recorded in logs
+Claude Code may not be correctly passing the `CLAUDE_TOOL_NAME` environment variable. This is related to Claude Code itself, and the logging feature is working normally. This may be improved in future updates.
 
-#### Hooksが動作しない場合
-1. スクリプトの実行権限確認: `chmod +x .claude/scripts/*.sh`
-2. 設定ファイル確認: `.claude/settings.json` の構文チェック
-3. テスト実行: `.claude/scripts/test-hooks.sh` でエラー特定
+#### Hooks not working
+1. Check script permissions: `chmod +x .claude/scripts/*.sh`
+2. Verify config file: Check `.claude/settings.json` syntax
+3. Test execution: Identify errors with `.claude/scripts/test-hooks.sh`
 
-#### 自動フォーマットが動作しない場合
-1. フォーマッター確認: `ruff`, `prettier`, `rustfmt` 等がインストール済みか
-2. ファイル拡張子確認: サポート対象（.py, .js, .ts, .rs, .go, .json）か
-3. ログ確認: `~/.claude/format.log` でエラー詳細確認
+#### Auto-format not working
+1. Check formatter: Are `ruff`, `prettier`, `rustfmt` etc. installed?
+2. Check file extension: Is it supported (.py, .js, .ts, .rs, .go, .json)?
+3. Check logs: View error details in `~/.claude/format.log`
 
-## カスタマイズ
+## Customization
 
-### 新しい言語のフォーマット追加
-`auto-format.sh` の case文に追加:
+### Adding new language formatting
+Add to case statement in `auto-format.sh`:
 ```bash
-*.新拡張子)
-    if command -v フォーマッター >/dev/null 2>&1; then
-        フォーマッター "$file" && log_format "Formatted 言語: $file"
+*.new_ext)
+    if command -v formatter >/dev/null 2>&1; then
+        formatter "$file" && log_format "Formatted language: $file"
     fi
     ;;
 ```
 
-### セキュリティルールの追加
-`deny-check.sh` の `DANGEROUS_PATTERNS` 配列に追加:
+### Adding security rules
+Add to `DANGEROUS_PATTERNS` array in `deny-check.sh`:
 ```bash
-"新しい危険パターン"
+"new dangerous pattern"
 ```
 
-### 活動ログのカスタマイズ
-`activity-logger.sh` でツール分類の追加・修正:
+### Customizing activity logs
+Add/modify tool classification in `activity-logger.sh`:
 ```bash
-"新ツール名")
+"NewToolName")
     echo "[$timestamp] CUSTOM_ACTION" >> "$METRICS_FILE"
     ;;
 ```
 
-## メリット・効果
+## Benefits & Effects
 
-- **自動化**: 手動作業の削減（フォーマット、ログ記録等）
-- **品質向上**: 一貫したコードフォーマット、セキュリティチェック
-- **可視化**: 開発活動・進捗の自動追跡
-- **効率化**: 作業終了時の自動サマリー生成
-- **安全性**: 危険コマンドの事前ブロック
+- **Automation**: Reduced manual work (formatting, logging, etc.)
+- **Quality improvement**: Consistent code formatting, security checks
+- **Visualization**: Automatic tracking of development activities and progress
+- **Efficiency**: Automatic summary generation at work completion
+- **Safety**: Pre-blocking of dangerous commands
 
-このhooksシステムにより、Claude Code使用時の開発効率・品質・安全性が大幅に向上します。
+This hooks system significantly improves development efficiency, quality, and safety when using Claude Code.

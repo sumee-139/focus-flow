@@ -6,6 +6,8 @@ description: "Execute based on plan - 計画に基づく実行"
 
 Execute implementation work based on the developed plan.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Pre-check**
