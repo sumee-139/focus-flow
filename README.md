@@ -109,6 +109,14 @@ A growing community of developers exploring the future of AI-powered development
 - 🔧 Contribute improvements and ideas
 - 💬 Share your experience
 
+## 🚀 Try It Out!
+
+Want to see Claude Friends in action? Check out our **[Sample Projects](SAMPLE_PROJECTS.md)** for hands-on examples:
+- 📝 Markdown-driven task manager
+- 🌱 Digital pet ecosystem
+- 🎮 Roguelike game
+- ...and more!
+
 ## 🚦 Ready to Start?
 
 Don't just code. **Orchestrate**.
