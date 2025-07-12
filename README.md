@@ -39,7 +39,7 @@ Our revolutionary prompt caching means you can use AI all day without breaking t
 No more "what was I working on?" - Your AI team maintains perfect project memory.
 
 ### 🔍 **Instant Problem Analysis**
-AI-Friendly Logger turns cryptic errors into clear solutions in seconds.
+AI-Friendly Logger V2 (powered by [Vibe Logger](https://github.com/fladdict/vibe-logger) concepts) turns cryptic errors into clear solutions in seconds.
 
 ### 🎭 **Smart Agents with Special Modes**
 - **Planner**: Strategic thinking + automatic Feature Design Mode with Mermaid diagrams

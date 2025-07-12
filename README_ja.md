@@ -40,7 +40,7 @@ $ /agent:builder
 「何やってたっけ？」はもう過去の話。AIチームが完璧なプロジェクト記憶を維持。
 
 ### 🔍 **即座に問題を分析**
-AI-Friendly Loggerが、謎のエラーを数秒で明確な解決策に変換。
+AI-Friendly Logger V2（[Vibe Logger](https://github.com/fladdict/vibe-logger)概念採用）が、謎のエラーを数秒で明確な解決策に変換。
 
 ### 🎭 **特殊モード付きスマートエージェント**
 - **プランナー**: 戦略的思考 + 自動新機能設計モード（Mermaid図付き）

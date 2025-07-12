@@ -52,11 +52,15 @@ This is a major release introducing the revolutionary Claude Friends system, tra
 ## [1.2.0] - 2025-07-10
 
 ### Added
-- **AI-Friendly Logger**: Vibe Logger概念を採用した構造化JSONログシステム
-- **AIログ解析ツール**: `analyze-ai-logs.py`によるパターン分析・洞察生成機能
+- **AI-Friendly Logger V2**: [Vibe Logger](https://github.com/fladdict/vibe-logger)概念を採用した構造化JSONログシステム
+  - @fladdict氏の[AIエージェント用ログシステム「Vibe Logger」提案](https://note.com/fladdict/n/n5046f72bdadd)に基づく実装
+  - JSONL形式による効率的なAI解析
+  - 相関ID追跡とログレベル管理
+- **AIログ解析ツール**: `analyze-ai-logs-v2.py`によるパターン分析・洞察生成機能
 - **豊富なコンテキスト**: プロジェクト・環境・Git情報を自動収集
-- **AIメタデータ**: デバッグヒント・優先度・推奨アクションの自動付与
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクション・ai_todo フィールド
 - **エラー分析機能**: エラーパターンの検出と改善提案
+- **Vibe Logger統合ガイド**: `.claude/vibe-logger-integration.md`による段階的移行支援
 
 ### Enhanced
 - 既存の活動ログシステムと並行動作による段階的移行サポート

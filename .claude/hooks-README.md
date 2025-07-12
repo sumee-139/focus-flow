@@ -32,7 +32,18 @@ This project integrates Claude Code hooks to improve development efficiency.
   - Edited files, sizes, and extensions
   - Operation type classification (CODE_EDIT, FILE_READ, COMMAND_EXEC, etc.)
 
-### 4. Session Complete Hooks (Stop)
+### 4. AI-Friendly Logger V2 Hooks (PostToolUse)
+**Script**: `.claude/scripts/ai-logger-v2.sh`
+- **Purpose**: Structured logging optimized for AI analysis (based on [Vibe Logger](https://github.com/fladdict/vibe-logger) concepts)
+- **Log file**: `~/.claude/ai-activity-v2.jsonl`
+- **Features**:
+  - JSONL format for efficient AI parsing
+  - Rich context (project, environment, Git info)
+  - AI metadata (debug hints, priority, suggested actions)
+  - Correlation ID tracking
+  - Error pattern analysis with `analyze-ai-logs-v2.py`
+
+### 5. Session Complete Hooks (Stop)
 **Script**: `.claude/scripts/session-complete.sh`
 - **Purpose**: Status summary at end of work session
 - **Log file**: `~/.claude/session.log`
@@ -45,11 +56,13 @@ This project integrates Claude Code hooks to improve development efficiency.
 
 ```
 ~/.claude/
-├── activity.log      # Detailed activity log
-├── metrics.log       # Operation type metrics
-├── session.log       # Session summary
-├── format.log        # Format execution log
-└── security.log      # Security block log
+├── activity.log           # Detailed activity log
+├── metrics.log            # Operation type metrics
+├── session.log            # Session summary
+├── format.log             # Format execution log
+├── security.log           # Security block log
+├── ai-activity-v2.jsonl   # AI-optimized structured logs (Vibe Logger format)
+└── ai-activity.jsonl      # Legacy AI logger (for backward compatibility)
 ```
 
 ## Hooks Configuration (.claude/settings.json)
@@ -87,6 +100,10 @@ This project integrates Claude Code hooks to improve development efficiency.
           {
             "type": "command",
             "command": ".claude/scripts/activity-logger.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/scripts/ai-logger-v2.sh"
           }
         ]
       }
@@ -127,6 +144,12 @@ cat ~/.claude/session.log
 
 # Check security log
 tail -f ~/.claude/security.log
+
+# Monitor AI-optimized logs (real-time)
+tail -f ~/.claude/ai-activity-v2.jsonl
+
+# Analyze AI logs with insights
+.claude/scripts/analyze-ai-logs-v2.py --format summary
 ```
 
 ### Troubleshooting
