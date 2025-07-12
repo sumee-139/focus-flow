@@ -1,8 +1,8 @@
-# Claude Code Lightweight Project Template v1.2.0
+# Claude Friends Project Template v2.0.0
 
 🌐 **[日本語版](README_TEMPLATE_ja.md)** | **English**
 
-**The Next-Generation Knowledge Management System Designed for AI-Native Development**
+**AI-Powered Multi-Agent Development System - Your AI Team in a Box**
 
 ## 🚀 Why This Template is Revolutionary
 
@@ -66,14 +66,11 @@ docs/adr/template.md         # ADR template
 ├── debug/                  # Debug information
 │   └── latest.md           # Latest debug session (within 100 lines)
 ├── archive/                # Regular cleanup
-├── commands/               # Custom commands
-│   ├── plan.md             # Planning
-│   ├── act.md              # Implementation execution
+├── commands/               # Core commands
+│   ├── agent-planner.md    # Planner agent (includes feature design)
+│   ├── agent-builder.md    # Builder agent (includes debug & review)
 │   ├── daily.md            # Daily update
-│   ├── focus.md            # Focus mode
-│   ├── debug-start.md      # Debug-focused mode
-│   ├── feature-plan.md     # New feature design mode
-│   └── review-check.md     # Code review mode
+│   └── focus.md            # Focus mode
 ├── scripts/                # Security & logging scripts
 │   ├── deny-check.sh       # Dangerous command blocking
 │   ├── allow-check.sh      # Safe command allow
@@ -100,19 +97,21 @@ cd your-project/
 
 ### 2. Daily Development Flow
 
-#### Basic Cycle (Daily)
+#### With Claude Friends (Recommended)
 ```
-Morning: /project:plan     # Today's work plan (5 min)
-↓
-Implementation: /project:act    # Execute based on plan
-(Depending on situation)
-↓ /debug:start      # When debugging
-↓ /feature:plan     # When designing new features
-↓ /review:check     # When reviewing code
-↓
-Focus work: /project:focus  # When switching tasks or focusing
-↓
-Evening: /project:daily    # Daily update (3 min)
+Morning: /agent:planner    # Plan today's work and design features
+         ↓
+         "I want to add user authentication"
+         → Planner automatically creates detailed specs with diagrams
+         ↓
+Work:    /agent:builder    # Start implementation based on plan
+         ↓
+         Error occurs? → Builder automatically enters Debug Mode
+         Implementation done? → Builder can switch to Review Mode
+         ↓
+Focus:   /project:focus    # When you need to concentrate
+         ↓
+Evening: /project:daily    # Daily retrospective (3 min)
 ```
 
 #### Tag Search (As needed)
@@ -141,30 +140,32 @@ Tag search: #urgent #bug #feature #completed  # Fast search for related info
 
 Transform your solo development into a team experience with AI agents:
 
-### Agent Commands
+### Core Commands (Just 4!)
 | Command | Purpose | Details |
 |---------|---------|---------|
-| `/agent:planner` | Switch to strategic planning mode | Plan phases, organize tasks |
-| `/agent:builder` | Switch to implementation mode | Code, test, debug |
+| `/agent:planner` | Strategic planning + Design | Creates specs with Mermaid diagrams |
+| `/agent:builder` | Implementation + Debug + Review | Handles all coding tasks |
+| `/project:focus` | Focus on current task | Works with any agent |
+| `/project:daily` | Daily retrospective | Works with any agent |
+
+### Smart Agent Features
+- **Planner Special Mode**: Automatically switches to Feature Design Mode when planning new features
+- **Builder Special Modes**: 
+  - Debug Mode: Activates when errors occur
+  - Code Review Mode: Ensures quality after implementation
+- **Smooth Handoffs**: Agents recommend the best mode for the next agent
 
 **[→ Full Claude Friends Guide](.claude/claude-friends-guide.md)**
 
-## 🛠 Custom Commands
+## 🛠 Command System Overview
 
-### Basic Commands
-| Command | Purpose | Time Required |
-|---------|---------|---------------|
-| `/project:plan` | Work planning | 5 min |
-| `/project:act` | Execute based on plan | Implementation time |
-| `/project:focus` | Focus on current task | Immediate |
-| `/project:daily` | Daily retrospective | 3 min |
+The Claude Friends system simplifies development with just 4 core commands. All previous specialized modes are now integrated into the agent system:
 
-### Specialized Modes
-| Command | Purpose | Referenced Files |
-|---------|---------|------------------|
-| `/debug:start` | Debug-focused mode | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | New feature design mode | overview.md + next.md + requirements |
-| `/review:check` | Code review mode | history.md + checklist |
+### Quick Reference
+- **Planning/Design** → `/agent:planner` (includes feature design mode)
+- **Coding/Debug/Review** → `/agent:builder` (includes debug & review modes)
+- **Focus Work** → `/project:focus`
+- **Daily Review** → `/project:daily`
 
 ### Tag Search
 - Tag format: Search within Memory Bank with `#tag_name`
@@ -247,59 +248,46 @@ Transform your solo development into a team experience with AI agents:
 
 ### 🚀 First Day Flow
 
-#### Human-Led Development
+#### With Claude Friends System
 ```
 09:00 Copy template & customize
-09:15 /project:plan - First work plan
-09:30 Start development work
-12:00 Progress check
+09:15 /agent:planner - Plan project structure and first features
+      → Planner creates project overview with Mermaid architecture diagrams
+09:30 /agent:builder - Start implementing based on Planner's design
+      → Builder follows the plan, writes code, and tests
+12:00 Progress check & adjust priorities with Planner
+16:00 /agent:builder - Review code quality (Review Mode)
 17:00 /project:daily - First day retrospective
-```
-
-#### AI-Led Development
-```
-09:00 Copy template & customize (Human)
-09:15 /project:plan - First work plan (Human→AI)
-09:30 AI development starts (AI implements, human checks/suggests)
-12:00 Progress check & direction adjustment (Human)
-16:00 Deliverable review & feedback (Human)
-17:00 /project:daily - First day retrospective (Human→AI)
 ```
 
 ### 📅 Daily Operations (Day 2 onwards)
 
-#### Human-Led Development
+#### Claude Friends Workflow
 ```
-09:00 /project:plan     # Today's task organization
-09:30 Start development # Use Quick Modes as needed
-      /debug:start      # When debugging
-      /feature:plan     # When designing new features
-      /review:check     # When reviewing code
-12:00 /project:focus    # Focus on afternoon tasks
-17:00 /project:daily    # Today's retrospective
-```
-
-#### AI-Led Development (Recommended Timeline)
-```
-09:00-09:30  Human: Today's work instructions with /project:plan
-09:30-11:30  AI: Focused implementation with /project:act (human can work in parallel)
-             (Use /debug:start, /feature:plan etc. as needed)
-11:30-12:00  Human: Interim review & feedback
-13:00-15:00  AI: Continue implementation (human does design/planning)
-             Check code quality with /review:check
-15:00-15:30  Human: Course correction & additional instructions
-15:30-16:30  AI: Final implementation & adjustments
-16:30-17:00  Human: Final review & tomorrow's preparation
-17:00-17:15  Human: Retrospective with /project:daily
+09:00 /agent:planner    # Review progress and plan today's work
+      → "Add user notifications feature"
+      → Planner creates detailed spec with sequence diagrams
+      
+10:00 /agent:builder    # Start implementing new feature
+      → Builder works on notification system
+      → Error? Automatically switches to Debug Mode
+      
+14:00 /project:focus    # Deep focus on complex logic
+      
+16:00 /agent:builder    # Code review before wrapping up
+      → "Review the notification implementation"
+      → Builder analyzes code quality and suggests improvements
+      
+17:00 /project:daily    # Reflect and plan for tomorrow
 ```
 
 ### 👥 Human-AI Role Division
 
-#### Human Responsibilities
-- **Strategic Decisions**: Planning with `/project:plan`
-- **Quality Management**: Regular reviews and feedback
-- **Direction Control**: Implementation course correction
-- **Requirements Adjustment**: Adding/changing new requirements
+#### Human Responsibilities  
+- **Strategic Decisions**: Work with Planner agent for high-level planning
+- **Requirements Definition**: Explain needs to Planner for detailed specs
+- **Quality Management**: Request Builder's Code Review Mode
+- **Direction Control**: Guide agents through handoffs
 - **Retrospective**: Progress management with `/project:daily`
 
 #### AI Responsibilities
@@ -322,13 +310,13 @@ Parallel work during AI implementation (30-90 min):
 
 | Frequency | Command | Timing |
 |-----------|---------|--------|
-| Daily | `/project:plan` | Morning work start |
+| Daily | `/agent:planner` | Morning planning & design |
+| Daily | `/agent:builder` | Implementation & debugging |
 | Daily | `/project:daily` | Evening retrospective |
-| During work | `/project:act` | Implementation execution |
-| As needed | `/project:focus` | Focused implementation |
-| Situational | `/debug:start` | When debugging |
-| Situational | `/feature:plan` | New feature design |
-| Situational | `/review:check` | Code review |
+| As needed | `/project:focus` | Deep concentration |
+| Automatic | Planner Feature Mode | When designing new features |
+| Automatic | Builder Debug Mode | When errors occur |
+| Automatic | Builder Review Mode | For code quality checks |
 | Anytime | `#tag search` | Related info search |
 
 ## 🎉 Let's Start
@@ -336,8 +324,9 @@ Parallel work during AI implementation (30-90 min):
 1. Copy the template
 2. Customize CLAUDE.md
 3. Test security settings: Run `.claude/scripts/test-security.sh`
-4. Create your first plan with `/project:plan`
-5. Start efficient development referring to the above examples!
+4. Start with `/agent:planner` to design your project
+5. Switch to `/agent:builder` to start coding
+6. Enjoy AI-powered team development!
 
 Let's achieve efficient personal development with Claude Code using this template!
 
