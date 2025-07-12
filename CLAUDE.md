@@ -87,12 +87,13 @@ Simply explain your needs to the active agent, and they will switch to the appro
 - **AI logging**: Vibe Logger concept adoption with structured JSON format optimized for AI analysis
 - **Session management**: Automatic summary and Git status recording at work end
 
-### AI-Friendly Logger (NEW)
-- **Structured logs**: JSON format optimized for AI analysis (@~/.claude/ai-activity.jsonl)
+### AI-Friendly Logger V2 (Vibe Logger準拠)
+- **Structured logs**: JSONL format optimized for AI analysis (@~/.claude/ai-activity-v2.jsonl)
 - **Rich context**: Automatically collects project, environment, and file information
 - **AI metadata**: Adds debug hints, priority, and recommended actions
-- **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs.py`
-- **Details**: @.claude/ai-logger-README.md
+- **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs-v2.py`
+- **Vibe Logger concept**: Based on @fladdict's VibeCoding philosophy
+- **Details**: @.claude/ai-logger-README.md | @.claude/vibe-logger-integration.md
 
 ### Hooks Testing & Verification
 ```bash
@@ -173,7 +174,7 @@ Automatically recorded in `.clauderules` file.
 - Development guidelines: @.claude/guidelines/development.md
 - Hooks system: @.claude/hooks-README.md
 - Security settings: @.claude/security-README.md
-- AI logger system: @.claude/ai-logger-README.md
+- AI logger system: @.claude/ai-logger-README.md | @.claude/vibe-logger-integration.md
 - Requirements specification: @docs/requirements.md
 - ADR template: @docs/adr/template.md
 - Migration guide: @memo/migration-guide.md

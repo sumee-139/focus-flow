@@ -84,7 +84,7 @@
           },
           {
             "type": "command",
-            "command": ".claude/scripts/ai-logger.sh"
+            "command": ".claude/scripts/ai-logger-v2.sh"
           }
         ]
       }
