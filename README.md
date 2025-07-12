@@ -15,11 +15,19 @@ Imagine having a **Project Planner** who organizes your ideas and a **Code Build
 $ /agent:planner
 "Let's tackle the authentication system today. I've broken it down into 3 phases..."
 
+# Planning a new feature? Planner automatically switches to design mode
+"I want to add user notifications"
+"Switching to Feature Design Mode. Let me create a detailed spec with diagrams..."
+
 # Seamless handoff to your AI Builder  
 $ /agent:builder
 "Got it! Starting with the login API. I'll follow the plan and implement JWT..."
 
-# Your code gets written, tested, and documented automatically
+# Hit an error? Builder automatically switches to debug mode
+"TypeError: Cannot read property 'id' of undefined"
+"Entering Debug Mode. Let me analyze this error and trace its root cause..."
+
+# Your code gets written, tested, debugged, and reviewed automatically
 ```
 
 ## 🎯 Why Developers Love Claude Friends
@@ -33,8 +41,10 @@ No more "what was I working on?" - Your AI team maintains perfect project memory
 ### 🔍 **Instant Problem Analysis**
 AI-Friendly Logger turns cryptic errors into clear solutions in seconds.
 
-### 🎭 **Multiple Personalities, One Goal**
-Switch between strategic planning and detailed coding with a simple command.
+### 🎭 **Smart Agents with Special Modes**
+- **Planner**: Strategic thinking + automatic Feature Design Mode with Mermaid diagrams
+- **Builder**: Coding expert + automatic Debug Mode and Code Review Mode
+- Just 4 simple commands, but infinite possibilities!
 
 ## 🏃‍♂️ Quick Start
 
@@ -59,9 +69,12 @@ cp -r . ../my-awesome-project/ && cd ../my-awesome-project/
 
 ### 🌟 **Claude Friends Multi-Agent System** *(Now Available!)*
 Perfect for complex projects that need both planning and execution.
-- Sequential AI agents (Planner → Builder)
-- Role-specific memory systems
-- Intelligent task handoffs
+- **Smart AI Agents with Special Modes**:
+  - Planner: Planning + Feature Design (with Mermaid diagrams)
+  - Builder: Coding + Debug Mode + Code Review
+- **Just 4 Commands**: `/agent:planner`, `/agent:builder`, `/project:focus`, `/project:daily`
+- **Automatic Mode Switching**: Agents adapt to your current needs
+- **Intelligent Handoffs**: Smooth transitions with mode recommendations
 
 **[→ Learn More](README_TEMPLATE.md#claude-friends)** | **[→ User Guide](.claude/claude-friends-guide.md)**
 
@@ -76,10 +89,11 @@ The foundation for AI-powered development.
 ## 🎯 Built for Real Development Challenges
 
 ### What This Template Helps You Do:
-- **Plan Better**: AI Planner helps break down complex projects into manageable phases
-- **Code Faster**: AI Builder handles repetitive tasks while you focus on business logic  
-- **Debug Smarter**: AI-Friendly Logger provides context-rich error information
-- **Remember Everything**: Memory Bank keeps your project knowledge organized
+- **Plan Better**: AI Planner creates detailed specs with Mermaid diagrams automatically
+- **Code Faster**: AI Builder handles implementation, testing, and reviews in specialized modes
+- **Debug Instantly**: Builder's Debug Mode analyzes errors and finds root causes automatically
+- **Review Automatically**: Builder's Code Review Mode ensures quality without manual effort
+- **Remember Everything**: Memory Bank and handoff system maintain perfect project context
 
 ## 🛠 What's Inside
 

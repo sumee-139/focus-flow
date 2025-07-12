@@ -10,9 +10,20 @@
 
 ## Claude Friends System (NEW!)
 **Sequential Multi-Agent System** - AI開発チームをシミュレート
-- **Planner Agent**: 戦略立案・Phase/ToDo管理
-- **Builder Agent**: 実装・テスト・デバッグ
-- **Smooth Handoff**: エージェント間の引き継ぎシステム
+- **Planner Agent**: 戦略立案・Phase/ToDo管理・ユーザーとの窓口・設計書作成
+  - 特殊モード: 新機能設計モード
+- **Builder Agent**: 実装・テスト・デバッグ・技術的質問対応
+  - 特殊モード: デバッグモード、コードレビューモード
+- **Smooth Handoff**: エージェント間の引き継ぎシステム（モード情報含む）
+
+### 基本的な開発フロー
+1. **計画・設計フェーズ** → `/agent:planner`
+   - 要件確認、設計書作成、ToDo分解
+2. **実装フェーズ** → `/agent:builder`
+   - コーディング、テスト、デバッグ
+3. **必要に応じて切り替え**
+   - 仕様変更 → Plannerへ
+   - 技術的課題 → Builderで解決
 
 ### Agent Structure
 - Active agent: @.claude/agents/active.md
@@ -47,26 +58,21 @@
 
 ## Custom Commands
 
-### Claude Friends Commands (NEW!)
-| Command | Purpose | Time Required | Details |
-|---------|---------|---------------|---------|
-| `/agent:planner` | Switch to Planner mode | Immediate | @.claude/commands/agent-planner.md |
-| `/agent:builder` | Switch to Builder mode | Immediate | @.claude/commands/agent-builder.md |
+### Core Commands (Just 4!)
+| Command | Purpose | Details |
+|---------|---------|---------|
+| `/agent:planner` | Strategic planning + Design | Creates specs with Mermaid diagrams |
+| `/agent:builder` | Implementation + Debug + Review | Handles all coding tasks |
+| `/project:focus` | Focus on current task | Works with any agent |
+| `/project:daily` | Daily retrospective (3 min) | Works with any agent |
 
-### Basic Commands
-| Command | Purpose | Time Required | Details |
-|---------|---------|---------------|---------|
-| `/project:plan` | Work planning | 5 min | @.claude/commands/plan.md |
-| `/project:act` | Execute based on plan | Implementation time | @.claude/commands/act.md |
-| `/project:focus` | Focus on current task | Immediate | @.claude/commands/focus.md |
-| `/project:daily` | Daily retrospective | 3 min | @.claude/commands/daily.md |
+### Special Modes (Integrated into Agents)
+The following modes are now integrated into the agent system:
+- **New Feature Design** → Use Planner's special mode
+- **Debug Mode** → Use Builder's special mode  
+- **Code Review** → Use Builder's special mode
 
-### Specialized Modes
-| Command | Purpose | Referenced Files |
-|---------|---------|------------------|
-| `/debug:start` | Debug-focused mode | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | New feature design mode | overview.md + next.md + requirements |
-| `/review:check` | Code review mode | history.md + checklist |
+Simply explain your needs to the active agent, and they will switch to the appropriate mode.
 
 ### Tag Search
 - Tag format: Search within Memory Bank with `#tag_name`

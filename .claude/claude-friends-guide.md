@@ -6,19 +6,24 @@
 **Sequential Multi-Agent System** - Experience team development even when working solo with AI.
 
 ### Two AI Agents
-- **Planner**: Determines project direction and organizes tasks
-- **Builder**: Writes code and tests based on the plan
+- **Planner**: Determines project direction, user communication, creates design docs, organizes tasks
+- **Builder**: Writes code and tests based on the plan, handles technical questions
 
 ## 🚀 Basic Usage
 
 ### 1. First Launch
 ```bash
-# Start in Planner mode (planning)
+# Start in Planner mode (planning & design)
 /agent:planner
 
 # Switch to Builder once plan is ready (implementation)
 /agent:builder
 ```
+
+### Key Principle
+- **All planning → Planner** (no `/project:plan` needed)
+- **All implementation → Builder** (no `/project:act` needed)
+- **Simple and clear role division**
 
 ### 2. Daily Development Flow
 ```
@@ -36,8 +41,10 @@ End: Create handover for next day
 ### 3. When to Switch Agents
 
 #### When to Use Planner
+- Starting a new project or feature
+- Confirming requirements with users
+- Creating design documents (with Mermaid diagrams)
 - Determining project direction
-- Designing major features
 - Organizing task priorities
 - Re-planning when stuck
 
@@ -46,6 +53,8 @@ End: Create handover for next day
 - Fixing bugs
 - Creating tests
 - Refactoring
+- Handling technical implementation details
+- Debugging technical issues
 
 ## 📝 Handover Tips
 
@@ -86,11 +95,19 @@ End: Create handover for next day
 - "What's the big picture?"
 - "What are the priorities?"
 - "Is this approach good?"
+- "I want to add a new feature" → Automatically switches to feature design mode
 
 ### Talking to Builder
-- "Fix this error"
+- "Fix this error" → Automatically switches to debug mode
 - "Write tests for this"
+- "Review this code" → Automatically switches to code review mode
 - "Improve performance"
+
+### Special Modes
+Agents have special modes for specific tasks:
+- **Planner's Feature Design Mode**: Activated when planning new features
+- **Builder's Debug Mode**: Activated when investigating errors
+- **Builder's Code Review Mode**: Activated when checking code quality
 
 ## 📁 Understanding File Structure
 
@@ -128,10 +145,11 @@ End: Create handover for next day
 - Move handovers older than 1 week to archive folder
 - Useful for referencing past decisions
 
-### 4. Combining with Existing Commands
-- `/project:daily` for daily retrospective
+### 4. Combining with Other Commands
+- `/project:focus` to focus on current task (works with any agent)
+- `/project:daily` for daily retrospective (works with any agent)
 - `/debug:start` for debug mode
-- Agent system coexists with traditional commands
+- Specialized modes work alongside the agent system
 
 ## ⚠️ Important Notes
 

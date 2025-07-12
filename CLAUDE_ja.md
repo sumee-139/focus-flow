@@ -10,9 +10,20 @@
 
 ## Claude Friendsシステム (NEW!)
 **シーケンシャル・マルチエージェントシステム** - AI開発チームをシミュレート
-- **Plannerエージェント**: 戦略立案・Phase/ToDo管理
-- **Builderエージェント**: 実装・テスト・デバッグ
-- **スムーズな引き継ぎ**: エージェント間の引き継ぎシステム
+- **Plannerエージェント**: 戦略立案・Phase/ToDo管理・ユーザーとの窓口・設計書作成
+  - 特殊モード: 新機能設計モード（Mermaid図付き）
+- **Builderエージェント**: 実装・テスト・デバッグ・技術的質問対応
+  - 特殊モード: デバッグモード、コードレビューモード
+- **スムーズな引き継ぎ**: エージェント間の引き継ぎシステム（モード情報含む）
+
+### 基本的な開発フロー
+1. **計画・設計フェーズ** → `/agent:planner`
+   - 要件確認、設計書作成、ToDo分解
+2. **実装フェーズ** → `/agent:builder`
+   - コーディング、テスト、デバッグ
+3. **必要に応じて切り替え**
+   - 仕様変更 → Plannerへ
+   - 技術的課題 → Builderで解決
 
 ### エージェント構造
 - アクティブエージェント: @.claude/agents/active.md
@@ -49,26 +60,21 @@
 
 ## カスタムコマンド
 
-### Claude Friendsコマンド (NEW!)
-| コマンド | 用途 | 所要時間 | 詳細 |
-|---------|----- |-----------|------|
-| `/agent:planner` | Plannerモードに切り替え | 即座 | @.claude/commands/agent-planner.md |
-| `/agent:builder` | Builderモードに切り替え | 即座 | @.claude/commands/agent-builder.md |
+### コアコマンド（たった4つ！）
+| コマンド | 用途 | 詳細 |
+|---------|------|------|
+| `/agent:planner` | 戦略計画＋設計 | Mermaid図付きで仕様書作成 |
+| `/agent:builder` | 実装＋デバッグ＋レビュー | すべてのコーディング作業 |
+| `/project:focus` | 現在のタスクに集中 | どのエージェントでも使用可 |
+| `/project:daily` | 日次振り返り（3分） | どのエージェントでも使用可 |
 
-### 基本コマンド
-| コマンド | 用途 | 所要時間 | 詳細 |
-|---------|----- |-----------|------|
-| `/project:plan` | 作業計画立案 | 5分 | @.claude/commands/plan.md |
-| `/project:act` | 計画に基づく実装実行 | 実装時間 | @.claude/commands/act.md |
-| `/project:focus` | 現在タスクに集中 | 即座 | @.claude/commands/focus.md |
-| `/project:daily` | 日次振り返り | 3分 | @.claude/commands/daily.md |
+### 特殊モード（エージェントに統合済み）
+以下のモードはエージェントシステムに統合されました：
+- **新機能設計** → Plannerの特殊モードを使用
+- **デバッグモード** → Builderの特殊モードを使用  
+- **コードレビュー** → Builderの特殊モードを使用
 
-### 専門化モード
-| コマンド | 用途 | 参照ファイル |
-|---------|----- |-------------|
-| `/debug:start` | デバッグ特化モード | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | 新機能設計モード | overview.md + next.md + 要件定義 |
-| `/review:check` | コードレビューモード | history.md + チェックリスト |
+アクティブなエージェントに要望を説明するだけで、適切なモードに切り替わります。
 
 ### タグ検索
 - タグ形式: `#tag_name` でMemory Bank内検索
