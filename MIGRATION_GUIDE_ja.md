@@ -78,6 +78,10 @@ echo "# Active Agent\n\n## Current Agent: none\n\nLast updated: $(date +%Y-%m-%d
 git pull origin main
 
 # または手動でv2.0.0ファイルをコピー
+
+# 日本語環境で使用する場合
+mv .clauderules .clauderules_en     # 英語版を保存
+mv .clauderules_ja .clauderules     # 日本語版を使用
 ```
 
 ### ステップ 4: コマンドの移行

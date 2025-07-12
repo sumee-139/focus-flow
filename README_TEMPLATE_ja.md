@@ -90,8 +90,12 @@ cp -r claude_file_template/ your-project/
 cd your-project/
 
 # 日本語版ファイルを使用（推奨）
-mv CLAUDE_ja.md CLAUDE.md
-mv README_TEMPLATE_ja.md README.md
+mv CLAUDE.md CLAUDE_en.md          # 英語版を保存
+mv CLAUDE_ja.md CLAUDE.md           # 日本語版をメインに
+mv README_TEMPLATE.md README_TEMPLATE_en.md  # 英語版を保存
+mv README_TEMPLATE_ja.md README.md  # 日本語版をメインに
+mv .clauderules .clauderules_en     # 英語版を保存
+mv .clauderules_ja .clauderules     # 日本語版をメインに
 # 必要に応じて他の_jaファイルも同様に置き換え
 
 # プロジェクト情報をカスタマイズ
