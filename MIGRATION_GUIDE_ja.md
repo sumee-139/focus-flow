@@ -1,159 +1,213 @@
-# Claude File Template v1.2.0 移行ガイド
+# Claude Friends v2.0.0 移行ガイド
 
-このガイドは、以前のバージョンから v1.2.0 への移行方法を説明します。
+🌐 **日本語** | **[English](MIGRATION_GUIDE.md)**
+
+v1.xからv2.0.0への移行を支援するガイドです。
+
+## 🎉 v2.0.0の革新的変更点
+
+### Claude Friendsマルチエージェントシステムの導入
+- **Plannerエージェント**: 戦略立案・設計書作成（Mermaid図付き）
+- **Builderエージェント**: 実装・デバッグ・コードレビュー
+- **スマートモード切り替え**: エージェントが文脈に応じて自動的に特殊モードに切り替え
+
+### コマンドの大幅な簡素化
+- **以前**: 7つ以上のコマンド
+- **現在**: たった4つのコアコマンド
+- **削減率**: 40%以上のコマンド削減
 
 ## 🚨 破壊的変更
 
-### 1. CLAUDE.md の大幅な簡素化
-- **変更前**: 367行の詳細な設定
-- **変更後**: 65行のコンパクトな設定
-- **対応**: 詳細情報は `@.claude/guidelines/` に移動しました
+### 1. 削除されたコマンド
 
-### 2. 削除されたファイル/ディレクトリ
-以下の要素が削除されました：
+| 削除されたコマンド | 新しい方法 |
+|-------------------|------------|
+| `/project:plan` | `/agent:planner` を使用 |
+| `/project:act` | `/agent:builder` を使用 |
+| `/feature:plan` | Plannerの新機能設計モード（自動） |
+| `/debug:start` | Builderのデバッグモード（自動） |
+| `/review:check` | Builderのコードレビューモード |
 
-#### 削除されたコマンド
-- `.claude/commands/compress.md` → 不要（一時的用途）
-- `.claude/commands/deploy-prep.md` → CI/CDで自動化推奨
-- `.claude/commands/monthly.md` → 使用頻度が低い
-- `.claude/commands/update-memory.md` → 自動化推奨
-- `.claude/commands/health.md` → `/project:daily` に統合
+### 2. 新しいエージェント構造
+```
+.claude/
+├── agents/          # NEW!
+│   └── active.md    # 現在アクティブなエージェント
+├── planner/         # NEW!
+│   ├── identity.md  # Plannerの役割定義
+│   ├── notes.md     # 作業メモ
+│   └── handover.md  # 引き継ぎ文書
+├── builder/         # NEW!
+│   ├── identity.md  # Builderの役割定義
+│   ├── notes.md     # 実装メモ
+│   └── handover.md  # 引き継ぎ文書
+└── shared/          # NEW!
+    ├── phase-todo.md    # Phase/ToDo管理
+    └── constraints.md   # プロジェクト制約
+```
 
-#### 削除された構造
-- `PROJECT_MEMORY.md` → `.claude/context/history.md` で代替
-- `.claude/evolution/` → 過度な構造化のため削除
-- `.claude/agents/` → 時期尚早のため削除
-
-### 3. ガイドラインの統合
-旧ファイル → 新ファイルのマッピング：
-
-| 旧ファイル | 新ファイル |
-|-----------|-----------|
-| `development.md` | `development.md` |
-| `error-handling.md` | `development.md` に統合 |
-| `quality-gates.md` | `development.md` に統合 |
-| `git-conventions.md` | `git-workflow.md` に統合 |
-| `adr-system.md` | `git-workflow.md` に統合 |
-| `testing.md` | `testing-quality.md` に統合 |
-| `debt-tracking.md` | `testing-quality.md` に統合 |
+### 3. ワークフローの変化
+- **以前**: コマンドベースの開発
+- **現在**: エージェントベースの開発
+- **メリット**: より自然な対話形式、自動的な文脈理解
 
 ## 🔧 移行手順
 
 ### ステップ 1: バックアップ
 ```bash
 # 現在の設定をバックアップ
-cp -r .claude .claude_backup
-cp CLAUDE.md CLAUDE_backup.md
+cp -r .claude .claude_backup_v1
+cp CLAUDE.md CLAUDE_backup_v1.md
 ```
 
-### ステップ 2: 新バージョンの適用
+### ステップ 2: 新しいエージェント構造の作成
 ```bash
-# 最新バージョンを取得
+# エージェントディレクトリの作成
+mkdir -p .claude/agents
+mkdir -p .claude/planner/archive
+mkdir -p .claude/builder/archive
+mkdir -p .claude/shared
+
+# active.mdの初期化
+echo "# Active Agent\n\n## Current Agent: none\n\nLast updated: $(date +%Y-%m-%d)" > .claude/agents/active.md
+```
+
+### ステップ 3: 最新版の適用
+```bash
+# 最新版を取得
 git pull origin main
 
-# または手動でファイルを更新
+# または手動でv2.0.0ファイルをコピー
 ```
 
-### ステップ 3: カスタマイズの移行
+### ステップ 4: コマンドの移行
 
-#### PROJECT_MEMORY.md を使用していた場合
-1. 内容を `.claude/context/history.md` に移動
-2. 「設計の理由」セクションを history.md の「重要な決定事項」に追加
-3. 「学習ログ」を history.md の「振り返りログ」に追加
-
-#### hooks.yaml のカスタマイズ
-evolution/ ディレクトリへの参照を更新：
-```yaml
-# 変更前
-echo "..." >> .claude/evolution/changes.log
-
-# 変更後（必要な場合）
-echo "..." >> .claude/logs/changes.log  # logsディレクトリを作成
-```
-
-### ステップ 4: AI Logger の有効化（オプション）
+#### 日常のワークフロー移行
 ```bash
-# 設定ファイルの確認
-cat .claude/settings.json
+# 以前のワークフロー
+/project:plan      # 計画立案
+/project:act       # 実装実行
+/debug:start       # デバッグ
+/review:check      # レビュー
 
-# AI Logger が hooks に含まれていることを確認
-# "command": ".claude/scripts/ai-logger.sh" が存在するか確認
-
-# テスト実行
-echo "Test file" > test.txt
-rm test.txt
-
-# AI ログの確認
-ls -la ~/.claude/ai-activity.jsonl
+# 新しいワークフロー
+/agent:planner     # 計画・設計（新機能モード自動切り替え）
+/agent:builder     # 実装・デバッグ・レビュー（モード自動切り替え）
 ```
 
-### ステップ 5: 検証
-```bash
-# ファイル構造の確認
-find .claude -type f -name "*.md" | sort
+#### カスタムコマンドの更新
+もしカスタムコマンドを作成していた場合：
+1. `.claude/commands/` を確認
+2. 削除されたコマンドへの参照を更新
+3. 新しいエージェントベースのフローに適応
 
-# CLAUDE.md の確認
-cat CLAUDE.md
+### ステップ 5: CLAUDE.mdの更新
+```bash
+# CLAUDE.mdの主要セクションを更新
+# - カスタムコマンドセクション
+# - Claude Friendsシステムの説明を追加
+# - 削除されたコマンドの記述を削除
 ```
 
-## 📋 チェックリスト
-
-移行完了の確認：
-- [ ] CLAUDE.md が新しい簡素化版になっている
-- [ ] `.claude/guidelines/` に3つのファイルがある
-- [ ] `.claude/commands/` に7つのファイルがある
-- [ ] カスタムコマンドが正常に動作する
-- [ ] hooks.yaml のパスが更新されている
-
-## 🆕 新機能
-
-### AI-Friendly Logger（v1.2.0 - Vibe Logger概念採用）
-**新規追加ファイル**:
-- `.claude/scripts/ai-logger.sh` - 構造化ログ生成スクリプト
-- `.claude/scripts/analyze-ai-logs.py` - AIログ解析ツール
-- `.claude/ai-logger-README.md` - 詳細ドキュメント
-
-**主な機能**:
-- 構造化JSON形式でAI分析に最適化されたログ
-- プロジェクト・環境・Git情報の自動収集
-- AIメタデータ（デバッグヒント・優先度・推奨アクション）
-- エラーパターン分析とAI向け洞察生成
-- 既存の活動ログシステムと並行動作
-
-**インスピレーション**: [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
-
-### セキュアな Bash 設定
-`.claude/settings.local.json` に安全な実行権限が追加されました：
-- 危険なコマンドの拒否リスト
-- 許可されたコマンドのホワイトリスト
-- 実行前のセキュリティチェック
-
-### 統合されたガイドライン
-- 開発に関する情報が1ファイルに集約
-- Git/ADR関連が1ファイルに統合
-- テスト/品質/技術負債が1ファイルに統合
-
-## ❓ トラブルシューティング
-
-### Q: 以前のコマンドが見つからない
-A: 以下の対応表を確認してください：
-- `/health` → `/project:daily` の健康診断機能を使用
-- 月次タスク → 手動で実行するか、カレンダーリマインダーを設定
-
-### Q: PROJECT_MEMORY.md への参照エラー
-A: すべての参照を `.claude/context/history.md` に更新してください
-
-### Q: ファイルが多すぎて混乱している
-A: 不要なバックアップファイルを削除：
+### ステップ 6: 検証
 ```bash
-rm -rf .claude_backup CLAUDE_backup.md
+# エージェント構造の確認
+ls -la .claude/agents/
+ls -la .claude/planner/
+ls -la .claude/builder/
+
+# コマンドの動作確認
+# Plannerモードをテスト
+"Please switch to planner mode"
+
+# Builderモードをテスト  
+"Please switch to builder mode"
+```
+
+## 📋 移行チェックリスト
+
+- [ ] バックアップを作成した
+- [ ] エージェントディレクトリ構造を作成した
+- [ ] CLAUDE.mdを更新した
+- [ ] 削除されたコマンドへの参照を更新した
+- [ ] `/agent:planner` が正常に動作する
+- [ ] `/agent:builder` が正常に動作する
+- [ ] 特殊モードの自動切り替えを確認した
+- [ ] 引き継ぎ文書（handover.md）の作成を理解した
+
+## 🆕 新機能の活用
+
+### 1. スマートモード切り替え
+```
+Planner使用中：
+「新しいユーザー認証機能を設計したい」
+→ 自動的に新機能設計モードに切り替わり、Mermaid図を作成
+
+Builder使用中：
+エラーが発生
+→ 自動的にデバッグモードに切り替わり、根本原因を分析
+```
+
+### 2. 引き継ぎシステム
+```bash
+# エージェント切り替え時
+1. 現在のエージェントが handover.md を作成
+2. 次のエージェントへの推奨事項を記載
+3. スムーズな作業継続が可能
+```
+
+### 3. Phase/ToDo管理
+```
+# shared/phase-todo.md で一元管理
+- 現在のPhase
+- Phase内のToDo（優先順）
+- 完了したPhase
+- 次のPhase候補
+```
+
+## ❓ よくある質問
+
+### Q: なぜコマンドが減ったのですか？
+A: エージェントシステムが文脈を理解し、自動的に適切なモードに切り替わるため、個別のモードコマンドが不要になりました。
+
+### Q: 以前の `/debug:start` の機能はどこへ？
+A: Builderエージェントがエラーを検出すると自動的にデバッグモードに入ります。手動で起動したい場合は「デバッグモードで分析して」と伝えるだけです。
+
+### Q: `/feature:plan` の詳細な設計書機能は？
+A: Plannerエージェントに統合され、さらに強化されました。Mermaid図を自動的に含む、より視覚的な設計書を作成します。
+
+### Q: 移行にどれくらい時間がかかりますか？
+A: 通常のプロジェクトなら30分程度で完了します。カスタマイズが多い場合は1時間程度を見込んでください。
+
+### Q: v1.xに戻すことはできますか？
+A: バックアップから復元可能ですが、v2.0.0の利点（コスト削減、効率向上）を失うことになります。
+
+## 🚀 移行後の新しいワークフロー例
+
+```
+朝の開始:
+/agent:planner
+「今日はユーザー管理機能を完成させたい」
+→ Plannerが計画を立案、設計書を作成
+
+実装開始:
+/agent:builder  
+「Plannerの設計に基づいて実装を開始」
+→ Builderが実装、テスト、必要に応じてデバッグ
+
+レビュー:
+「実装したコードをレビューモードで確認して」
+→ Builderが自動的にコードレビューモードに切り替え
+
+日次振り返り:
+/project:daily
+→ どのエージェントからでも実行可能
 ```
 
 ## 📞 サポート
 
-問題が発生した場合は、GitHubのIssueで報告してください：
-https://github.com/sougetuOte/claude-file-template/issues
+移行に関する質問や問題がある場合は、GitHubのIssueで報告してください。
 
 ---
 
-**注意**: この移行により、プロジェクトの管理がよりシンプルで効率的になります。一時的な手間はありますが、長期的なメリットは大きいです。
+**重要**: v2.0.0への移行により、開発体験が大幅に向上します。初期の学習曲線はありますが、すぐに新しいワークフローの効率性を実感できるでしょう。

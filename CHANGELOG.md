@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-07-12
+
+### 🎉 Major Release: Claude Friends Multi-Agent System
+
+This is a major release introducing the revolutionary Claude Friends system, transforming solo development into an AI-powered team experience.
+
+### Added
+- **Claude Friends Multi-Agent System**: Sequential AI agents that simulate a development team
+  - **Planner Agent**: Strategic planning, requirement gathering, design documentation with Mermaid diagrams
+  - **Builder Agent**: Implementation, testing, debugging, and code review
+  - **Smart Mode Switching**: Agents automatically switch to specialized modes based on context
+- **Special Modes**: 
+  - Planner: Feature Design Mode (auto-activates for new features)
+  - Builder: Debug Mode (auto-activates on errors) & Code Review Mode
+- **Intelligent Handoff System**: Smooth transitions between agents with mode recommendations
+- **Agent Workspaces**: Dedicated directories for each agent with notes, identity, and handover files
+- **Simplified Command System**: Just 4 core commands (`/agent:planner`, `/agent:builder`, `/project:focus`, `/project:daily`)
+
+### Changed
+- **Major Command Consolidation**: 
+  - `/feature:plan` → Integrated into Planner's Feature Design Mode
+  - `/debug:start` → Integrated into Builder's Debug Mode
+  - `/review:check` → Integrated into Builder's Code Review Mode
+- **Project Structure**: Evolved from Memory Bank only to Agent + Memory Bank hybrid
+- **Development Workflow**: Shifted from command-based to agent-based development
+- **Documentation**: Complete overhaul to reflect Claude Friends system
+
+### Removed
+- **Deprecated Commands**: 
+  - `/project:plan` (replaced by `/agent:planner`)
+  - `/project:act` (replaced by `/agent:builder`)
+  - Individual mode commands (now integrated into agents)
+
+### Breaking Changes
+- Command structure completely redesigned - existing workflows need migration
+- Memory Bank structure expanded with agent-specific directories
+- `core/current.md` deprecated in favor of agent-specific notes
+
+### Migration Guide
+1. Start using `/agent:planner` instead of `/project:plan`
+2. Use `/agent:builder` instead of `/project:act`
+3. Special modes are now automatic - no need for separate commands
+4. Handover documents required when switching agents
+
 ## [1.2.0] - 2025-07-10
 
 ### Added
