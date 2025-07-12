@@ -88,7 +88,7 @@ Simply explain your needs to the active agent, and they will switch to the appro
 - **Session management**: Automatic summary and Git status recording at work end
 
 ### AI-Friendly Logger V2 (Vibe Logger準拠)
-- **Structured logs**: JSONL format optimized for AI analysis (@~/.claude/ai-activity-v2.jsonl)
+- **Structured logs**: JSONL format optimized for AI analysis (@~/.claude/ai-activity.jsonl)
 - **Rich context**: Automatically collects project, environment, and file information
 - **AI metadata**: Adds debug hints, priority, and recommended actions
 - **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs.py`

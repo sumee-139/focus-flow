@@ -289,8 +289,8 @@ class AILogAnalyzer:
 
 def main():
     parser = argparse.ArgumentParser(description='Analyze AI-friendly activity logs')
-    parser.add_argument('--log-file', default=Path.home() / '.claude' / 'ai-activity-v2.jsonl',
-                        help='Path to log file (default: ~/.claude/ai-activity-v2.jsonl)')
+    parser.add_argument('--log-file', default=Path.home() / '.claude' / 'ai-activity.jsonl',
+                        help='Path to log file (default: ~/.claude/ai-activity.jsonl)')
     parser.add_argument('--format', choices=['summary', 'json', 'errors-only'], default='summary',
                         help='Output format (default: summary)')
     parser.add_argument('--errors-only', action='store_true',

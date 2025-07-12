@@ -13,7 +13,7 @@ timestamp=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")
 correlation_id=$(uuidgen 2>/dev/null || echo "$(date +%s)-$$")
 
 # ログファイルの設定
-AI_LOG_FILE="${HOME}/.claude/ai-activity-v2.jsonl"
+AI_LOG_FILE="${HOME}/.claude/ai-activity.jsonl"
 mkdir -p "$(dirname "$AI_LOG_FILE")"
 
 # プロジェクト情報の取得
@@ -166,6 +166,7 @@ log_entry=$(jq -nc \
         "environment": $environment,
         "source": $source,
         "human_note": (if $human_note != "" then $human_note else null end),
+        "ai_hint": (if $ai_hint != "" then $ai_hint else null end),
         "ai_todo": (if $ai_todo != "" then $ai_todo else null end)
     } | with_entries(select(.value != null))')
 
