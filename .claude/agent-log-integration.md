@@ -14,9 +14,9 @@
 2. **デバッグモード**
    - エラーや問題の調査に特化
    - **必須ログ確認手順**：
-     1. 最近のエラーを確認: `python3 .claude/scripts/analyze-ai-logs-v2.py --errors-only`
+     1. 最近のエラーを確認: `python3 .claude/scripts/analyze-ai-logs.py --errors-only`
      2. 活動履歴を確認: `tail -50 ~/.claude/activity.log | grep ERROR`
-     3. AI用ログ解析: `python3 .claude/scripts/analyze-ai-logs-v2.py --format json > debug-report.json`
+     3. AI用ログ解析: `python3 .claude/scripts/analyze-ai-logs.py --format json > debug-report.json`
    - エラーパターンの分析と解決策の提案
    - 実装前に必ずログでエラーコンテキストを確認すること
 ```
@@ -27,8 +27,8 @@
 ```markdown
 #### 引き継ぎ時のログ確認
 Builderから引き継ぐ際は、必ず以下を確認：
-1. 直近の活動サマリー: `python3 .claude/scripts/analyze-ai-logs-v2.py`
-2. エラーがあった場合: `python3 .claude/scripts/analyze-ai-logs-v2.py --errors-only`
+1. 直近の活動サマリー: `python3 .claude/scripts/analyze-ai-logs.py`
+2. エラーがあった場合: `python3 .claude/scripts/analyze-ai-logs.py --errors-only`
 3. 作業履歴の把握: `tail -30 ~/.claude/activity.log`
 ```
 
@@ -36,8 +36,8 @@ Builderから引き継ぐ際は、必ず以下を確認：
 
 ```markdown
 ## 参考ログ情報
-- 最後のエラー: [analyze-ai-logs-v2.py --errors-only の出力をペースト]
-- 主な作業内容: [analyze-ai-logs-v2.py のサマリーセクション]
+- 最後のエラー: [analyze-ai-logs.py --errors-only の出力をペースト]
+- 主な作業内容: [analyze-ai-logs.py のサマリーセクション]
 - 要注意事項: [エラーパターンやAI TODOsから抽出]
 ```
 
@@ -49,10 +49,10 @@ Builderから引き継ぐ際は、必ず以下を確認：
 エラーがある場合は必ず確認：
 ```bash
 # エラーサマリーを表示
-python3 .claude/scripts/analyze-ai-logs-v2.py --errors-only
+python3 .claude/scripts/analyze-ai-logs.py --errors-only
 
 # 詳細が必要な場合
-python3 .claude/scripts/analyze-ai-logs-v2.py --format json
+python3 .claude/scripts/analyze-ai-logs.py --format json
 ```
 ```
 

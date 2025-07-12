@@ -32,7 +32,7 @@
 cp .claude/scripts/ai-logger.sh .claude/scripts/ai-logger-original.sh
 
 # 新しいロガーをテスト
-.claude/scripts/ai-logger-v2.sh
+.claude/scripts/ai-logger.sh
 ```
 
 ### ステップ2: 設定ファイルの更新
@@ -50,7 +50,7 @@ cp .claude/scripts/ai-logger.sh .claude/scripts/ai-logger-original.sh
           },
           {
             "type": "command",
-            "command": ".claude/scripts/ai-logger-v2.sh"  // ← ここを変更
+            "command": ".claude/scripts/ai-logger.sh"  // ← ここを変更
           }
         ]
       }
@@ -62,10 +62,10 @@ cp .claude/scripts/ai-logger.sh .claude/scripts/ai-logger-original.sh
 ### ステップ3: ログの確認
 ```bash
 # 新しいログファイルの確認
-tail -f ~/.claude/ai-activity-v2.jsonl
+tail -f ~/.claude/ai-activity.jsonl
 
 # 解析ツールの実行
-.claude/scripts/analyze-ai-logs-v2.py
+.claude/scripts/analyze-ai-logs.py
 ```
 
 ## 使用例
@@ -73,17 +73,17 @@ tail -f ~/.claude/ai-activity-v2.jsonl
 ### エラー解析
 ```bash
 # エラーのみを表示
-.claude/scripts/analyze-ai-logs-v2.py --errors-only
+.claude/scripts/analyze-ai-logs.py --errors-only
 
 # JSON形式で完全な分析
-.claude/scripts/analyze-ai-logs-v2.py --format json > analysis.json
+.claude/scripts/analyze-ai-logs.py --format json > analysis.json
 ```
 
 ### AIへの情報提供
 ```markdown
 Claude, 以下のログ分析結果を確認して、エラーの原因を特定してください：
 
-[analyze-ai-logs-v2.py の出力をペースト]
+[analyze-ai-logs.py の出力をペースト]
 ```
 
 ## 互換性

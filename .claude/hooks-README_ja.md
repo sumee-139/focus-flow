@@ -33,15 +33,15 @@
   - 操作種別の分類（CODE_EDIT, FILE_READ, COMMAND_EXEC等）
 
 ### 4. AI-Friendly Logger V2 Hooks（PostToolUse）
-**スクリプト**: `.claude/scripts/ai-logger-v2.sh`
+**スクリプト**: `.claude/scripts/ai-logger.sh`
 - **目的**: AI分析に最適化された構造化ログ（[Vibe Logger](https://github.com/fladdict/vibe-logger)概念採用）
-- **ログファイル**: `~/.claude/ai-activity-v2.jsonl`
+- **ログファイル**: `~/.claude/ai-activity.jsonl`
 - **機能**:
   - 効率的なAI解析のためのJSONL形式
   - 豊富なコンテキスト（プロジェクト、環境、Git情報）
   - AIメタデータ（デバッグヒント、優先度、推奨アクション）
   - 相関ID追跡
-  - `analyze-ai-logs-v2.py`によるエラーパターン分析
+  - `analyze-ai-logs.py`によるエラーパターン分析
 
 ### 5. セッション完了Hooks（Stop）
 **スクリプト**: `.claude/scripts/session-complete.sh`
@@ -61,8 +61,7 @@
 ├── session.log            # セッションサマリー
 ├── format.log             # フォーマット実行ログ
 ├── security.log           # セキュリティブロックログ
-├── ai-activity-v2.jsonl   # AI最適化構造化ログ（Vibe Logger形式）
-└── ai-activity.jsonl      # レガシーAIログ（後方互換性のため）
+└── ai-activity.jsonl      # AI最適化構造化ログ（Vibe Logger形式）
 ```
 
 ## Hooks設定（.claude/settings.json）
@@ -100,6 +99,10 @@
           {
             "type": "command",
             "command": ".claude/scripts/activity-logger.sh"
+          },
+          {
+            "type": "command",
+            "command": ".claude/scripts/ai-logger.sh"
           }
         ]
       }
@@ -140,6 +143,12 @@ cat ~/.claude/session.log
 
 # セキュリティログの確認
 tail -f ~/.claude/security.log
+
+# AI最適化ログの確認（リアルタイム）
+tail -f ~/.claude/ai-activity.jsonl
+
+# AIログのインサイト付き分析
+.claude/scripts/analyze-ai-logs.py --format summary
 ```
 
 ### トラブルシューティング

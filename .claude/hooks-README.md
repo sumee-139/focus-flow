@@ -33,15 +33,15 @@ This project integrates Claude Code hooks to improve development efficiency.
   - Operation type classification (CODE_EDIT, FILE_READ, COMMAND_EXEC, etc.)
 
 ### 4. AI-Friendly Logger V2 Hooks (PostToolUse)
-**Script**: `.claude/scripts/ai-logger-v2.sh`
+**Script**: `.claude/scripts/ai-logger.sh`
 - **Purpose**: Structured logging optimized for AI analysis (based on [Vibe Logger](https://github.com/fladdict/vibe-logger) concepts)
-- **Log file**: `~/.claude/ai-activity-v2.jsonl`
+- **Log file**: `~/.claude/ai-activity.jsonl`
 - **Features**:
   - JSONL format for efficient AI parsing
   - Rich context (project, environment, Git info)
   - AI metadata (debug hints, priority, suggested actions)
   - Correlation ID tracking
-  - Error pattern analysis with `analyze-ai-logs-v2.py`
+  - Error pattern analysis with `analyze-ai-logs.py`
 
 ### 5. Session Complete Hooks (Stop)
 **Script**: `.claude/scripts/session-complete.sh`
@@ -61,8 +61,7 @@ This project integrates Claude Code hooks to improve development efficiency.
 ├── session.log            # Session summary
 ├── format.log             # Format execution log
 ├── security.log           # Security block log
-├── ai-activity-v2.jsonl   # AI-optimized structured logs (Vibe Logger format)
-└── ai-activity.jsonl      # Legacy AI logger (for backward compatibility)
+└── ai-activity.jsonl      # AI-optimized structured logs (Vibe Logger format)
 ```
 
 ## Hooks Configuration (.claude/settings.json)
@@ -103,7 +102,7 @@ This project integrates Claude Code hooks to improve development efficiency.
           },
           {
             "type": "command",
-            "command": ".claude/scripts/ai-logger-v2.sh"
+            "command": ".claude/scripts/ai-logger.sh"
           }
         ]
       }
@@ -146,10 +145,10 @@ cat ~/.claude/session.log
 tail -f ~/.claude/security.log
 
 # Monitor AI-optimized logs (real-time)
-tail -f ~/.claude/ai-activity-v2.jsonl
+tail -f ~/.claude/ai-activity.jsonl
 
 # Analyze AI logs with insights
-.claude/scripts/analyze-ai-logs-v2.py --format summary
+.claude/scripts/analyze-ai-logs.py --format summary
 ```
 
 ### Troubleshooting

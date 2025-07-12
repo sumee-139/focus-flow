@@ -91,7 +91,7 @@ Simply explain your needs to the active agent, and they will switch to the appro
 - **Structured logs**: JSONL format optimized for AI analysis (@~/.claude/ai-activity-v2.jsonl)
 - **Rich context**: Automatically collects project, environment, and file information
 - **AI metadata**: Adds debug hints, priority, and recommended actions
-- **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs-v2.py`
+- **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs.py`
 - **Vibe Logger concept**: Based on @fladdict's VibeCoding philosophy
 - **Details**: @.claude/ai-logger-README.md | @.claude/vibe-logger-integration.md
 
