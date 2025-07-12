@@ -133,6 +133,10 @@ Want to see Claude Friends in action? Check out our **[Sample Projects](SAMPLE_P
 
 ## 🚦 Ready to Start?
 
+### 🛡️ Safe Environment (Recommended)
+Open in VS Code or GitHub Codespaces and select "Reopen in Container" for a secure sandbox environment where you can experiment safely.
+
+### Standard Setup
 Don't just code. **Orchestrate**.
 
 **[→ Get Your AI Team Now](README_TEMPLATE.md)**
