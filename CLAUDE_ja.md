@@ -169,6 +169,7 @@ tail -f ~/.claude/activity.log
 
 ## プロジェクト固有の学習
 `.clauderules`ファイルに自動記録されます。
+日本語版は`.clauderules_ja`を使用できます。
 
 ## 関連ドキュメント
 - 開発規約詳細: @docs/development-rules.md

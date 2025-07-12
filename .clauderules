@@ -1,55 +1,55 @@
-# [プロジェクト名] プロジェクト固有の知見
+# [Project Name] Project-Specific Insights
 
-## プロジェクト状況
-- **現在のフェーズ**: [開発フェーズを記載]
-- **進捗率**: [進捗率を記載]
-- **主要な成果**: [達成した主要な成果を記載]
+## Project Status
+- **Current Phase**: [Specify development phase]
+- **Progress**: [Specify progress percentage]
+- **Major Achievements**: [List major achievements]
 
-## プロジェクト特性
-[プロジェクト固有の特性や制約をここに記載]
-- 例: セキュリティ要件
-- 例: パフォーマンス要件
-- 例: 特殊な制約事項
+## Project Characteristics
+[Document project-specific characteristics and constraints here]
+- Example: Security requirements
+- Example: Performance requirements
+- Example: Special constraints
 
-## 開発上の注意点
-[開発時に注意すべき点を記載]
+## Development Considerations
+[Document important considerations during development]
 
-### [カテゴリ1]
-- [注意点を箇条書きで記載]
-- [解決策や回避方法も併記]
+### [Category 1]
+- [List considerations in bullet points]
+- [Include solutions or workarounds]
 
-### [カテゴリ2]
-- [注意点を箇条書きで記載]
-- [解決策や回避方法も併記]
+### [Category 2]
+- [List considerations in bullet points]
+- [Include solutions or workarounds]
 
-## よくある問題と解決策
+## Common Issues and Solutions
 
-### 問題: [問題の説明]
-**解決**: [解決方法を記載]
+### Issue: [Describe the issue]
+**Solution**: [Document the solution]
 
-### 問題: [問題の説明]
-**解決**: [解決方法を記載]
+### Issue: [Describe the issue]
+**Solution**: [Document the solution]
 
-## プロジェクト固有のコマンド
-[プロジェクトで頻繁に使用するコマンドを記載]
-- `[コマンド]` - [説明]
-- `[コマンド]` - [説明]
+## Project-Specific Commands
+[Document frequently used commands in this project]
+- `[command]` - [description]
+- `[command]` - [description]
 
-## 重要な決定事項
-- [日付] [決定内容と理由]
-- [日付] [決定内容と理由]
+## Important Decisions
+- [Date] [Decision and rationale]
+- [Date] [Decision and rationale]
 
-## 技術的な知見
-[プロジェクトで得られた技術的な知見を記載]
+## Technical Insights
+[Document technical insights gained from the project]
 
-### [技術領域1]
-- [知見の内容]
-- [実装例やコードスニペット]
+### [Technical Area 1]
+- [Insight details]
+- [Implementation examples or code snippets]
 
-### [技術領域2]
-- [知見の内容]
-- [実装例やコードスニペット]
+### [Technical Area 2]
+- [Insight details]
+- [Implementation examples or code snippets]
 
-## 今後の課題
-- [未解決の課題や改善点]
-- [将来的に対応が必要な事項]
+## Future Challenges
+- [Unresolved issues or improvements]
+- [Items requiring future attention]
