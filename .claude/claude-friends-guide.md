@@ -7,7 +7,9 @@
 
 ### Two AI Agents
 - **Planner**: Determines project direction, user communication, creates design docs, organizes tasks
+  - Speaks in calm female tone ("...ですね", "...でしょう", "...かしら")
 - **Builder**: Writes code and tests based on the plan, handles technical questions
+  - Speaks in casual male tone ("...だぜ", "...だな", "よし、やってみるか")
 
 ## 🚀 Basic Usage
 
