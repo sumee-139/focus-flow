@@ -1,0 +1,61 @@
+# Claude Code Hooks Configuration
+# This file defines project-specific automation
+
+hooks:
+  # Automatic code quality check
+  - event: PostToolUse
+    matcher:
+      tool: [Edit, Write, MultiEdit]
+      glob: "*.{js,ts,jsx,tsx,py}"
+    command: |
+      # Log code changes (enable as needed)
+      # echo "[$(date '+%Y-%m-%d %H:%M')] Code change: $CLAUDE_FILE_PATHS" >> .claude/logs/changes.log
+      # Language-specific quality checks (execute only existing commands)
+      if command -v npm >/dev/null 2>&1 && [ -f package.json ]; then
+        npm run lint --if-present
+        npm run typecheck --if-present
+      elif command -v python >/dev/null 2>&1 && [ -f requirements.txt ]; then
+        python -m flake8 $CLAUDE_FILE_PATHS 2>/dev/null || true
+        python -m mypy $CLAUDE_FILE_PATHS 2>/dev/null || true
+      fi
+
+  # Automatic recording on test success
+  - event: PostToolUse
+    matcher:
+      tool: Bash
+      command_contains: "test"
+    command: |14
+      if [ $CLAUDE_EXIT_CODE -eq 0 ]; then
+        echo "### $(date '+%Y-%m-%d %H:%M') - Test Success" >> .claude/context/history.md
+        echo "- Command: $CLAUDE_COMMAND" >> .claude/context/history.md
+        echo "" >> .claude/context/history.md
+      fi
+
+  # Recording when new features are added
+  - event: PostToolUse
+    matcher:
+      tool: [Write, MultiEdit]
+      glob: "*.{js,ts,jsx,tsx,py}"
+    command: |
+      # When new files are created
+      if [ "$CLAUDE_TOOL" = "Write" ]; then
+        # Log new feature additions (enable as needed)
+        # echo "### $(date '+%Y-%m-%d') - New feature added: $CLAUDE_FILE_PATHS" >> .claude/logs/features.log
+      fi
+
+  # Automatic recording of git operations
+  - event: PostToolUse
+    matcher:
+      tool: Bash
+      command_contains: "git commit"
+    command: |
+      if [ $CLAUDE_EXIT_CODE -eq 0 ]; then
+        # Log commits (enable as needed)
+        # echo "### $(date '+%Y-%m-%d %H:%M') - Commit" >> .claude/logs/commits.log
+        # echo "$CLAUDE_OUTPUT" >> .claude/logs/commits.log
+      fi
+
+# Environment variable settings
+env:
+  CLAUDE_HOOKS_ENABLED: true
+  CLAUDE_PROJECT_ROOT: $PWD
