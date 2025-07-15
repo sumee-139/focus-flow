@@ -1,62 +1,63 @@
 # FocusFlow Documentation
 
-## 📋 ドキュメント構造
+## 🎯 必読ドキュメント（開発前必須）
 
-### 🎯 Core Documents (必須読書)
-- **[Design Philosophy](design-philosophy.md)** ⭐️ - 設計哲学・開発前必読
-- **[Requirements](requirements.md)** - 要件定義・技術仕様
-- **[Development Rules](development-rules.md)** - 開発ルール・品質基準
+### 📚 Core Documents
+**開発参加前に必ず読む** - 所要時間: 15分
 
-### 🏗️ Architecture & Design
-- **[Design System Specs](design-system-specs.md)** - デザインシステム仕様
-- **[UI Screen Flow](ui-screen-flow.md)** - 画面遷移・ユーザーフロー
-- **[Responsive Design Specs](responsive-design-specs.md)** - レスポンシブデザイン
+1. **[Design Philosophy](core/design-philosophy.md)** ⭐️ **最重要** - 設計哲学・判断基準
+2. **[Requirements](core/requirements.md)** - 要件定義・技術仕様
+3. **[Development Rules](core/development-rules.md)** - TDD・品質基準
 
-### 📐 Design Details
-- **[Desktop Layout Detailed](desktop-layout-detailed.md)** - デスクトップレイアウト詳細
-- **[Wireframes Focus Mode](wireframes-focus-mode.md)** - フォーカスモード画面設計
-- **[Wireframes Task Management](wireframes-task-management.md)** - タスク管理画面設計
+## 📋 カテゴリ別ドキュメント
 
-### 👥 User Experience
-- **[User Stories](user-stories.md)** - ユーザーストーリー
-- **[Acceptance Criteria](acceptance-criteria.md)** - 受入基準
+### 🎨 Design / デザイン
+**UI・UX実装時に参照**
+- **[Design System Specs](design/design-system-specs.md)** - デザインシステム仕様
+- **[UI Screen Flow](design/ui-screen-flow.md)** - 画面遷移・ユーザーフロー
+- **[Responsive Design Specs](design/responsive-design-specs.md)** - レスポンシブデザイン
+- **[Desktop Layout Detailed](design/desktop-layout-detailed.md)** - デスクトップレイアウト詳細
+- **[Wireframes Focus Mode](design/wireframes-focus-mode.md)** - フォーカスモード画面設計
+- **[Wireframes Task Management](design/wireframes-task-management.md)** - タスク管理画面設計
 
-### 🔧 Development Process
-- **[Best Practices](best-practices.md)** - 開発ベストプラクティス
-- **[Requirements Status](requirements-status.md)** - 要件実装状況
+### 🔧 Development / 開発
+**実装・品質管理時に参照**
+- **[Best Practices](development/best-practices.md)** - 開発ベストプラクティス
+- **[Testing Guide](development/testing-guide.md)** - TDD実践ガイド
+- **[Requirements Status](development/requirements-status.md)** - 要件実装状況
 
-### 📚 Decision Records
+### 📋 Planning / 計画
+**機能設計・要件定義時に参照**
+- **[User Stories](planning/user-stories.md)** - ユーザーストーリー
+- **[Acceptance Criteria](planning/acceptance-criteria.md)** - 受入基準
+
+### 📚 Decision Records / 意思決定記録
+**技術選択・アーキテクチャ決定時に参照**
 - **[ADR Template](adr/template.md)** - アーキテクチャ決定記録テンプレート
 
 ## 🚀 開発者向けクイックスタート
 
-### 1. 必読ドキュメント (5分)
+### 1. 必読ドキュメント (15分)
 ```bash
-# 必ず最初に読む
-docs/design-philosophy.md    # 設計哲学
-docs/requirements.md         # 要件定義
-docs/development-rules.md    # 開発ルール
+# 必ず最初に読む - 優先順位順
+docs/core/design-philosophy.md    # ⭐️ 最重要: 設計哲学
+docs/core/requirements.md         # 要件定義
+docs/core/development-rules.md    # TDD・品質基準
 ```
 
-### 2. 実装前確認 (3分)
+### 2. 役割別参照ドキュメント
 ```bash
-# UI実装時
-docs/design-system-specs.md
-docs/ui-screen-flow.md
+# UI・デザイン実装時
+docs/design/design-system-specs.md
+docs/design/ui-screen-flow.md
 
 # 新機能実装時
-docs/user-stories.md
-docs/acceptance-criteria.md
-```
+docs/planning/user-stories.md
+docs/planning/acceptance-criteria.md
 
-### 3. 開発中参照
-```bash
-# 品質確認
-docs/best-practices.md
-docs/requirements-status.md
-
-# 設計判断
-docs/adr/template.md
+# 品質・運用管理時
+docs/development/best-practices.md
+docs/development/requirements-status.md
 ```
 
 ## 📖 読書順序

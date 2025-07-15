@@ -93,19 +93,19 @@ npm run check
 
 ## 📚 ドキュメント
 
-### 📖 必読ドキュメント
-- **[Design Philosophy](docs/design-philosophy.md)** ⭐️ - 設計哲学
-- **[Requirements](docs/requirements.md)** - 要件定義
-- **[Development Rules](docs/development-rules.md)** - 開発ルール
+### 🎯 必読ドキュメント（開発前必須）
+**所要時間: 15分**
 
-### 🏗️ 設計・実装
-- **[Design System](docs/design-system-specs.md)** - デザインシステム
-- **[UI Flow](docs/ui-screen-flow.md)** - 画面遷移
-- **[User Stories](docs/user-stories.md)** - ユーザーストーリー
+1. **[Design Philosophy](docs/core/design-philosophy.md)** ⭐️ **最重要** - 設計哲学
+2. **[Requirements](docs/core/requirements.md)** - 要件定義
+3. **[Development Rules](docs/core/development-rules.md)** - TDD・品質基準
 
-### 🔧 開発支援
-- **[Best Practices](docs/best-practices.md)** - ベストプラクティス
-- **[ADR Template](docs/adr/template.md)** - アーキテクチャ決定記録
+### 📋 カテゴリ別ドキュメント
+**詳細な構造は [docs/README.md](docs/README.md) を参照**
+
+- **🎨 Design**: UI・UX実装時に参照
+- **🔧 Development**: 実装・品質管理時に参照  
+- **📋 Planning**: 機能設計・要件定義時に参照
 
 ## 🎯 プロジェクト状況
 

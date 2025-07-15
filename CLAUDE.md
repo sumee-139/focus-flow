@@ -10,7 +10,9 @@
 
 ## Memory Bank Structure
 ### Core (Always Referenced)
-- **Design Philosophy**: @docs/design-philosophy.md ⭐**設計・実装前に必須参照**
+- **Design Philosophy**: @docs/core/design-philosophy.md ⭐**設計・実装前に必須参照**
+- **Requirements**: @docs/core/requirements.md - 要件定義・技術仕様
+- **Development Rules**: @docs/core/development-rules.md - TDD・品質基準
 - Current status: @.claude/core/current.md
 - Next actions: @.claude/core/next.md
 - Project overview: @.claude/core/overview.md
