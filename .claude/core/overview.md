@@ -21,10 +21,13 @@ tags: #overview #project #summary
 4. **ディスカバーモード**: 知識の可視化と関連性発見 #feature #core #p4
 
 ## Technology Stack
-- **Language**: TypeScript #tech #language
-- **Framework**: 調査中（Electron/Tauri候補） #tech #framework
-- **DB**: 調査中（SQLite/IndexedDB候補） #tech #database
-- **Others**: React/Vue、Markdown処理 #tech #tools
+- **Language**: TypeScript v5+ #tech #language
+- **Frontend**: React v18+ + Chakra UI v2+ #tech #framework
+- **Build Tool**: Vite v5+ #tech #build
+- **PWA**: Workbox v7+ #tech #pwa
+- **Database**: IndexedDB (Dexie.js) #tech #database
+- **State Management**: React Context + useReducer #tech #state
+- **Package Manager**: npm #tech #tools
 
 ## Constraints & Assumptions
 - 個人利用に特化（チーム機能は外部連携で対応）
@@ -32,9 +35,10 @@ tags: #overview #project #summary
 - 既存ツールとの協調（競合回避）
 
 ## Success Criteria & Progress
-- [ ] フェーズ1: 基本集中機能（フォーカスモード + タスク入力）
-- [ ] フェーズ2: 思考支援機能（クイックメモ + 検索）
+- [ ] フェーズ1: 基本集中機能（フォーカスモード + タスク入力）- PWA基盤
+- [ ] フェーズ2: 思考支援機能（クイックメモ + 検索）+ Flutter Widget
 - [ ] フェーズ3: 時間管理機能（見積もり + レポート）
+- [ ] フェーズ4-5: サーバーレス連携（Firebase + AWS Lambda）
 
 ## Problem Definition
 デジタルノイズと情報過多による集中力低下、既存ツールの複雑性による導入障壁、完璧主義によるツール利用の挫折
@@ -42,5 +46,6 @@ tags: #overview #project #summary
 ## User Value
 「自分は集中できる」という自信を育み、日常的なフロー状態を実現する優しいデジタル伴走者
 
+**First Reference**: Design Philosophy → @docs/design-philosophy.md ⭐**必須**
 Detailed technical information → @.claude/context/tech.md
 Detailed specifications → @docs/requirements.md

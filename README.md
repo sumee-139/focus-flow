@@ -1,213 +1,145 @@
-# Claude Code Lightweight Project Template v1.2.0
+# FocusFlow
 
-**The Next-Generation Knowledge Management System Designed for AI-Native Development**
+**個人の集中と知的生産性を最大化するデジタル伴走者**
 
-## 🚀 Why This Template is Revolutionary
+## 🎯 プロジェクト概要
 
-### 1. **90% Cost Reduction** - Prompt Cache Optimization
-By applying `cache_control` to long-term stable information (project overview, technical specifications, etc.), this system dramatically reduces Claude API usage costs. It fundamentally solves the cost problem in daily AI-powered development.
+FocusFlowは、「その日必ず着手するタスク」のみを管理し、集中を妨げる全ての要素を徹底的に排除したタスク管理アプリケーションです。
 
-### 2. **AI Analyzes Problems Instantly** - AI-Friendly Logger (Vibe Logger Concept)
-Transforms logging from "logs for humans to read" to "logs for AI to analyze". Structured JSON logs automatically collect context information, evolving debugging from "guessing and checking" to "instant root cause analysis by AI".
+### Core Concept
+- **「今日やる」ことのみ管理** - 期限という概念を排除
+- **集中力への献身** - 通知の完全遮断と視覚的ノイズの最小化
+- **Calm Technology** - 背景に徹し、ユーザーが意識しない技術
 
-### 3. **Systematized Project Memory** - Memory Bank System
-Hierarchically structures and stores your project's "memory". Dramatically reduces onboarding time for new members and eliminates "what was that again?" moments. AI provides accurate answers instantly.
+## 🚀 主要機能
 
-### 4. **Gradual Integration for Existing Projects**
-No need to "change everything right now". The design allows gradual adoption of necessary features while minimizing risk.
+### Phase 1: 基本集中機能
+- **フォーカスモード**: OSレベル通知制御による集中バリア
+- **シンプルタスク管理**: 統一アイコン・色区別排除
+- **デイリーメモ**: プレーンMarkdown形式
+
+### Phase 2: 思考支援機能
+- **クイックメモ**: 思考中断を防ぐ瞬時メモ
+- **知識可視化**: メモ間の関連性発見
+- **モバイルウィジェット**: Flutter製ホーム画面ウィジェット
+
+### Phase 3: 時間管理機能
+- **見積もり精度向上**: 実績データに基づく提案
+- **生産性レポート**: 集中時間の統計と分析
+
+## 🏗️ 技術スタック
+
+- **Frontend**: React 18+ + TypeScript 5+ + Chakra UI 2+
+- **Build**: Vite 5+ + PWA Plugin
+- **Database**: IndexedDB (Dexie.js)
+- **State**: React Context + useReducer
+- **PWA**: Workbox 7+ (Service Worker)
+- **Mobile**: Flutter 3+ (Phase 2)
+
+## 📋 開発ルール
+
+### TDD & Component Development
+- **TDD必須**: ビジネスロジック開発時は必ずt-wadaのTDDスタイル
+- **モックアップ必須**: コンポーネント作成時は`mockup/component-sandbox.html`に配置
+- **開発フロー**: モックアップ → コンポーネント実装 → 統合テスト
+
+### 品質基準
+- **TypeScript**: 全関数・変数に型注釈必須
+- **テストカバレッジ**: 80%+ (重要機能)
+- **PWA Lighthouse**: 90+点維持
+
+## 🎨 設計原則
+
+### 必須要件
+- **統一アイコン**: 全タスクに📝アイコン使用
+- **色区別禁止**: 🔴🟡🟢などの優先度表示排除
+- **進捗率禁止**: 完了/未完了の二値のみ
+- **UI優先度**: タブレット・PCでは70%以上をMarkdownエディタが占有
+
+### 禁止事項
+- 重要度・優先度フィールドの追加
+- 期限・締切フィールドの追加
+- 進捗率・パーセンテージの追加
+- 色による情報区別
+
+## 🚀 開発開始
+
+### 1. 設計哲学の理解
+```bash
+# 必須読書
+docs/design-philosophy.md
+```
+
+### 2. 開発環境セットアップ
+```bash
+git clone [repository-url]
+cd focus-flow
+npm install
+npm run dev
+```
+
+### 3. 開発フロー
+```bash
+# 1. TDD開発 (ビジネスロジック)
+npm run test:watch
+
+# 2. コンポーネント開発
+# mockup/component-sandbox.html でモックアップ作成
+npm run dev
+
+# 3. 品質チェック
+npm run check
+```
+
+## 📚 ドキュメント
+
+### 📖 必読ドキュメント
+- **[Design Philosophy](docs/design-philosophy.md)** ⭐️ - 設計哲学
+- **[Requirements](docs/requirements.md)** - 要件定義
+- **[Development Rules](docs/development-rules.md)** - 開発ルール
+
+### 🏗️ 設計・実装
+- **[Design System](docs/design-system-specs.md)** - デザインシステム
+- **[UI Flow](docs/ui-screen-flow.md)** - 画面遷移
+- **[User Stories](docs/user-stories.md)** - ユーザーストーリー
+
+### 🔧 開発支援
+- **[Best Practices](docs/best-practices.md)** - ベストプラクティス
+- **[ADR Template](docs/adr/template.md)** - アーキテクチャ決定記録
+
+## 🎯 プロジェクト状況
+
+### 現在のフェーズ
+- **Phase**: 計画・基盤整備段階
+- **Progress**: 0% (設計・ドキュメント完了)
+- **Next Milestone**: 2025-07-21 フェーズ1プロトタイプ完成
+
+### 今週の重点
+- 技術スタック調査完了
+- 開発環境セットアップ
+- フェーズ1アーキテクチャ設計
+
+## 🤝 コントリビューション
+
+### 開発参加
+1. **Design Philosophy** を熟読
+2. **Development Rules** を確認
+3. **Issue** から作業を選択
+4. **TDD** でビジネスロジック実装
+5. **モックアップ** でコンポーネント設計
+
+### 品質基準
+- [ ] Design Philosophy に矛盾しない
+- [ ] 集中力向上に寄与する
+- [ ] アクセシビリティを損なわない
+- [ ] 既存パターンに従う
+
+## 📄 ライセンス
+
+[MIT License](LICENSE)
 
 ---
 
-An efficient project development template optimized for AI-native development.
-
-[日本語版はこちら](README_TEMPLATE_ja.md)
-
-## 🎯 Features
-
-- **Lightweight Design**: Minimizes context usage
-- **Hierarchical Memory Bank**: Loads only necessary information
-- **Gradual Expansion**: Scales from small to large projects
-- **Daily Operations**: Complete status updates in 3 minutes
-- **Versatility**: Language and tech-stack agnostic design
-- **Integrated Development Standards**: Incorporates Anthropic best practices
-- **Quality Management**: Built-in error handling guide and quality gates
-- **Enhanced Security**: Dangerous command blocking via Claude Code hooks
-- **Project Memory**: Systematic management of history and decisions
-- **Automated Workflow**: Quality checks automation with Hooks functionality
-- **AI-Friendly Logger**: Vibe Logger concept adoption with structured JSON format optimized for AI analysis
-
-## 📁 Template Structure
-
-### Required Files
-```
-CLAUDE.md                    # Project configuration
-.clauderules                 # Project insights
-.gitignore                   # Cache file exclusion settings
-.claude/settings.json        # Cache environment + security settings
-.claude/hooks.yaml           # Hooks settings (new)
-.claude/security-README.md   # Security settings documentation
-.claude/ai-logger-README.md  # AI Logger settings documentation
-docs/requirements.md         # Requirements specification
-docs/adr/template.md         # ADR template
-```
-
-### Memory Bank (Hierarchical)
-```
-.claude/
-├── core/                    # Always referenced (lightweight)
-│   ├── current.md          # Current status (within 50 lines)
-│   ├── next.md             # Next actions (within 30 lines)
-│   ├── overview.md         # Project overview
-│   └── templates.md        # Quick templates & pattern collection
-├── context/                # Referenced as needed
-│   ├── tech.md             # Technical details
-│   ├── history.md          # History & decisions
-│   └── debt.md             # Technical debt tracking
-├── debug/                  # Debug information
-│   └── latest.md           # Latest debug session (within 100 lines)
-├── archive/                # Regular cleanup
-├── commands/               # Custom commands
-│   ├── plan.md             # Planning
-│   ├── act.md              # Implementation execution
-│   ├── daily.md            # Daily update
-│   ├── focus.md            # Focus mode
-│   ├── debug-start.md      # Debug-focused mode
-│   ├── feature-plan.md     # New feature design mode
-│   └── review-check.md     # Code review mode
-├── scripts/                # Security & logging scripts
-│   ├── deny-check.sh       # Dangerous command blocking
-│   ├── allow-check.sh      # Safe command allow
-│   ├── test-security.sh    # Security tests
-│   ├── ai-logger.sh        # AI-Friendly Logger
-│   └── analyze-ai-logs.py  # AI log analysis tool
-├── security-README.md      # Security settings documentation
-└── settings.json           # Project settings (cache+security)
-```
-
-## 🚀 Quick Start
-
-### 1. Use This Template
-```bash
-# Clone the template
-git clone https://github.com/yourusername/claude-file-template.git your-project-name
-cd your-project-name
-
-# Remove git history and start fresh
-rm -rf .git
-git init
-
-# Customize project information
-# - Replace [Project Name] in CLAUDE.md
-# - Fill in docs/requirements.md
-# - Update files in .claude/core/
-```
-
-### 2. Install and Test Security Features
-```bash
-# Make scripts executable
-chmod +x .claude/scripts/*.sh
-
-# Test security features
-.claude/scripts/test-security.sh
-```
-
-### 3. Start Development with Claude Code
-```bash
-# Create your first plan
-# Use the command: /project:plan
-
-# Begin implementation
-# Use the command: /project:act
-
-# Daily retrospective
-# Use the command: /project:daily
-```
-
-## 📋 Documentation
-
-### For Beginners
-- [README_TEMPLATE.md](README_TEMPLATE.md) - Detailed usage guide
-- [Development Rules](docs/development-rules.md) - Development standards and conventions
-
-### For Existing Projects
-- [Migration Guide](memo/migration-guide.md) - Gradual migration from existing projects
-- [Zero to Memory Bank](memo/zero-to-memory-bank.md) - Implementation guide for projects without Memory Bank
-
-### Technical Documentation
-- [Requirements Specification](docs/requirements.md) - Project requirements template
-- [ADR Template](docs/adr/template.md) - Architecture Decision Record template
-- [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) - Version migration guide
-
-## 🛠 Custom Commands
-
-### Basic Commands
-| Command | Purpose | Time Required |
-|---------|---------|---------------|
-| `/project:plan` | Work planning | 5 min |
-| `/project:act` | Execute based on plan | Implementation time |
-| `/project:focus` | Focus on current task | Immediate |
-| `/project:daily` | Daily retrospective | 3 min |
-
-### Specialized Modes
-| Command | Purpose | Referenced Files |
-|---------|---------|------------------|
-| `/debug:start` | Debug-focused mode | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | New feature design mode | overview.md + next.md + requirements |
-| `/review:check` | Code review mode | history.md + checklist |
-
-## 🎯 Target Projects
-
-### Optimal
-- Personal development projects
-- 1-3 month medium-term projects
-- Web development, app development
-- Prototype development
-
-### Requires Adjustment
-- Large team development
-- Long-term projects (1+ years)
-- Projects with advanced regulatory requirements
-
-## 📈 Key Benefits
-
-- **90% Cost Reduction**: Through prompt caching optimization
-- **85% Latency Reduction**: Faster API responses
-- **Efficient Development**: Hierarchical Memory Bank
-- **Enhanced Security**: Automatic dangerous command blocking
-- **AI-Powered Debugging**: Structured logs optimized for AI analysis
-
-## 🆕 v1.2.0 New Features
-
-### AI-Friendly Logger (Vibe Logger Concept)
-- **Structured Logs**: JSON format optimized for AI analysis
-- **Rich Context**: Automatically collects project, environment, and Git information
-- **AI Metadata**: Adds debug hints, priority, and recommended actions
-- **Pattern Analysis**: Visualizes error trends and file activity
-- **Analysis Tool**: Generate AI insights with `analyze-ai-logs.py`
-
-Inspired by [Vibe Logger](https://github.com/fladdict/vibe-logger) by @fladdict
-
-## 📚 Sources & References
-
-- [Anthropic Official Documentation](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)
-- [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- [Architecture Decision Records](https://github.com/joelparkerhenderson/architecture-decision-record)
-- [Vibe Logger](https://github.com/fladdict/vibe-logger) - AI-optimized logging concept
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Anthropic team for Claude Code and best practices
-- @fladdict for the Vibe Logger concept
-- Community contributors
-
----
-
-Start efficient personal development with Claude Code using this template!
+**開発チーム**: Focus & Flow Contributors  
+**最終更新**: 2025-07-15  
+**バージョン**: 0.1.0-alpha

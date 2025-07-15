@@ -90,7 +90,7 @@ firebase init firestore
 ### 技術選択
 - **Firebase Firestore**: リアルタイム同期
 - **実装工数**: 1日（基本機能）
-- **対象データ**: タスク、メモ、集中セッション
+- **対象データ**: タスク、メモ、集中セッション、デイリーメモ
 
 ### 実装概要
 ```typescript
@@ -143,10 +143,11 @@ npm run preview
 
 ## API Design
 ### Local Storage API (IndexedDB)
-- `tasks` - タスク管理
+- `tasks` - タスク管理（アラーム時間、並び順含む）
 - `sessions` - 集中セッション記録
 - `settings` - ユーザー設定
 - `notes` - クイックメモ
+- `dailyMemos` - デイリーメモ（プレーンMarkdown）
 
 ### PWA Service Worker APIs
 - Push API - 通知機能
@@ -155,9 +156,10 @@ npm run preview
 
 ## Database Design
 ### IndexedDB Tables
-- `tasks`: タスク情報（ID, タイトル, 見積もり時間, 完了状態）
+- `tasks`: タスク情報（ID, タイトル, 見積もり時間, 完了状態, アラーム時間, 並び順）
 - `sessions`: 集中セッション（ID, タスクID, 開始時間, 終了時間）
 - `notes`: クイックメモ（ID, 内容, 作成日時, タグ）
+- `dailyMemos`: デイリーメモ（日付, Markdown内容）
 - `settings`: ユーザー設定（テーマ, 通知設定, 機能解放レベル）
 
 ## Configuration Files

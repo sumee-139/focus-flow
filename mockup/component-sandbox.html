@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow - Component Sandbox</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Design System Colors */
+        :root {
+            /* Primary */
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+
+            /* Neutral */
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-300: #d1d5db;
+            --neutral-400: #9ca3af;
+            --neutral-500: #6b7280;
+            --neutral-600: #4b5563;
+            --neutral-700: #374151;
+            --neutral-800: #1f2937;
+            --neutral-900: #111827;
+
+            /* Semantic Colors */
+            --success-500: #22c55e;
+            --warning-500: #f59e0b;
+            --error-500: #ef4444;
+
+            /* Task Status */
+            --task-pending: var(--neutral-400);
+            --task-active: var(--primary-500);
+            --task-completed: var(--success-500);
+            --task-archived: var(--neutral-300);
+
+            /* Typography */
+            --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            /* Border Radius */
+            --border-radius-sm: 0.125rem;
+            --border-radius-md: 0.375rem;
+            --border-radius-lg: 0.5rem;
+            --border-radius-xl: 0.75rem;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            color: var(--neutral-900);
+            background-color: var(--neutral-50);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-6);
+        }
+
+        .section {
+            margin-bottom: var(--space-8);
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--neutral-100);
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .section-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin: 0;
+        }
+
+        .section-content {
+            padding: var(--space-4);
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .component-item {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-4);
+        }
+
+        .component-name {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: var(--space-2);
+        }
+
+        .new-component {
+            background: var(--primary-50);
+            border: 2px dashed var(--primary-300);
+            padding: var(--space-6);
+            text-align: center;
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--space-4);
+        }
+
+        .new-component h3 {
+            color: var(--primary-600);
+            margin-bottom: var(--space-2);
+        }
+
+        .new-component p {
+            color: var(--primary-500);
+            font-size: var(--font-size-sm);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid transparent;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-500);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+
+        .btn-secondary {
+            background-color: var(--neutral-100);
+            color: var(--neutral-900);
+            border-color: var(--neutral-300);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--neutral-200);
+            border-color: var(--neutral-400);
+        }
+
+        .btn-ghost {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary-600);
+            border-color: var(--neutral-200);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-ghost:hover {
+            background-color: white;
+            color: var(--primary-700);
+            border-color: var(--primary-200);
+        }
+
+        .btn-icon {
+            padding: var(--space-2);
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        /* Material Icons */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+
+        .material-icons.small { font-size: 18px; }
+        .material-icons.large { font-size: 36px; }
+
+        /* Task Card Styles */
+        .task-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .task-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .drag-handle {
+            color: var(--neutral-400);
+            cursor: move;
+        }
+
+        .task-icon {
+            font-size: var(--font-size-lg);
+        }
+
+        .task-title {
+            font-weight: 600;
+            color: var(--neutral-900);
+            flex: 1;
+        }
+
+        .task-time {
+            background: var(--neutral-100);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .task-description {
+            color: var(--neutral-600);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-2);
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-500);
+        }
+
+        .alarm-time {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // 新規作成用プレースホルダー
+        const NewComponentPlaceholder = ({ name, description }) => (
+            <div className="new-component">
+                <h3>{name}</h3>
+                <p>{description}</p>
+                <p style={{ marginTop: '8px', fontSize: '12px', color: 'var(--neutral-500)' }}>
+                    実装時にここにモックアップを配置
+                </p>
+            </div>
+        );
+
+        // 既存コンポーネントのサンプル
+        const TaskCard = ({ task }) => (
+            <div className="task-card">
+                <div className="task-header">
+                    <span className="drag-handle material-icons small">drag_indicator</span>
+                    <span className="task-icon material-icons small">description</span>
+                    <span className="task-title">{task.title}</span>
+                    <span className="task-time">{task.time}</span>
+                    <div className="task-actions">
+                        <button className="btn btn-primary btn-icon">
+                            <span className="material-icons small">play_arrow</span>
+                        </button>
+                        <button className="btn btn-secondary btn-icon">
+                            <span className="material-icons small">settings</span>
+                        </button>
+                    </div>
+                </div>
+                <div className="task-description">{task.description}</div>
+                <div className="task-meta">
+                    <div className="alarm-time">
+                        <span className="material-icons small">alarm</span>
+                        <span>{task.alarm || 'アラーム未設定'}</span>
+                    </div>
+                    <span>作成: {task.created}</span>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const sampleTask = {
+                title: 'React コンポーネント設計',
+                description: 'UIライブラリの選定と基本設計',
+                time: '60分',
+                alarm: '16:00 アラーム設定',
+                created: '7/14 09:00'
+            };
+
+            return (
+                <div className="container">
+                    <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '2rem', color: 'var(--primary-600)' }}>
+                        FocusFlow - Component Sandbox
+                    </h1>
+                    <p style={{ textAlign: 'center', color: 'var(--neutral-600)', marginBottom: '3rem' }}>
+                        コンポーネント作成時は、必ずここにモックアップを配置してから実装を開始してください
+                    </p>
+
+                    <div className="section">
+                        <div className="section-header">
+                            <h2 className="section-title">🆕 新規コンポーネント用</h2>
+                        </div>
+                        <div className="section-content">
+                            <NewComponentPlaceholder 
+                                name="新しいコンポーネント名" 
+                                description="コンポーネントの説明とユースケース"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <div className="section-header">
+                            <h2 className="section-title">✅ 既存コンポーネント</h2>
+                        </div>
+                        <div className="section-content">
+                            <div className="component-grid">
+                                <div className="component-item">
+                                    <div className="component-name">TaskCard</div>
+                                    <TaskCard task={sampleTask} />
+                                </div>
+                                <div className="component-item">
+                                    <div className="component-name">Button Variants</div>
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        <button className="btn btn-primary">
+                                            <span className="material-icons small">play_arrow</span>
+                                            集中開始
+                                        </button>
+                                        <button className="btn btn-secondary">
+                                            <span className="material-icons small">add</span>
+                                            追加
+                                        </button>
+                                        <button className="btn btn-ghost">
+                                            <span className="material-icons small">settings</span>
+                                            設定
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <div className="section-header">
+                            <h2 className="section-title">📋 使用方法</h2>
+                        </div>
+                        <div className="section-content">
+                            <ol style={{ color: 'var(--neutral-700)', lineHeight: '1.8' }}>
+                                <li>新しいコンポーネントを作成する前に、まずここにモックアップを配置</li>
+                                <li>デザインとインタラクションを視覚的に確認</li>
+                                <li>確認後、実際のReactコンポーネントを実装</li>
+                                <li>実装完了後、「既存コンポーネント」セクションに移動</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
