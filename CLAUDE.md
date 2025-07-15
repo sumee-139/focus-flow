@@ -10,6 +10,9 @@
 
 ## Memory Bank Structure
 ### Core (Always Referenced)
+- **Design Philosophy**: @docs/core/design-philosophy.md ⭐**設計・実装前に必須参照**
+- **Requirements**: @docs/core/requirements.md - 要件定義・技術仕様
+- **Development Rules**: @docs/core/development-rules.md - TDD・品質基準
 - Current status: @.claude/core/current.md
 - Next actions: @.claude/core/next.md
 - Project overview: @.claude/core/overview.md
@@ -90,6 +93,12 @@ Detailed settings: @.claude/hooks-README.md | @.claude/security-README.md
 - **Testing**: 80%+ coverage for important features, TDD recommended (gradual learning)
 - **Formatting**: Quality check with `[tool] run format/lint/typecheck`
 
+### TDD & Component Development
+- **TDD必須**: ビジネスロジック開発時は必ずt-wadaのTDDスタイルで進行
+- **TDDサイクル**: Red（失敗テスト作成） → Green（実装） → Refactor（リファクタリング）
+- **モックアップ必須**: コンポーネント作成時は必ず`mockup/component-sandbox.html`にモックアップ配置
+- **開発フロー**: モックアップ → コンポーネント実装 → 統合テスト
+
 ### Git Conventions
 - **Commit format**: `[prefix]: [change description]` (feat/fix/docs/test etc.)
 - **Quality gate**: Must run `[tool] run check` before commit
@@ -139,6 +148,7 @@ Detailed rules: @docs/development-rules.md
 Automatically recorded in `.clauderules` file.
 
 ## Related Documents
+- **Design Philosophy**: @docs/design-philosophy.md ⭐**必須参照**
 - Development rules details: @docs/development-rules.md
 - Development guidelines: @.claude/guidelines/development.md
 - Hooks system: @.claude/hooks-README.md

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow - Design System Mockup</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Design System Colors */
+        :root {
+            /* Primary */
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+
+            /* Neutral */
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-300: #d1d5db;
+            --neutral-400: #9ca3af;
+            --neutral-500: #6b7280;
+            --neutral-600: #4b5563;
+            --neutral-700: #374151;
+            --neutral-800: #1f2937;
+            --neutral-900: #111827;
+
+            /* Semantic Colors */
+            --success-500: #22c55e;
+            --warning-500: #f59e0b;
+            --error-500: #ef4444;
+
+            /* Task Status */
+            --task-pending: var(--neutral-400);
+            --task-active: var(--primary-500);
+            --task-completed: var(--success-500);
+            --task-archived: var(--neutral-300);
+
+            /* Typography */
+            --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            /* Border Radius */
+            --border-radius-sm: 0.125rem;
+            --border-radius-md: 0.375rem;
+            --border-radius-lg: 0.5rem;
+            --border-radius-xl: 0.75rem;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            color: var(--neutral-900);
+            background-color: var(--neutral-50);
+        }
+
+        /* Component Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-6);
+        }
+
+        .section {
+            margin-bottom: var(--space-12);
+        }
+
+        .section-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--space-6);
+            padding-bottom: var(--space-2);
+            border-bottom: 2px solid var(--neutral-200);
+        }
+
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+
+        .mockup-item {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .mockup-header {
+            padding: var(--space-4);
+            background: var(--neutral-100);
+            border-bottom: 1px solid var(--neutral-200);
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .mockup-content {
+            padding: var(--space-4);
+        }
+
+        /* Task Card Styles */
+        .task-card {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-3);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .task-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .drag-handle {
+            color: var(--neutral-400);
+            cursor: move;
+        }
+
+        .task-icon {
+            font-size: var(--font-size-lg);
+        }
+
+        /* Material Icons */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+        }
+
+        .material-icons.small { font-size: 18px; }
+        .material-icons.large { font-size: 36px; }
+
+        .task-title {
+            font-weight: 600;
+            color: var(--neutral-900);
+            flex: 1;
+        }
+
+        .task-time {
+            background: var(--neutral-100);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .task-description {
+            color: var(--neutral-600);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-2);
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-500);
+        }
+
+        .alarm-time {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border: 1px solid transparent;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-500);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+
+        .btn-secondary {
+            background-color: var(--neutral-100);
+            color: var(--neutral-900);
+            border-color: var(--neutral-300);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--neutral-200);
+            border-color: var(--neutral-400);
+        }
+
+        .btn-ghost {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary-600);
+            border-color: var(--neutral-200);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-ghost:hover {
+            background-color: white;
+            color: var(--primary-700);
+            border-color: var(--primary-200);
+        }
+
+        .btn-icon {
+            padding: var(--space-2);
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        /* Daily Memo Styles */
+        .daily-memo {
+            background: white;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+
+        .daily-memo-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+
+        .daily-memo-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+
+        .daily-memo-content {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-4);
+            min-height: 120px;
+            font-family: monospace;
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+            color: var(--neutral-700);
+        }
+
+        /* Focus Mode Styles */
+        .focus-mode {
+            background: linear-gradient(135deg, var(--neutral-100) 0%, var(--neutral-50) 100%);
+            border-radius: var(--border-radius-xl);
+            padding: var(--space-8);
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .focus-task {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .focus-timer {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--primary-600);
+            margin: var(--space-4) 0;
+        }
+
+        .focus-progress {
+            width: 100%;
+            height: 8px;
+            background: var(--neutral-200);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            margin-bottom: var(--space-4);
+        }
+
+        .focus-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-500), var(--primary-600));
+            width: 62%;
+            transition: width 0.3s ease;
+        }
+
+        .focus-actions {
+            display: flex;
+            gap: var(--space-3);
+            justify-content: center;
+            margin-top: var(--space-4);
+        }
+
+        .focus-stats {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            margin-top: var(--space-4);
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+
+        .color-item {
+            text-align: center;
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 80px;
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--space-2);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .color-name {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+
+        .color-value {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-500);
+            font-family: monospace;
+        }
+
+        .typography-sample {
+            margin-bottom: var(--space-4);
+            padding: var(--space-4);
+            background: white;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .text-h1 {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .text-h2 {
+            font-size: var(--font-size-3xl);
+            font-weight: 600;
+            line-height: 1.25;
+            color: var(--neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .text-h3 {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            line-height: 1.375;
+            color: var(--neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .text-body {
+            font-size: var(--font-size-base);
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--neutral-900);
+            margin-bottom: var(--space-2);
+        }
+
+        .text-body-sm {
+            font-size: var(--font-size-sm);
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--neutral-600);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Components
+        const TaskCard = ({ task }) => (
+            <div className="task-card">
+                <div className="task-header">
+                    <span className="drag-handle material-icons small">drag_indicator</span>
+                    <span className="task-icon material-icons small">description</span>
+                    <span className="task-title">{task.title}</span>
+                    <span className="task-time">{task.time}</span>
+                    <div className="task-actions">
+                        <button className="btn btn-primary btn-icon">
+                            <span className="material-icons small">play_arrow</span>
+                        </button>
+                        <button className="btn btn-secondary btn-icon">
+                            <span className="material-icons small">settings</span>
+                        </button>
+                    </div>
+                </div>
+                <div className="task-description">{task.description}</div>
+                <div className="task-meta">
+                    <div className="alarm-time">
+                        <span className="material-icons small">alarm</span>
+                        <span>{task.alarm || 'アラーム未設定'}</span>
+                    </div>
+                    <span>作成: {task.created}</span>
+                </div>
+            </div>
+        );
+
+        const DailyMemo = () => (
+            <div className="daily-memo">
+                <div className="daily-memo-header">
+                    <span className="material-icons small">event_note</span>
+                    <h3 className="daily-memo-title">デイリーメモ</h3>
+                    <span style={{ fontSize: '12px', color: 'var(--neutral-500)', marginLeft: 'auto' }}>
+                        Phase 2でWYSIWYGエディタ対応予定
+                    </span>
+                </div>
+                <div className="daily-memo-content">
+{`## 今日のメモ
+
+- UI設計の最終確認が必要
+- API連携の仕様変更あり
+
+**アイデア**: タスクの並び順をドラッグで変更
+
+明日: 会議資料の準備
+
+---
+[自由記述・Markdown対応]`}
+                </div>
+            </div>
+        );
+
+        const FocusMode = () => (
+            <div className="focus-mode">
+                <div className="focus-task">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span className="material-icons small">description</span>
+                        <span>React コンポーネント設計</span>
+                    </div>
+                    <div style={{ fontSize: '14px', color: 'var(--neutral-600)', marginTop: '4px' }}>
+                        見積もり: 60分 | 経過: 23分
+                    </div>
+                </div>
+                <div className="focus-timer">37:42</div>
+                <div className="focus-progress">
+                    <div className="focus-progress-bar"></div>
+                </div>
+                <div style={{ marginBottom: '16px', color: 'var(--neutral-600)' }}>
+                    62% 完了
+                </div>
+                <div className="focus-actions">
+                    <button className="btn btn-secondary">
+                        <span className="material-icons small">pause</span>
+                        一時停止
+                    </button>
+                    <button className="btn btn-ghost">
+                        <span className="material-icons small">edit_note</span>
+                        タスクメモ
+                    </button>
+                    <button className="btn btn-ghost">
+                        <span className="material-icons small">event_note</span>
+                        デイリーメモ
+                    </button>
+                    <button className="btn btn-secondary">
+                        <span className="material-icons small">stop</span>
+                        終了
+                    </button>
+                </div>
+                <div className="focus-stats">
+                    中断回数: 1回 | 効率: 85%
+                </div>
+            </div>
+        );
+
+        const ColorPalette = () => (
+            <div className="color-palette">
+                <div className="color-item">
+                    <div className="color-swatch" style={{ backgroundColor: 'var(--primary-500)' }}></div>
+                    <div className="color-name">Primary</div>
+                    <div className="color-value">#3b82f6</div>
+                </div>
+                <div className="color-item">
+                    <div className="color-swatch" style={{ backgroundColor: 'var(--neutral-500)' }}></div>
+                    <div className="color-name">Neutral</div>
+                    <div className="color-value">#6b7280</div>
+                </div>
+                <div className="color-item">
+                    <div className="color-swatch" style={{ backgroundColor: 'var(--success-500)' }}></div>
+                    <div className="color-name">Success</div>
+                    <div className="color-value">#22c55e</div>
+                </div>
+                <div className="color-item">
+                    <div className="color-swatch" style={{ backgroundColor: 'var(--warning-500)' }}></div>
+                    <div className="color-name">Warning</div>
+                    <div className="color-value">#f59e0b</div>
+                </div>
+                <div className="color-item">
+                    <div className="color-swatch" style={{ backgroundColor: 'var(--error-500)' }}></div>
+                    <div className="color-name">Error</div>
+                    <div className="color-value">#ef4444</div>
+                </div>
+            </div>
+        );
+
+        const TypographySample = () => (
+            <div>
+                <div className="typography-sample">
+                    <h1 className="text-h1">見出し1 - FocusFlow</h1>
+                    <h2 className="text-h2">見出し2 - タスク管理</h2>
+                    <h3 className="text-h3">見出し3 - 今日のタスク</h3>
+                    <p className="text-body">本文テキスト - 集中を最優先に設計されたタスク管理アプリケーション</p>
+                    <p className="text-body-sm">小さな本文 - 詳細情報や補足説明に使用</p>
+                </div>
+            </div>
+        );
+
+        const ButtonSamples = () => (
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                <button className="btn btn-primary">
+                    <span className="material-icons small">play_arrow</span>
+                    集中開始
+                </button>
+                <button className="btn btn-secondary">
+                    <span className="material-icons small">add</span>
+                    タスク作成
+                </button>
+                <button className="btn btn-ghost">
+                    <span className="material-icons small">settings</span>
+                    設定
+                </button>
+                <button className="btn btn-primary btn-icon">
+                    <span className="material-icons small">play_arrow</span>
+                </button>
+                <button className="btn btn-secondary btn-icon">
+                    <span className="material-icons small">pause</span>
+                </button>
+                <button className="btn btn-ghost btn-icon">
+                    <span className="material-icons small">delete</span>
+                </button>
+            </div>
+        );
+
+        const App = () => {
+            const sampleTasks = [
+                {
+                    title: 'React コンポーネント設計',
+                    description: 'UIライブラリの選定と基本設計',
+                    time: '60分',
+                    alarm: '16:00 アラーム設定',
+                    created: '7/14 09:00'
+                },
+                {
+                    title: 'API仕様書レビュー',
+                    description: '外部API連携の仕様確認',
+                    time: '30分',
+                    alarm: null,
+                    created: '7/13 15:30'
+                },
+                {
+                    title: 'メール返信',
+                    description: '顧客からの問い合わせ対応',
+                    time: '15分',
+                    alarm: '18:00 アラーム設定',
+                    created: '7/14 14:00'
+                }
+            ];
+
+            return (
+                <div className="container">
+                    <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '3rem', color: 'var(--primary-600)' }}>
+                        FocusFlow - Design System Mockup
+                    </h1>
+
+                    <div className="section">
+                        <h2 className="section-title">1. カラーパレット</h2>
+                        <ColorPalette />
+                    </div>
+
+                    <div className="section">
+                        <h2 className="section-title">2. タイポグラフィ</h2>
+                        <TypographySample />
+                    </div>
+
+                    <div className="section">
+                        <h2 className="section-title">3. ボタンコンポーネント</h2>
+                        <div className="mockup-item">
+                            <div className="mockup-header">Button Variants</div>
+                            <div className="mockup-content">
+                                <ButtonSamples />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2 className="section-title">4. タスクカード</h2>
+                        <div className="mockup-grid">
+                            <div className="mockup-item">
+                                <div className="mockup-header">統一アイコン使用</div>
+                                <div className="mockup-content">
+                                    {sampleTasks.map((task, index) => (
+                                        <TaskCard key={index} task={task} />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="mockup-item">
+                                <div className="mockup-header">デイリーメモ</div>
+                                <div className="mockup-content">
+                                    <DailyMemo />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2 className="section-title">5. フォーカスモード</h2>
+                        <div className="mockup-item">
+                            <div className="mockup-header">集中セッション画面</div>
+                            <div className="mockup-content">
+                                <FocusMode />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="section">
+                        <h2 className="section-title">6. 設計原則の実装確認</h2>
+                        <div className="mockup-item">
+                            <div className="mockup-header">Design Philosophy 適用状況</div>
+                            <div className="mockup-content">
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                                    <div>
+                                        <h4 style={{ color: 'var(--success-500)', marginBottom: '8px' }}>✅ 実装済み</h4>
+                                        <ul style={{ fontSize: '14px', color: 'var(--neutral-600)' }}>
+                                            <li>統一Material Iconsの使用</li>
+                                            <li>色による区別の排除</li>
+                                            <li>⋮⋮ドラッグハンドル</li>
+                                            <li>アラーム時間表示</li>
+                                            <li>プレーンMarkdownメモ</li>
+                                            <li>Calm Technology配色</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: 'var(--neutral-500)', marginBottom: '8px' }}>📋 確認事項</h4>
+                                        <ul style={{ fontSize: '14px', color: 'var(--neutral-600)' }}>
+                                            <li>アクセシビリティ対応</li>
+                                            <li>フォーカス管理</li>
+                                            <li>キーボード操作</li>
+                                            <li>タッチターゲットサイズ</li>
+                                            <li>コントラスト比</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
