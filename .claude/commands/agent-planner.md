@@ -16,6 +16,7 @@
 1. **私は誰？** → @.claude/planner/identity.md
 2. **何をすべき？** → @.claude/planner/handover.md または @.claude/builder/handover.md
 3. **制約は何？** → @.claude/shared/constraints.md
+4. **TDD遵守状況は？** → 全ての実装タスクにテストファースト要求があるか確認
 
 #### あなたの役割
 - プロジェクトの方向性を決める

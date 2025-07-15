@@ -121,8 +121,26 @@ tail -f ~/.claude/activity.log
 
 ### コード品質
 - **型注釈**: 全関数・変数に必須
-- **テスト**: 重要機能は80%以上カバレッジ、TDD推奨（段階的習得可）
+- **テスト**: TDD（テスト駆動開発）を厳格に遵守
 - **フォーマット**: `[tool] run format/lint/typecheck` で品質チェック
+
+### TDD開発手法（t-wada流）- 必須要件
+- 🔴 **Red**: 失敗するテストを書く（実装より先にテストを書く）
+- 🟢 **Green**: テストを通す最小限の実装
+- 🔵 **Refactor**: リファクタリング（テストが通る状態を維持）
+
+#### TDD実践原則（必須）
+- **小さなステップ**: 一度に1つの機能のみ実装
+- **仮実装**: テストを通すためにベタ書きでもOK（例：`return 42`）
+- **三角測量**: 2つ目、3つ目のテストケースで一般化する
+- **即座にコミット**: 各フェーズ完了後すぐにコミット
+
+#### TDDコミットルール（必須）
+- 🔴 テストを書いたら: `test: add failing test for [feature]`
+- 🟢 テストを通したら: `feat: implement [feature] to pass test`
+- 🔵 リファクタリングしたら: `refactor: [description]`
+
+詳細なTDDルール: @.claude/shared/constraints.md
 
 ### Git規約
 - **コミット形式**: `[prefix]: [変更内容]` （feat/fix/docs/test等）

@@ -120,8 +120,26 @@ Detailed settings: @.claude/hooks-README.md | @.claude/security-README.md
 
 ### Code Quality
 - **Type annotations**: Required for all functions and variables
-- **Testing**: 80%+ coverage for important features, TDD recommended (gradual learning)
+- **Testing**: TDD（テスト駆動開発）を厳格に遵守
 - **Formatting**: Quality check with `[tool] run format/lint/typecheck`
+
+### TDD開発手法（t-wada流）- 必須要件
+- 🔴 **Red**: 失敗するテストを書く（実装より先にテストを書く）
+- 🟢 **Green**: テストを通す最小限の実装
+- 🔵 **Refactor**: リファクタリング（テストが通る状態を維持）
+
+#### TDD実践原則（必須）
+- **小さなステップ**: 一度に1つの機能のみ実装
+- **仮実装**: テストを通すためにベタ書きでもOK（例：`return 42`）
+- **三角測量**: 2つ目、3つ目のテストケースで一般化する
+- **即座にコミット**: 各フェーズ完了後すぐにコミット
+
+#### TDDコミットルール（必須）
+- 🔴 テストを書いたら: `test: add failing test for [feature]`
+- 🟢 テストを通したら: `feat: implement [feature] to pass test`
+- 🔵 リファクタリングしたら: `refactor: [description]`
+
+詳細なTDDルール: @.claude/shared/constraints.md
 
 ### Git Conventions
 - **Commit format**: `[prefix]: [change description]` (feat/fix/docs/test etc.)

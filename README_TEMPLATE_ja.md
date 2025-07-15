@@ -162,6 +162,7 @@ mv .clauderules_ja .clauderules     # 日本語版をメインに
 - **Builder特殊モード**: 
   - デバッグモード: エラー発生時に自動起動
   - コードレビューモード: 実装後の品質確保
+  - TDD厳守: Red→Green→Refactorサイクル必須
 - **スムーズな引き継ぎ**: エージェントが次のエージェントに最適なモードを推奨
 
 **[→ Claude Friends 完全ガイド](.claude/claude-friends-guide_ja.md)**
@@ -184,7 +185,7 @@ Claude Friendsシステムは、たった4つのコアコマンドで開発を�
 
 ### 開発規約（Core Development Rules）
 - パッケージ管理統一方針
-- コード品質基準・テスト要件
+- コード品質基準・TDD必須要件
 - Git/PR規約（コミット形式・トレーラー・レビュー規約）
 
 ### 実行コマンド一覧

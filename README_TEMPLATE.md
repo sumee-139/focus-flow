@@ -153,6 +153,7 @@ Transform your solo development into a team experience with AI agents:
 - **Builder Special Modes**: 
   - Debug Mode: Activates when errors occur
   - Code Review Mode: Ensures quality after implementation
+  - TDD Enforcement: Red→Green→Refactor cycle mandatory
 - **Smooth Handoffs**: Agents recommend the best mode for the next agent
 
 **[→ Full Claude Friends Guide](.claude/claude-friends-guide.md)**
@@ -175,7 +176,7 @@ The Claude Friends system simplifies development with just 4 core commands. All 
 
 ### Core Development Rules
 - Unified package management policy
-- Code quality standards & test requirements
+- Code quality standards & mandatory TDD requirements
 - Git/PR conventions (commit format, trailers, review rules)
 
 ### Command List

@@ -43,7 +43,7 @@ AI-Friendly Logger V2 (powered by [Vibe Logger](https://github.com/fladdict/vibe
 
 ### 🎭 **Smart Agents with Special Modes**
 - **Planner**: Strategic thinking + automatic Feature Design Mode with Mermaid diagrams
-- **Builder**: Coding expert + automatic Debug Mode and Code Review Mode
+- **Builder**: Coding expert + automatic Debug Mode and Code Review Mode + strict TDD enforcement
 - Just 4 simple commands, but infinite possibilities!
 
 ## 🏃‍♂️ Quick Start
@@ -90,7 +90,7 @@ The foundation for AI-powered development.
 
 ### What This Template Helps You Do:
 - **Plan Better**: AI Planner creates detailed specs with Mermaid diagrams automatically
-- **Code Faster**: AI Builder handles implementation, testing, and reviews in specialized modes
+- **Code Faster**: AI Builder handles implementation with mandatory TDD (test-first approach)
 - **Debug Instantly**: Builder's Debug Mode analyzes errors and finds root causes automatically
 - **Review Automatically**: Builder's Code Review Mode ensures quality without manual effort
 - **Remember Everything**: Memory Bank and handoff system maintain perfect project context

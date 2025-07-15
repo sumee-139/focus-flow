@@ -22,6 +22,7 @@ This is a major release introducing the revolutionary Claude Friends system, tra
 - **Intelligent Handoff System**: Smooth transitions between agents with mode recommendations
 - **Agent Workspaces**: Dedicated directories for each agent with notes, identity, and handover files
 - **Simplified Command System**: Just 4 core commands (`/agent:planner`, `/agent:builder`, `/project:focus`, `/project:daily`)
+- **Mandatory TDD**: Test-Driven Development (t-wada style) is now strictly enforced
 
 ### Changed
 - **Major Command Consolidation**: 
