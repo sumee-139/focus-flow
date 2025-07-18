@@ -21,7 +21,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
 
     // バリデーション
     if (!title.trim()) {
-      setError('Title is required')
+      setError('タスクタイトルは必須です')
       return
     }
 
@@ -54,42 +54,42 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
       {error && <div className="error-message">{error}</div>}
       
       <div className="form-group">
-        <label htmlFor="task-title">Task Title *</label>
+        <label htmlFor="task-title">タスクタイトル *</label>
         <input
           id="task-title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="What needs to be done?"
+          placeholder="何をする必要がありますか？"
           required
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="description">Description</label>
+        <label htmlFor="description">説明</label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Optional details..."
+          placeholder="任意の詳細..."
           rows={3}
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="estimated-minutes">Estimated Minutes</label>
+        <label htmlFor="estimated-minutes">見積時間（分）</label>
         <input
           id="estimated-minutes"
           type="number"
           value={estimatedMinutes}
           onChange={(e) => setEstimatedMinutes(Number(e.target.value))}
           min="1"
-          step="5"
+          step="1"
         />
       </div>
 
       <div className="form-group">
-        <label htmlFor="alarm-time">Alarm Time</label>
+        <label htmlFor="alarm-time">アラーム時刻</label>
         <input
           id="alarm-time"
           type="time"
@@ -99,22 +99,22 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
       </div>
 
       <div className="form-group">
-        <label htmlFor="tags">Tags (comma separated)</label>
+        <label htmlFor="tags">タグ（カンマ区切り）</label>
         <input
           id="tags"
           type="text"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          placeholder="work, urgent, personal"
+          placeholder="仕事, 緊急, プライベート"
         />
       </div>
 
       <div className="form-actions">
         <button type="submit" className="btn btn-primary">
-          Add Task
+          タスクを追加
         </button>
         <button type="button" onClick={onCancel} className="btn btn-secondary">
-          Cancel
+          キャンセル
         </button>
       </div>
     </form>
