@@ -1,0 +1,337 @@
+/* FocusFlow App Styles - Design Philosophy準拠 */
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Design Philosophy: 色による区別の禁止 - 統一カラーパレット */
+  --primary-text: #333333;
+  --secondary-text: #666666;
+  --background: #FFFFFF;
+  --border: #E0E0E0;
+  --focus-color: #0066CC;
+  --light-gray: #F5F5F5;
+
+  color: var(--primary-text);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.app {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* Header (Design Philosophy: 最小限のボタン配置) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+}
+
+.title-section h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.title-section .subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+/* Focus Mode Toggle (Design Philosophy: Calm Technology) */
+.focus-toggle .focus-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.focus-toggle .focus-btn:hover {
+  border-color: var(--focus-color);
+}
+
+.focus-toggle .focus-btn.active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* Main Layout (Design Philosophy: 70%以上をMarkdownエディタが占有) */
+.main-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Tasks Sidebar (30%) */
+.tasks-sidebar {
+  width: 30%;
+  min-width: 300px;
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  background-color: var(--light-gray);
+}
+
+.tasks-sidebar h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.tasks-list {
+  margin-bottom: 16px;
+}
+
+.add-task-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--secondary-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.add-task-btn:hover {
+  border-color: var(--focus-color);
+  color: var(--focus-color);
+}
+
+/* Daily Memo Editor (70%) - Design Philosophy必須 */
+.memo-editor {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.memo-editor h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.markdown-editor {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.markdown-editor:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.memo-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--secondary-text);
+  text-align: right;
+}
+
+/* Debug Information (開発中のみ) */
+.debug-info {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background-color: var(--light-gray);
+}
+
+.debug-info summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+
+.debug-content {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+
+.debug-content p {
+  margin: 4px 0;
+}
+
+.btn.btn-test {
+  margin-top: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+/* Status Message */
+.status-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  background-color: var(--primary-text);
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile First Responsive Design (Design Philosophy準拠) */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  
+  .tasks-sidebar {
+    width: 100%;
+    min-width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex: 0 0 auto;
+    max-height: 40vh;
+  }
+  
+  .memo-editor {
+    flex: 1;
+  }
+  
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .title-section h1 {
+    font-size: 20px;
+  }
+  
+  .title-section .subtitle {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .tasks-sidebar,
+  .memo-editor {
+    padding: 16px;
+  }
+  
+  .markdown-editor {
+    font-size: 13px;
+  }
+}
+
+/* Accessibility (Design Philosophy: Accessibility First) */
+@media (prefers-reduced-motion: reduce) {
+  .focus-btn,
+  .add-task-btn,
+  .status-message {
+    transition: none;
+  }
+  
+  @keyframes slideIn {
+    from, to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --primary-text: #000000;
+    --secondary-text: #333333;
+    --border: #000000;
+  }
+  
+  .markdown-editor:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 統一性の重視 - Design Philosophy準拠 */
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* 静寂の美学 - 派手な演出を避ける */
+* {
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline-offset: 2px;
+}

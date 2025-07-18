@@ -1,0 +1,191 @@
+/* TaskItem.css - Design Philosophy準拠スタイル */
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  margin-bottom: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.task-item:hover {
+  border-color: #0066CC;
+}
+
+.task-item.completed {
+  opacity: 0.7;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: #666666;
+}
+
+/* ドラッグハンドル（Design Philosophy推奨パターン） */
+.drag-handle {
+  cursor: grab;
+  color: #666666;
+  font-size: 16px;
+  user-select: none;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.drag-handle:hover {
+  background-color: #F5F5F5;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* 統一アイコン（Design Philosophy必須要件） */
+.task-icon {
+  font-size: 18px;
+  user-select: none;
+}
+
+/* タスクコンテンツ */
+.task-content {
+  flex: 1;
+  min-width: 0; /* flexbox overflow fix */
+}
+
+.task-title {
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 4px;
+  word-wrap: break-word;
+}
+
+.task-description {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 6px;
+  word-wrap: break-word;
+}
+
+.task-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #666666;
+}
+
+.estimated-time,
+.alarm-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #F5F5F5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #333333;
+}
+
+/* タスクアクション */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.edit-button,
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  opacity: 1;
+  background-color: #F5F5F5;
+}
+
+/* モバイル対応（Design Philosophy: Mobile First） */
+@media (max-width: 480px) {
+  .task-item {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .drag-handle {
+    font-size: 14px;
+  }
+  
+  .task-icon {
+    font-size: 16px;
+  }
+  
+  .task-title {
+    font-size: 15px;
+  }
+  
+  .task-description {
+    font-size: 13px;
+  }
+  
+  .task-meta {
+    font-size: 11px;
+    gap: 8px;
+  }
+  
+  .edit-button,
+  .delete-button {
+    font-size: 13px;
+    padding: 6px;
+  }
+}
+
+/* アクセシビリティ（Design Philosophy: Accessibility First） */
+@media (prefers-reduced-motion: reduce) {
+  .task-item,
+  .drag-handle,
+  .edit-button,
+  .delete-button {
+    transition: none;
+  }
+}
+
+/* 高コントラストモード */
+@media (prefers-contrast: high) {
+  .task-item {
+    border-color: #000000;
+  }
+  
+  .task-title {
+    color: #000000;
+  }
+  
+  .task-description,
+  .task-meta {
+    color: #333333;
+  }
+}
