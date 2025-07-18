@@ -319,6 +319,166 @@ body {
   }
 }
 
+/* ConfirmDialog - Design Philosophy準拠 */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: confirmDialogSlideIn 0.3s ease-out;
+}
+
+@keyframes confirmDialogSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.confirm-dialog-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.confirm-dialog-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.confirm-dialog-body {
+  padding: 20px 24px;
+}
+
+.confirm-dialog-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--secondary-text);
+}
+
+.confirm-dialog-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.confirm-dialog-footer .btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.confirm-dialog-footer .btn-secondary {
+  background-color: var(--background);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.confirm-dialog-footer .btn-secondary:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+.confirm-dialog-footer .btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.confirm-dialog-footer .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+/* Mobile responsive - Design Philosophy準拠 */
+@media (max-width: 480px) {
+  .confirm-dialog {
+    width: 90%;
+    max-width: 400px;
+    margin: 20px;
+  }
+  
+  .confirm-dialog-header {
+    padding: 16px 20px 12px;
+  }
+  
+  .confirm-dialog-header h3 {
+    font-size: 16px;
+  }
+  
+  .confirm-dialog-body {
+    padding: 16px 20px;
+  }
+  
+  .confirm-dialog-footer {
+    padding: 12px 20px 20px;
+    gap: 8px;
+  }
+  
+  .confirm-dialog-footer .btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Accessibility - Design Philosophy準拠 */
+@media (prefers-reduced-motion: reduce) {
+  .confirm-dialog {
+    animation: none;
+  }
+  
+  @keyframes confirmDialogSlideIn {
+    from, to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .confirm-dialog {
+    border-color: #000000;
+  }
+  
+  .confirm-dialog-header,
+  .confirm-dialog-footer {
+    border-color: #000000;
+  }
+  
+  .confirm-dialog-footer .btn-secondary {
+    border-color: #000000;
+  }
+}
+
 /* 統一性の重視 - Design Philosophy準拠 */
 button:focus,
 input:focus,
