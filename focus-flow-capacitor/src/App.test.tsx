@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import App from './App'
 
 // 🔴 Red Phase: タスク削除機能の失敗するテストを先に書く
