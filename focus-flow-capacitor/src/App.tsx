@@ -5,35 +5,39 @@ import type { AppState, AppAction, Task } from './types/Task'
 import { TaskItem } from './components/TaskItem'
 import { AddTaskForm } from './components/AddTaskForm'
 import { ConfirmDialog } from './components/ConfirmDialog'
+import { useLocalStorage } from './hooks/useLocalStorage'
 import './App.css'
 
+// デフォルトタスク（localStorage が空の場合の初期値）
+const defaultTasks: Task[] = [
+  {
+    id: '1',
+    title: 'FocusFlowプロトタイプを完成させる',
+    description: 'Design Philosophyに準拠したUI実装',
+    estimatedMinutes: 120,
+    alarmTime: '14:00',
+    order: 1,
+    completed: false,
+    tags: ['development'],
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: '2',
+    title: 'タスク管理機能をテストする',
+    description: '基本的なCRUD操作の動作確認',
+    estimatedMinutes: 30,
+    order: 2,
+    completed: false,
+    tags: ['testing'],
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+]
+
 // App State Reducer (Design Philosophy準拠の状態管理)
-const initialState: AppState = {
-  tasks: [
-    {
-      id: '1',
-      title: 'FocusFlowプロトタイプを完成させる',
-      description: 'Design Philosophyに準拠したUI実装',
-      estimatedMinutes: 120,
-      alarmTime: '14:00',
-      order: 1,
-      completed: false,
-      tags: ['development'],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      title: 'タスク管理機能をテストする',
-      description: '基本的なCRUD操作の動作確認',
-      estimatedMinutes: 30,
-      order: 2,
-      completed: false,
-      tags: ['testing'],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ],
+const getInitialState = (tasks: Task[]): AppState => ({
+  tasks,
   focusMode: {
     isActive: false
   },
@@ -50,7 +54,7 @@ const initialState: AppState = {
       taskId: null
     }
   }
-}
+})
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
@@ -144,14 +148,33 @@ function appReducer(state: AppState, action: AppAction): AppState {
   }
 }
 
+// Date文字列をDateオブジェクトに変換するヘルパー関数
+const parseTasks = (tasks: Task[]): Task[] => {
+  return tasks.map(task => ({
+    ...task,
+    createdAt: typeof task.createdAt === 'string' ? new Date(task.createdAt) : task.createdAt,
+    updatedAt: typeof task.updatedAt === 'string' ? new Date(task.updatedAt) : task.updatedAt
+  }))
+}
+
 function App() {
-  const [state, dispatch] = useReducer(appReducer, initialState)
+  // LocalStorageからタスクを読み込み
+  const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', defaultTasks)
+  
+  // 初期状態をlocalStorageのタスクで設定
+  const [state, dispatch] = useReducer(appReducer, getInitialState(parseTasks(storedTasks)))
+  
   const [platformInfo] = useState({
     platform: Capacitor.getPlatform(),
     isNativePlatform: Capacitor.isNativePlatform()
   })
   const [notificationPermission, setNotificationPermission] = useState<string>('unknown')
   const [statusMessage, setStatusMessage] = useState('')
+
+  // タスクの変更をlocalStorageに保存
+  useEffect(() => {
+    setStoredTasks(state.tasks)
+  }, [state.tasks, setStoredTasks])
 
   useEffect(() => {
     checkNotificationPermissions()
