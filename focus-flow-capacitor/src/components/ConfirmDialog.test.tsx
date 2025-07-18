@@ -159,4 +159,109 @@ describe('ConfirmDialog', () => {
     const computedStyle = window.getComputedStyle(dialog)
     expect(computedStyle.backgroundColor).not.toMatch(/(red|green|yellow|#ff|#00ff|#ffff)/)
   })
+
+  // 🔴 Red Phase: CSS styling失敗テスト - 実装前に書く
+  describe('CSS Styling', () => {
+    test('should have proper overlay styling', () => {
+      const mockOnConfirm = vi.fn()
+      const mockOnCancel = vi.fn()
+
+      render(
+        <ConfirmDialog
+          isOpen={true}
+          title="Delete Task"
+          message="Are you sure you want to delete this task?"
+          onConfirm={mockOnConfirm}
+          onCancel={mockOnCancel}
+        />
+      )
+
+      const overlay = screen.getByRole('dialog').parentElement
+      expect(overlay).toHaveClass('confirm-dialog-overlay')
+      
+      // オーバーレイスタイルの確認
+      const overlayStyle = window.getComputedStyle(overlay!)
+      expect(overlayStyle.position).toBe('fixed')
+      expect(overlayStyle.zIndex).toBe('1000')
+      expect(overlayStyle.top).toBe('0px')
+      expect(overlayStyle.left).toBe('0px')
+      expect(overlayStyle.width).toBe('100%')
+      expect(overlayStyle.height).toBe('100%')
+    })
+
+    test('should have proper dialog styling', () => {
+      const mockOnConfirm = vi.fn()
+      const mockOnCancel = vi.fn()
+
+      render(
+        <ConfirmDialog
+          isOpen={true}
+          title="Delete Task"
+          message="Are you sure you want to delete this task?"
+          onConfirm={mockOnConfirm}
+          onCancel={mockOnCancel}
+        />
+      )
+
+      const dialog = screen.getByRole('dialog')
+      expect(dialog).toHaveClass('confirm-dialog')
+      
+      // ダイアログスタイルの確認
+      const dialogStyle = window.getComputedStyle(dialog)
+      expect(dialogStyle.backgroundColor).toBe('rgb(255, 255, 255)') // var(--background)
+      expect(dialogStyle.borderRadius).toBe('8px')
+      expect(dialogStyle.border).toBe('1px solid rgb(224, 224, 224)') // var(--border)
+    })
+
+    test('should have proper button styling', () => {
+      const mockOnConfirm = vi.fn()
+      const mockOnCancel = vi.fn()
+
+      render(
+        <ConfirmDialog
+          isOpen={true}
+          title="Delete Task"
+          message="Are you sure you want to delete this task?"
+          onConfirm={mockOnConfirm}
+          onCancel={mockOnCancel}
+        />
+      )
+
+      const confirmBtn = screen.getByRole('button', { name: /confirm/i })
+      const cancelBtn = screen.getByRole('button', { name: /cancel/i })
+      
+      // プライマリボタンとセカンダリボタンのスタイル確認
+      expect(confirmBtn).toHaveClass('btn', 'btn-primary')
+      expect(cancelBtn).toHaveClass('btn', 'btn-secondary')
+    })
+
+    test('should be responsive on mobile devices', () => {
+      const mockOnConfirm = vi.fn()
+      const mockOnCancel = vi.fn()
+
+      // モバイルビューポートを模擬
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 480,
+      })
+
+      render(
+        <ConfirmDialog
+          isOpen={true}
+          title="Delete Task"
+          message="Are you sure you want to delete this task?"
+          onConfirm={mockOnConfirm}
+          onCancel={mockOnCancel}
+        />
+      )
+
+      const dialog = screen.getByRole('dialog')
+      const dialogStyle = window.getComputedStyle(dialog)
+      
+      // モバイルでの適切な幅とマージン
+      expect(dialogStyle.width).toBe('90%')
+      expect(dialogStyle.maxWidth).toBe('400px')
+    })
+  })
 })
