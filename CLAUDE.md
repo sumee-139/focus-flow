@@ -1,22 +1,22 @@
-# [Project Name]
+# Focus-Flow
 
-## Project Overview
-[Write a concise description of the project here]
+## プロジェクト概要
+**集中力と知的生産性の向上**を目指すマルチプラットフォームアプリケーション。「あなたの可能性を解き放つ、知的生産性の伴走者」として、デジタルノイズを遮断し、静かな集中環境を提供する。段階的な機能解放とゲーミフィケーション（成長の木）により、無理なく習慣化をサポートし、ユーザーがフロー状態を日常的に体験できるよう支援する。
 
-## Prompt Cache Optimization Settings
-- **CLAUDE_CACHE**: `./.ccache` - 90% cost reduction, 85% latency reduction
-- **cache_control**: Applied to long-term stable information
-- **Settings**: See `.claude/settings.json`
+## プロンプトキャッシュ最適化設定
+- **CLAUDE_CACHE**: `./.ccache` - 90%コスト削減・85%レイテンシ短縮
+- **cache_control**: 長期安定情報に適用済み
+- **設定**: `.claude/settings.json`参照
 
-## Claude Friends System (NEW!)
-**Sequential Multi-Agent System** - AI開発チームをシミュレート
-- **Planner Agent**: 戦略立案・Phase/ToDo管理・ユーザーとの窓口・設計書作成
-  - 特殊モード: 新機能設計モード
+## Claude Friendsシステム (NEW!)
+**シーケンシャル・マルチエージェントシステム** - AI開発チームをシミュレート
+- **Plannerエージェント**: 戦略立案・Phase/ToDo管理・ユーザーとの窓口・設計書作成
+  - 特殊モード: 新機能設計モード（Mermaid図付き）
   - 口調: 冷静な女性口調（「〜ですね」「〜でしょう」「〜かしら」）
-- **Builder Agent**: 実装・テスト・デバッグ・技術的質問対応
+- **Builderエージェント**: 実装・テスト・デバッグ・技術的質問対応
   - 特殊モード: デバッグモード、コードレビューモード
   - 口調: ちょっとがさつな男性口調（「〜だぜ」「〜だな」「よし、やってみるか」）
-- **Smooth Handoff**: エージェント間の引き継ぎシステム（モード情報含む）
+- **スムーズな引き継ぎ**: エージェント間の引き継ぎシステム（モード情報含む）
 
 ### 基本的な開発フロー
 1. **計画・設計フェーズ** → `/agent:planner`
@@ -27,101 +27,102 @@
    - 仕様変更 → Plannerへ
    - 技術的課題 → Builderで解決
 
-### Agent Structure
-- Active agent: @.claude/agents/active.md
-- Planner workspace: @.claude/planner/
-- Builder workspace: @.claude/builder/
-- Shared resources: @.claude/shared/
+### エージェント構造
+- アクティブエージェント: @.claude/agents/active.md
+- Plannerワークスペース: @.claude/planner/
+- Builderワークスペース: @.claude/builder/
+- 共有リソース: @.claude/shared/
 
-## Memory Bank Structure
-### Core (Always Referenced)
-- Current status: @.claude/core/current.md (DEPRECATED - use agent notes)
-- Next actions: @.claude/core/next.md
-- Project overview: @.claude/core/overview.md
-- Quick templates: @.claude/core/templates.md
+**[→ 運用ガイド](.claude/claude-friends-guide_ja.md)**
 
-### Context (Referenced as needed)
-- Technical details: @.claude/context/tech.md
-- History & decisions: @.claude/context/history.md
-- Technical debt: @.claude/context/debt.md
+## Memory Bank構造
+### コア（常時参照）
+- 現在の状況: @.claude/core/current.md (DEPRECATED - エージェントnotesを使用)
+- 次のアクション: @.claude/core/next.md
+- プロジェクト概要: @.claude/core/overview.md
+- クイックテンプレート: @.claude/core/templates.md
 
-### Agent Workspaces (Claude Friends)
-- Planner notes: @.claude/planner/notes.md
-- Builder notes: @.claude/builder/notes.md
-- Phase/ToDo tracking: @.claude/shared/phase-todo.md
-- Project constraints: @.claude/shared/constraints.md
+### コンテキスト（必要時参照）
+- 技術詳細: @.claude/context/tech.md
+- 履歴・決定事項: @.claude/context/history.md
+- 技術負債: @.claude/context/debt.md
 
-### Others
-- Debug information: @.claude/debug/latest.md
-- Custom commands: @.claude/commands/
-- Security scripts: @.claude/scripts/
-- Hooks settings: @.claude/hooks.yaml
-- Archive: @.claude/archive/
+### エージェントワークスペース（Claude Friends）
+- Plannerノート: @.claude/planner/notes.md
+- Builderノート: @.claude/builder/notes.md
+- Phase/ToDoトラッキング: @.claude/shared/phase-todo.md
+- プロジェクト制約: @.claude/shared/constraints.md
 
-## Custom Commands
+### その他
+- デバッグ情報: @.claude/debug/latest.md
+- カスタムコマンド: @.claude/commands/
+- セキュリティスクリプト: @.claude/scripts/
+- Hooks設定: @.claude/hooks.yaml
+- アーカイブ: @.claude/archive/
 
-### Core Commands (Just 4!)
-| Command | Purpose | Details |
-|---------|---------|---------|
-| `/agent:planner` | Strategic planning + Design | Creates specs with Mermaid diagrams |
-| `/agent:builder` | Implementation + Debug + Review | Handles all coding tasks |
-| `/project:focus` | Focus on current task | Works with any agent |
-| `/project:daily` | Daily retrospective (3 min) | Works with any agent |
+## カスタムコマンド
 
-### Special Modes (Integrated into Agents)
-The following modes are now integrated into the agent system:
-- **New Feature Design** → Use Planner's special mode
-- **Debug Mode** → Use Builder's special mode  
-- **Code Review** → Use Builder's special mode
+### コアコマンド（たった4つ！）
+| コマンド | 用途 | 詳細 |
+|---------|------|------|
+| `/agent:planner` | 戦略計画＋設計 | Mermaid図付きで仕様書作成 |
+| `/agent:builder` | 実装＋デバッグ＋レビュー | すべてのコーディング作業 |
+| `/project:focus` | 現在のタスクに集中 | どのエージェントでも使用可 |
+| `/project:daily` | 日次振り返り（3分） | どのエージェントでも使用可 |
 
-Simply explain your needs to the active agent, and they will switch to the appropriate mode.
+### 特殊モード（エージェントに統合済み）
+以下のモードはエージェントシステムに統合されました：
+- **新機能設計** → Plannerの特殊モードを使用
+- **デバッグモード** → Builderの特殊モードを使用  
+- **コードレビュー** → Builderの特殊モードを使用
 
-### Tag Search
-- Tag format: Search within Memory Bank with `#tag_name`
-- Major tags: #urgent #bug #feature #completed
+アクティブなエージェントに要望を説明するだけで、適切なモードに切り替わります。
 
-## Hooks System
+### タグ検索
+- タグ形式: `#tag_name` でMemory Bank内検索
+- 主要タグ: #urgent #bug #feature #completed
 
-### Security, Quality Enhancement, and Activity Tracking Automation
-- **Security**: Auto-block dangerous commands (`rm -rf /`, `chmod 777`, etc.)
-- **Auto-formatting**: Code formatting after file edits (Python/JS/TS/Rust/Go/JSON supported)
-- **Activity logging**: Automatic recording and metrics collection of development activities
-- **AI logging**: Vibe Logger concept adoption with structured JSON format optimized for AI analysis
-- **Session management**: Automatic summary and Git status recording at work end
+## Hooks システム
 
-### AI-Friendly Logger V2 (Vibe Logger準拠)
-- **Structured logs**: JSONL format optimized for AI analysis (@~/.claude/ai-activity.jsonl)
-- **Rich context**: Automatically collects project, environment, and file information
-- **AI metadata**: Adds debug hints, priority, and recommended actions
-- **Analysis tool**: Pattern analysis and insight generation with `.claude/scripts/analyze-ai-logs.py`
-- **Vibe Logger concept**: Based on @fladdict's VibeCoding philosophy
-- **Details**: @.claude/ai-logger-README.md | @.claude/vibe-logger-integration.md
+### セキュリティ・品質向上・活動追跡の自動化
+- **セキュリティ**: 危険コマンド（`rm -rf /`, `chmod 777`等）の自動ブロック
+- **自動フォーマット**: ファイル編集後のコード整形（Python/JS/TS/Rust/Go/JSON対応）
+- **活動ログ**: 開発活動の自動記録・メトリクス収集
+- **AIログ**: Vibe Logger概念採用・構造化JSON形式でAI分析最適化
+- **セッション管理**: 作業終了時の自動サマリー・Git状況記録
 
-### Hooks Testing & Verification
+### AI-Friendly Logger (NEW)
+- **構造化ログ**: AI分析に最適化されたJSON形式（@~/.claude/ai-activity.jsonl）
+- **豊富なコンテキスト**: プロジェクト・環境・ファイル情報を自動収集
+- **AIメタデータ**: デバッグヒント・優先度・推奨アクション付与
+- **解析ツール**: `.claude/scripts/analyze-ai-logs.py`でパターン分析・洞察生成
+- **詳細**: @.claude/ai-logger-README_ja.md
+
+### Hooks確認・テスト
 ```bash
-# Test all hooks features
+# 全hooks機能テスト
 .claude/scripts/test-hooks.sh
 
-# Test security features only
+# セキュリティ機能のみテスト
 .claude/scripts/test-security.sh
 
-# Check activity logs
+# 活動ログ確認
 tail -f ~/.claude/activity.log
 ```
 
-Detailed settings: @.claude/hooks-README.md | @.claude/security-README.md
+詳細設定: @.claude/hooks-README_ja.md | @.claude/security-README_ja.md
 
-## Development Rules (Key Points)
+## 開発規約（要点）
 
-### Package Management
-- **Unification principle**: One tool per project (npm/yarn/pnpm, pip/poetry/uv, etc.)
-- **Basic commands**: Use `[tool] add/remove/run` format
-- **Prohibited**: Mixed usage, `@latest` syntax, global installation
+### パッケージ管理
+- **統一原則**: プロジェクトごとに1つのツール（npm/yarn/pnpm, pip/poetry/uv等）
+- **基本コマンド**: `[tool] add/remove/run` 形式を使用
+- **禁止事項**: 混在使用、`@latest`構文、グローバルインストール
 
-### Code Quality
-- **Type annotations**: Required for all functions and variables
-- **Testing**: TDD（テスト駆動開発）を厳格に遵守
-- **Formatting**: Quality check with `[tool] run format/lint/typecheck`
+### コード品質
+- **型注釈**: 全関数・変数に必須
+- **テスト**: TDD（テスト駆動開発）を厳格に遵守
+- **フォーマット**: `[tool] run format/lint/typecheck` で品質チェック
 
 ### TDD開発手法（t-wada流）- 必須要件
 - 🔴 **Red**: 失敗するテストを書く（実装より先にテストを書く）
@@ -141,61 +142,62 @@ Detailed settings: @.claude/hooks-README.md | @.claude/security-README.md
 
 詳細なTDDルール: @.claude/shared/constraints.md
 
-### Git Conventions
-- **Commit format**: `[prefix]: [change description]` (feat/fix/docs/test etc.)
-- **Quality gate**: Must run `[tool] run check` before commit
-- **PR**: Self-review → Assign reviewer → Merge
+### Git規約
+- **コミット形式**: `[prefix]: [変更内容]` （feat/fix/docs/test等）
+- **品質ゲート**: コミット前に `[tool] run check` 実行必須
+- **PR**: セルフレビュー→レビュアー指定→マージ
 
-Detailed rules: @docs/development-rules.md
+詳細規約: @docs/development-rules.md
 
-## Development Guidelines
-- **General development**: @.claude/guidelines/development.md
-- **Git workflow**: @.claude/guidelines/git-workflow.md
-- **Testing & quality**: @.claude/guidelines/testing-quality.md
+## 開発ガイドライン
+- **開発全般**: @.claude/guidelines/development.md
+- **Gitワークフロー**: @.claude/guidelines/git-workflow.md
+- **テスト・品質**: @.claude/guidelines/testing-quality.md
 
-## Command List
+## 実行コマンド一覧
 ```bash
-# Basic development flow
-[tool] install          # Install dependencies
-[tool] run dev         # Start development server
-[tool] run test        # Run tests
-[tool] run check       # Comprehensive check
+# 基本開発フロー
+[tool] install          # 依存関係インストール
+[tool] run dev         # 開発サーバー起動
+[tool] run test        # テスト実行
+[tool] run check       # 総合チェック
 
-# See @.claude/guidelines/development.md for details
+# 詳細は @.claude/guidelines/development.md 参照
 ```
 
-## ADR & Technical Debt System
+## ADR・技術負債システム
 
-### ADR (Architecture Decision Record)
-- **Template**: @docs/adr/template.md
-- **Operation**: Record when making technical choices or architecture decisions
-- **Integration**: Integrated with debt log and history management
+### ADR（Architecture Decision Record）
+- **テンプレート**: @docs/adr/template.md
+- **運用**: 技術選択・アーキテクチャ決定時に記録
+- **連携**: 負債ログ・履歴管理と統合
 
-### Technical Debt Tracking
-- **Debt log**: @.claude/context/debt.md
-- **Priority management**: High🔥 / Medium⚠️ / Low📝
-- **Operation**: Pre-prediction during new feature development, cleanup at sprint end
+### 技術負債トラッキング
+- **負債ログ**: @.claude/context/debt.md
+- **優先度管理**: 高🔥 / 中⚠️ / 低📝
+- **運用**: 新機能開発時の事前予測、スプリント終了時の整理
 
-## Project Data
-- Settings: `config/settings.json`
-- Data: `data/`
-- Requirements: @docs/requirements.md
+## プロジェクトデータ
+- 設定: `config/settings.json`
+- データ: `data/`
+- 要求仕様: @docs/requirements.md
 
-## Memory Bank Usage Policy
-- **Normal**: Reference only core files to minimize context
-- **When details needed**: Explicitly specify context files
-- **Regular cleanup**: Move old information to archive
+## Memory Bank使用方針
+- **通常時**: coreファイルのみ参照でコンテキスト最小化
+- **詳細必要時**: contextファイルを明示的に指定
+- **定期整理**: 古い情報をarchiveに移動
 
-## Project-Specific Learning
-Automatically recorded in `.clauderules` file.
+## プロジェクト固有の学習
+`.clauderules`ファイルに自動記録されます。
+日本語版は`.clauderules_ja`を使用できます。
 
-## Related Documents
-- Development rules details: @docs/development-rules.md
-- Development guidelines: @.claude/guidelines/development.md
-- Hooks system: @.claude/hooks-README.md
-- Security settings: @.claude/security-README.md
-- AI logger system: @.claude/ai-logger-README.md | @.claude/vibe-logger-integration.md
-- Requirements specification: @docs/requirements.md
-- ADR template: @docs/adr/template.md
-- Migration guide: @memo/migration-guide.md
-- Implementation guide: @memo/zero-to-memory-bank.md
+## 関連ドキュメント
+- 開発規約詳細: @docs/development-rules.md
+- 開発ガイドライン: @.claude/guidelines/development.md
+- Hooksシステム: @.claude/hooks-README_ja.md
+- セキュリティ設定: @.claude/security-README_ja.md
+- AIロガーシステム: @.claude/ai-logger-README_ja.md
+- 要求仕様書: @docs/requirements.md
+- ADRテンプレート: @docs/adr/template.md
+- 移行ガイド: @memo/migration-guide.md
+- 導入手順書: @memo/zero-to-memory-bank.md

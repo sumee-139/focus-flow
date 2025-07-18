@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core'
 import type { AppState, AppAction, Task } from './types/Task'
 import { TaskItem } from './components/TaskItem'
 import { AddTaskForm } from './components/AddTaskForm'
+import { ConfirmDialog } from './components/ConfirmDialog'
 import './App.css'
 
 // App State Reducer (Design Philosophy準拠の状態管理)
@@ -43,7 +44,11 @@ const initialState: AppState = {
   },
   ui: {
     isAddingTask: false,
-    showSettings: false
+    showSettings: false,
+    deleteConfirmDialog: {
+      isOpen: false,
+      taskId: null
+    }
   }
 }
 
@@ -56,6 +61,18 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ui: {
           ...state.ui,
           isAddingTask: false
+        }
+      }
+    case 'DELETE_TASK':
+      return {
+        ...state,
+        tasks: state.tasks.filter(task => task.id !== action.payload),
+        ui: {
+          ...state.ui,
+          deleteConfirmDialog: {
+            isOpen: false,
+            taskId: null
+          }
         }
       }
     case 'TOGGLE_TASK':
@@ -98,6 +115,28 @@ function appReducer(state: AppState, action: AppAction): AppState {
         ui: {
           ...state.ui,
           ...action.payload
+        }
+      }
+    case 'SHOW_DELETE_CONFIRM':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          deleteConfirmDialog: {
+            isOpen: true,
+            taskId: action.payload
+          }
+        }
+      }
+    case 'HIDE_DELETE_CONFIRM':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          deleteConfirmDialog: {
+            isOpen: false,
+            taskId: null
+          }
         }
       }
     default:
@@ -231,8 +270,17 @@ function App() {
   }
 
   const handleDeleteTask = (id: string) => {
-    console.log('Delete task:', id)
-    // TODO: Implement delete functionality
+    dispatch({ type: 'SHOW_DELETE_CONFIRM', payload: id })
+  }
+
+  const handleConfirmDelete = () => {
+    if (state.ui.deleteConfirmDialog.taskId) {
+      dispatch({ type: 'DELETE_TASK', payload: state.ui.deleteConfirmDialog.taskId })
+    }
+  }
+
+  const handleCancelDelete = () => {
+    dispatch({ type: 'HIDE_DELETE_CONFIRM' })
   }
 
   const handleReorderTask = (dragIndex: number, hoverIndex: number) => {
@@ -337,6 +385,17 @@ function App() {
             {statusMessage}
           </div>
         )}
+
+        {/* Delete Confirmation Dialog */}
+        <ConfirmDialog
+          isOpen={state.ui.deleteConfirmDialog.isOpen}
+          title="Delete Task"
+          message="Are you sure you want to delete this task? This action cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
       </div>
     </div>
   )

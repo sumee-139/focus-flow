@@ -10,60 +10,81 @@ cache_control: {"type": "ephemeral"}
 
 ## Technology Stack Details
 ### Frontend
-- [Framework] v[version]
-- [Library 1] v[version] - [Purpose]
-- [Library 2] v[version] - [Purpose]
+- React v19.1.0 - UI framework (Capacitor版)
+- Chakra UI v3.22.0 - Component library
+- Framer Motion v12.23.6 - Animation library
+- TypeScript v5.8.3 - Type safety
+- Vite v7.0.4 - Build tool
+- Electron v37.2.2 - Desktop application framework
 
 ### Backend
-- [Language] v[version]
-- [Framework] v[version]
-- [Important library] v[version] - [Purpose]
+- ローカルストレージ中心のアーキテクチャ
+- LocalStorage/IndexedDB - データ永続化
+- 将来的にSQLite対応予定
 
 ### Infrastructure & Tools
-- [DB] v[version]
-- [Other important tools]
+- Capacitor v7.4.2 - Cross-platform development
+- ESLint v9.30.1 - Code linting
+- Electron Forge v7.8.1 - Desktop app packaging
 
 ## Development Environment
 ```bash
-# Setup steps
-[Command 1]
-[Command 2]
-[Command 3]
+# Capacitor版のセットアップ
+cd focus-flow-capacitor
+npm install
+npm run dev
+
+# Electron版のセットアップ
+cd focus-flow-app
+npm install
+npm start
 ```
 
 ## Startup Procedures
 ```bash
-# Development environment
-[Startup command]
+# Development environment (Capacitor版)
+npm run dev
 
-# Production environment
-[Deploy command]
+# Development environment (Electron版)
+npm start
+
+# Production build (Capacitor版)
+npm run build
+
+# Production build (Electron版)
+npm run make
 ```
 
 ## API Design
-### Main Endpoints
-- `GET /api/[resource]` - [Purpose]
-- `POST /api/[resource]` - [Purpose]
-- `PUT /api/[resource]/:id` - [Purpose]
-- `DELETE /api/[resource]/:id` - [Purpose]
+### Local Storage Schema
+- `focus-sessions` - 集中セッション履歴
+- `quick-memos` - クイックメモデータ
+- `user-preferences` - ユーザー設定
+- `growth-tree-data` - 成長の木の進捗データ
 
 ## Database Design
-### Main Tables
-- `[table1]`: [Purpose]
-- `[table2]`: [Purpose]
+### Main Data Structures
+- `FocusSession`: 集中セッション情報（開始時刻、終了時刻、中断理由）
+- `QuickMemo`: メモ情報（内容、作成日時、タグ、添付ファイル）
+- `ProjectTemplate`: プロジェクトテンプレート情報
 
 ## Configuration Files
-- `[File name]`: [Purpose and important settings]
-- `[File name]`: [Purpose and important settings]
+- `capacitor.config.ts`: Capacitor設定（プラットフォーム固有設定）
+- `forge.config.js`: Electron Forge設定（パッケージング設定）
+- `vite.config.ts`: Vite設定（ビルド最適化）
+- `eslint.config.js`: ESLint設定（コード品質）
 
 ## Performance Requirements
-- [Requirement 1]: [Numerical target]
-- [Requirement 2]: [Numerical target]
+- クイックメモの記録時間: 3秒以内
+- フォーカスモードの起動時間: 2秒以内
+- 全文検索の応答時間: 1秒以内
 
 ## Security Considerations
-- [Consideration 1]
-- [Consideration 2]
+- ローカルストレージ中心でプライバシーを保護
+- ファイル添付機能におけるセキュリティスキャン
+- 将来的なクラウド同期での暗号化
 
 ## Known Constraints & Issues
-- [Constraint 1]: [Details and workaround]
-- [Constraint 2]: [Details and workaround]
+- Capacitor版とElectron版の機能差異: 通知API、ファイルアクセス権限の違い
+- モバイルでの音声入力精度: デバイス依存、ネットワーク接続が必要
+- 成長の木の視覚化: パフォーマンス最適化が必要

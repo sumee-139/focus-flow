@@ -46,6 +46,10 @@ export interface AppState {
     selectedTask?: string;
     isAddingTask: boolean;
     showSettings: boolean;
+    deleteConfirmDialog: {
+      isOpen: boolean;
+      taskId: string | null;
+    };
   };
 }
 
@@ -61,4 +65,6 @@ export type AppAction =
   | { type: 'END_FOCUS' }
   | { type: 'UPDATE_MEMO'; payload: { date: string; content: string } }
   | { type: 'SAVE_MEMO'; payload: { date: string; content: string } }
-  | { type: 'SET_UI_STATE'; payload: Partial<AppState['ui']> };
+  | { type: 'SET_UI_STATE'; payload: Partial<AppState['ui']> }
+  | { type: 'SHOW_DELETE_CONFIRM'; payload: string }
+  | { type: 'HIDE_DELETE_CONFIRM' };
