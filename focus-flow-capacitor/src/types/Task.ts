@@ -60,4 +60,5 @@ export type AppAction =
   | { type: 'START_FOCUS'; payload: { duration: number; taskId?: string } }
   | { type: 'END_FOCUS' }
   | { type: 'UPDATE_MEMO'; payload: { date: string; content: string } }
-  | { type: 'SAVE_MEMO'; payload: { date: string; content: string } };
+  | { type: 'SAVE_MEMO'; payload: { date: string; content: string } }
+  | { type: 'SET_UI_STATE'; payload: Partial<AppState['ui']> };

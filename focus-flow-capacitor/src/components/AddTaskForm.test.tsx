@@ -1,7 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, test, expect, vi } from 'vitest'
 import { AddTaskForm } from './AddTaskForm'
-import type { Task } from '../types/Task'
 
 // 🔴 Red Phase: 失敗するテストを先に書く（実装より前）
 describe('AddTaskForm', () => {
@@ -27,7 +26,6 @@ describe('AddTaskForm', () => {
     // フォームに入力
     const titleInput = screen.getByLabelText(/task title/i)
     const minutesInput = screen.getByLabelText(/estimated minutes/i)
-    const submitButton = screen.getByRole('button', { name: /add task/i })
     
     fireEvent.change(titleInput, {
       target: { value: 'Test Task' }

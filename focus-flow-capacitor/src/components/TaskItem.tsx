@@ -30,7 +30,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   }
 
   return (
-    <div className={`task-item ${task.completed ? 'completed' : ''}`}>
+    <div className={`task-item ${task.completed ? 'completed' : ''}`} data-testid="task-item">
       {/* ドラッグハンドル（Design Philosophy準拠） */}
       <div className="drag-handle" title="Drag to reorder">
         ⋮⋮

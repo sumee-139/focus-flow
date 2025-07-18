@@ -1,8 +1,9 @@
 import { useState, useEffect, useReducer } from 'react'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { Capacitor } from '@capacitor/core'
-import type { AppState, AppAction } from './types/Task'
+import type { AppState, AppAction, Task } from './types/Task'
 import { TaskItem } from './components/TaskItem'
+import { AddTaskForm } from './components/AddTaskForm'
 import './App.css'
 
 // App State Reducer (Design Philosophy準拠の状態管理)
@@ -48,6 +49,15 @@ const initialState: AppState = {
 
 function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
+    case 'ADD_TASK':
+      return {
+        ...state,
+        tasks: [...state.tasks, action.payload],
+        ui: {
+          ...state.ui,
+          isAddingTask: false
+        }
+      }
     case 'TOGGLE_TASK':
       return {
         ...state,
@@ -80,6 +90,14 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ...state.dailyMemo,
           content: action.payload.content,
           lastSaved: new Date()
+        }
+      }
+    case 'SET_UI_STATE':
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          ...action.payload
         }
       }
     default:
@@ -199,6 +217,10 @@ function App() {
   }
 
   // Task Handlers
+  const handleAddTask = (task: Task) => {
+    dispatch({ type: 'ADD_TASK', payload: task })
+  }
+
   const handleToggleTask = (id: string) => {
     dispatch({ type: 'TOGGLE_TASK', payload: id })
   }
@@ -216,6 +238,14 @@ function App() {
   const handleReorderTask = (dragIndex: number, hoverIndex: number) => {
     console.log('Reorder task:', dragIndex, hoverIndex)
     // TODO: Implement reorder functionality
+  }
+
+  const handleShowAddTask = () => {
+    dispatch({ type: 'SET_UI_STATE', payload: { isAddingTask: true } })
+  }
+
+  const handleCancelAddTask = () => {
+    dispatch({ type: 'SET_UI_STATE', payload: { isAddingTask: false } })
   }
 
   const handleMemoChange = (content: string) => {
@@ -257,9 +287,17 @@ function App() {
                 />
               ))}
             </div>
-            <button className="add-task-btn">
-              + Add Task
-            </button>
+            
+            {state.ui.isAddingTask ? (
+              <AddTaskForm
+                onAdd={handleAddTask}
+                onCancel={handleCancelAddTask}
+              />
+            ) : (
+              <button className="add-task-btn" onClick={handleShowAddTask}>
+                + Add Task
+              </button>
+            )}
           </aside>
 
           {/* Daily Memo Editor (70% - Design Philosophy必須) */}

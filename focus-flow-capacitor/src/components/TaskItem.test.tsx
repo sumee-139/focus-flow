@@ -95,4 +95,47 @@ describe('TaskItem', () => {
     expect(screen.queryByText(/%/)).not.toBeInTheDocument()
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
   })
+
+  // 🔴 Red Phase: タスク完了機能の追加テスト
+  test('should handle completed task correctly', () => {
+    const completedTask: Task = {
+      ...mockTask,
+      completed: true
+    }
+    const mockHandlers = {
+      onToggle: vi.fn(),
+      onEdit: vi.fn(),
+      onDelete: vi.fn(),
+      onReorder: vi.fn()
+    }
+
+    render(<TaskItem task={completedTask} {...mockHandlers} />)
+    
+    // 完了状態のタスクには completed クラスが付与される
+    const taskElement = screen.getByTestId('task-item')
+    expect(taskElement).toHaveClass('completed')
+    
+    // チェックボックスがチェック状態
+    const checkbox = screen.getByRole('checkbox')
+    expect(checkbox).toBeChecked()
+  })
+
+  test('should handle uncompleted task correctly', () => {
+    const mockHandlers = {
+      onToggle: vi.fn(),
+      onEdit: vi.fn(),
+      onDelete: vi.fn(),
+      onReorder: vi.fn()
+    }
+
+    render(<TaskItem task={mockTask} {...mockHandlers} />)
+    
+    // 未完了タスクには completed クラスが付与されない
+    const taskElement = screen.getByTestId('task-item')
+    expect(taskElement).not.toHaveClass('completed')
+    
+    // チェックボックスが未チェック状態
+    const checkbox = screen.getByRole('checkbox')
+    expect(checkbox).not.toBeChecked()
+  })
 })
