@@ -130,3 +130,107 @@ describe('AddTaskForm', () => {
     expect(screen.queryByLabelText(/importance/i)).not.toBeInTheDocument()
   })
 })
+
+// 🔴 Red Phase - Phase 2.1改修版テスト（失敗するテストを先に書く）
+describe('TaskForm - 改修版 (Phase 2.1)', () => {
+  test('should accept valid estimated minutes input', async () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // ユーザーフィードバック：30分で「有効な値を入力してください」エラーが出る問題
+    const titleInput = screen.getByLabelText(/タスクタイトル/i)
+    const minutesInput = screen.getByLabelText(/見積時間/i)
+    
+    fireEvent.change(titleInput, { target: { value: 'テストタスク' } })
+    fireEvent.change(minutesInput, { target: { value: '30' } })
+    
+    fireEvent.submit(screen.getByRole('form'))
+    
+    // 30分の入力でエラーが出ずに正常に送信されることを確認
+    await waitFor(() => {
+      expect(mockOnAdd).toHaveBeenCalledWith(expect.objectContaining({
+        estimatedMinutes: 30
+      }))
+    })
+    
+    // バリデーションエラーが表示されないことを確認
+    expect(screen.queryByText(/有効な値を入力してください/i)).not.toBeInTheDocument()
+  })
+
+  test('should display proper Japanese labels', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // 日本語ラベルの存在確認
+    expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/説明/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/見積時間/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/アラーム時刻/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/タグ/i)).toBeInTheDocument()
+    
+    // ボタンの日本語化確認
+    expect(screen.getByRole('button', { name: /タスクを追加/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /キャンセル/i })).toBeInTheDocument()
+  })
+
+  test('should have unified design tone', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    const form = screen.getByRole('form')
+    
+    // Design Philosophy準拠のクラス名確認
+    expect(form).toHaveClass('add-task-form')
+    
+    // 統一されたbutton要素の確認
+    const submitButton = screen.getByRole('button', { name: /タスクを追加/i })
+    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
+    
+    expect(submitButton).toHaveClass('btn', 'btn-primary')
+    expect(cancelButton).toHaveClass('btn', 'btn-secondary')
+  })
+
+  test('should render buttons properly', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // ボタンが適切に表示されることを確認（ユーザーフィードバック：ボタンの視認性問題）
+    const submitButton = screen.getByRole('button', { name: /タスクを追加/i })
+    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
+    
+    // ボタンが表示されていることを確認
+    expect(submitButton).toBeVisible()
+    expect(cancelButton).toBeVisible()
+    
+    // フォームアクションコンテナ内に配置されていることを確認
+    const formActions = document.querySelector('.form-actions')
+    expect(formActions).toContainElement(submitButton)
+    expect(formActions).toContainElement(cancelButton)
+  })
+
+  test('should show Japanese validation error messages', async () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // タイトルを空のままでフォーム送信
+    fireEvent.submit(screen.getByRole('form'))
+    
+    // 日本語バリデーションエラーメッセージが表示される
+    await waitFor(() => {
+      expect(screen.getByText(/タスクタイトルは必須です/i)).toBeInTheDocument()
+    })
+    
+    // 英語エラーメッセージが表示されないことを確認
+    expect(screen.queryByText(/title is required/i)).not.toBeInTheDocument()
+  })
+})
