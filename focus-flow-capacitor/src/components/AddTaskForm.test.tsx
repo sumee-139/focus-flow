@@ -234,3 +234,101 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
     expect(screen.queryByText(/title is required/i)).not.toBeInTheDocument()
   })
 })
+
+// 🔴 Red Phase - スリムデザイン版テスト（タスクカード準拠）
+describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
+  test('should have compact task-card style layout', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    const form = screen.getByRole('form')
+    
+    // タスクカード準拠のコンパクトスタイル確認
+    expect(form).toHaveClass('add-task-form-slim')
+    
+    // 統一アイコンの存在確認（Design Philosophy準拠）
+    expect(form).toContainElement(document.querySelector('.task-icon'))
+    
+    // 横並びレイアウトの確認
+    const mainRow = form.querySelector('.form-main-row')
+    expect(mainRow).toBeInTheDocument()
+  })
+
+  test('should have inline form fields like task card', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // インライン要素の確認
+    const titleInput = screen.getByLabelText(/タスクタイトル/i)
+    const minutesInput = screen.getByLabelText(/見積時間/i)
+    
+    // プレースホルダーによるラベル代替
+    expect(titleInput).toHaveAttribute('placeholder', 'タスクタイトルを入力...')
+    expect(minutesInput).toHaveAttribute('placeholder', '分')
+    
+    // コンパクトなサイズ
+    expect(minutesInput).toHaveClass('compact-input')
+  })
+
+  test('should have collapsible advanced fields', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // 詳細オプション展開ボタンの確認
+    const expandButton = screen.getByRole('button', { name: /詳細オプション/i })
+    expect(expandButton).toBeInTheDocument()
+    
+    // 初期状態では詳細フィールドが非表示
+    expect(screen.queryByLabelText(/説明/i)).not.toBeVisible()
+    expect(screen.queryByLabelText(/アラーム時刻/i)).not.toBeVisible()
+    expect(screen.queryByLabelText(/タグ/i)).not.toBeVisible()
+    
+    // 展開ボタンクリック
+    fireEvent.click(expandButton)
+    
+    // 詳細フィールドが表示される
+    expect(screen.getByLabelText(/説明/i)).toBeVisible()
+    expect(screen.getByLabelText(/アラーム時刻/i)).toBeVisible()
+    expect(screen.getByLabelText(/タグ/i)).toBeVisible()
+  })
+
+  test('should have compact action buttons similar to task card', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // コンパクトなアクションボタン
+    const addButton = screen.getByRole('button', { name: /追加/i })
+    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
+    
+    expect(addButton).toHaveClass('btn-compact')
+    expect(cancelButton).toHaveClass('btn-compact')
+    
+    // タスクカードと同じサイズ感
+    const actionsContainer = addButton.closest('.form-actions')
+    expect(actionsContainer).toHaveClass('actions-compact')
+  })
+
+  test('should maintain task card visual consistency', () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    const form = screen.getByRole('form')
+    
+    // タスクカードと同じ境界線・角丸・パディング
+    expect(form).toHaveClass('add-task-form-slim')
+    
+    // 統一アイコンの確認（📝）
+    const taskIcon = form.querySelector('.task-icon')
+    expect(taskIcon).toHaveTextContent('📝')
+  })
+})
