@@ -10,10 +10,10 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // 必須フィールドの存在確認（日本語ラベル対応）
+    // 必須フィールドの存在確認（スリムデザイン対応）
     expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/見積時間/i)).toBeInTheDocument()
-    expect(screen.getByText(/タスクを追加/i)).toBeInTheDocument()
+    expect(screen.getByText(/追加/i)).toBeInTheDocument()
     expect(screen.getByText(/キャンセル/i)).toBeInTheDocument()
   })
 

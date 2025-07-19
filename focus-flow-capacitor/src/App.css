@@ -101,14 +101,30 @@ body {
   overflow: hidden;
 }
 
-/* Tasks Sidebar (30%) */
+/* Tasks Sidebar (30%) - フォーム固定表示対応 */
 .tasks-sidebar {
   width: 30%;
   min-width: 300px;
   border-right: 1px solid var(--border);
-  padding: 20px;
-  overflow-y: auto;
   background-color: var(--light-gray);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 0 20px; /* 下のpaddingを削除 */
+}
+
+/* フォーム固定表示エリア */
+.form-fixed-area {
+  flex-shrink: 0; /* 縮小されない */
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* スクロール可能なタスクリストエリア */
+.tasks-scrollable-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px; /* 下部の余白 */
 }
 
 .tasks-sidebar h3 {
@@ -496,7 +512,201 @@ textarea:focus {
   outline-offset: 2px;
 }
 
-/* AddTaskForm - Design Philosophy準拠スタイル */
+/* AddTaskForm - スリムデザイン版（タスクカード準拠） */
+.add-task-form-slim {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  margin-bottom: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim:hover {
+  border-color: var(--focus-color);
+}
+
+/* メインレイアウト（タスクカード風） */
+.add-task-form-slim .form-main-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 統一アイコン（TaskItemと同じ） */
+.add-task-form-slim .task-icon {
+  font-size: 18px;
+  user-select: none;
+}
+
+/* コンテンツエリア */
+.add-task-form-slim .form-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-task-form-slim .title-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--background);
+  color: var(--primary-text);
+  margin-bottom: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim .title-input:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+/* メタ情報エリア（TaskItemのtask-metaと同じ） */
+.add-task-form-slim .form-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+
+.add-task-form-slim .compact-input {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: center;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.add-task-form-slim .compact-input:focus {
+  border-color: var(--focus-color);
+  outline: none;
+}
+
+.add-task-form-slim .time-label {
+  margin-left: 4px;
+}
+
+.add-task-form-slim .expand-button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--secondary-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-task-form-slim .expand-button:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+/* コンパクトアクションボタン（TaskItemと同じサイズ感） */
+.add-task-form-slim .actions-compact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-task-form-slim .btn-compact {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.add-task-form-slim .btn-compact.btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.add-task-form-slim .btn-compact.btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+.add-task-form-slim .btn-compact.btn-secondary {
+  background-color: var(--background);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.add-task-form-slim .btn-compact.btn-secondary:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+/* 詳細オプション（展開時のみ表示） */
+.add-task-form-slim .form-advanced {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.add-task-form-slim .form-advanced .form-group {
+  margin-bottom: 12px;
+}
+
+.add-task-form-slim .form-advanced .form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.add-task-form-slim .form-advanced .form-row .form-group {
+  flex: 1;
+}
+
+.add-task-form-slim .form-advanced label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary-text);
+  margin-bottom: 4px;
+}
+
+.add-task-form-slim .form-advanced input,
+.add-task-form-slim .form-advanced textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim .form-advanced input:focus,
+.add-task-form-slim .form-advanced textarea:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+.add-task-form-slim .form-advanced textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+/* 従来の大きなフォーム（後方互換性のため残す） */
 .add-task-form {
   display: flex;
   flex-direction: column;

@@ -344,31 +344,32 @@ function App() {
 
         <div className="main-layout">
           {/* Tasks Sidebar (30% - Design Philosophy準拠) */}
-          <aside className="tasks-sidebar">
+          <aside className="tasks-sidebar" data-testid="tasks-section">
             <h3>Today's Tasks</h3>
-            <div className="tasks-list">
-              {state.tasks.map(task => (
-                <TaskItem
-                  key={task.id}
-                  task={task}
-                  onToggle={handleToggleTask}
-                  onEdit={handleEditTask}
-                  onDelete={handleDeleteTask}
-                  onReorder={handleReorderTask}
-                />
-              ))}
-            </div>
             
-            {state.ui.isAddingTask ? (
+            {/* フォーム固定表示エリア */}
+            <div className="form-fixed-area" data-testid="form-fixed-area">
               <AddTaskForm
                 onAdd={handleAddTask}
-                onCancel={handleCancelAddTask}
+                onCancel={() => {}} // キャンセル不要（常時表示）
               />
-            ) : (
-              <button className="add-task-btn" onClick={handleShowAddTask}>
-                + Add Task
-              </button>
-            )}
+            </div>
+            
+            {/* スクロール可能なタスクリストエリア */}
+            <div className="tasks-scrollable-area" data-testid="tasks-scrollable-area">
+              <div className="tasks-list">
+                {state.tasks.map(task => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    onToggle={handleToggleTask}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                    onReorder={handleReorderTask}
+                  />
+                ))}
+              </div>
+            </div>
           </aside>
 
           {/* Daily Memo Editor (70% - Design Philosophy必須) */}
