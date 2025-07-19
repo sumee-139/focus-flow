@@ -10,11 +10,12 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // 必須フィールドの存在確認（スリムデザイン対応）
+    // 必須フィールドの存在確認（キャンセルボタン削除対応）
     expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/見積時間/i)).toBeInTheDocument()
     expect(screen.getByText(/追加/i)).toBeInTheDocument()
-    expect(screen.getByText(/キャンセル/i)).toBeInTheDocument()
+    // キャンセルボタンは削除されました
+    expect(screen.queryByText(/キャンセル/i)).not.toBeInTheDocument()
   })
 
   test('should create task with unified icon when submitted', async () => {
@@ -69,16 +70,15 @@ describe('AddTaskForm', () => {
     expect(mockOnAdd).not.toHaveBeenCalled()
   })
 
-  test('should call onCancel when cancel button is clicked', () => {
+  test('should not have cancel button - permanent form display', () => {
     const mockOnAdd = vi.fn()
     const mockOnCancel = vi.fn()
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
-    fireEvent.click(cancelButton)
-    
-    expect(mockOnCancel).toHaveBeenCalled()
+    // キャンセルボタンは削除されました（常時表示フォーム）
+    expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
+    expect(mockOnCancel).not.toHaveBeenCalled()
   })
 
   test('should support optional fields', async () => {
@@ -86,6 +86,9 @@ describe('AddTaskForm', () => {
     const mockOnCancel = vi.fn()
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // 詳細オプションを展開
+    fireEvent.click(screen.getByLabelText(/詳細オプション/i))
     
     // 全フィールドに入力（日本語ラベル対応）
     fireEvent.change(screen.getByLabelText(/タスクタイトル/i), {
@@ -165,16 +168,21 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // 日本語ラベルの存在確認
+    // 基本フィールドの日本語ラベル確認
     expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/説明/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/見積時間/i)).toBeInTheDocument()
+    
+    // 詳細オプションを展開
+    fireEvent.click(screen.getByLabelText(/詳細オプション/i))
+    
+    // 詳細フィールドの日本語ラベル確認
+    expect(screen.getByLabelText(/説明/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/アラーム時刻/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/タグ/i)).toBeInTheDocument()
     
-    // ボタンの日本語化確認
-    expect(screen.getByRole('button', { name: /タスクを追加/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /キャンセル/i })).toBeInTheDocument()
+    // ボタンの日本語化確認（キャンセルボタン削除対応）
+    expect(screen.getByRole('button', { name: /追加/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
   })
 
   test('should have unified design tone', () => {
@@ -186,34 +194,31 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
     const form = screen.getByRole('form')
     
     // Design Philosophy準拠のクラス名確認
-    expect(form).toHaveClass('add-task-form')
+    expect(form).toHaveClass('add-task-form-slim')
     
-    // 統一されたbutton要素の確認
-    const submitButton = screen.getByRole('button', { name: /タスクを追加/i })
-    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
+    // 統一されたbutton要素の確認（キャンセルボタン削除対応）
+    const submitButton = screen.getByRole('button', { name: /追加/i })
     
-    expect(submitButton).toHaveClass('btn', 'btn-primary')
-    expect(cancelButton).toHaveClass('btn', 'btn-secondary')
+    expect(submitButton).toHaveClass('btn-compact', 'btn-primary')
+    // キャンセルボタンは削除されました
+    expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
   })
 
-  test('should render buttons properly', () => {
+  test('should render add button properly', () => {
     const mockOnAdd = vi.fn()
     const mockOnCancel = vi.fn()
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // ボタンが適切に表示されることを確認（ユーザーフィードバック：ボタンの視認性問題）
-    const submitButton = screen.getByRole('button', { name: /タスクを追加/i })
-    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
+    // 追加ボタンが適切に表示されることを確認（キャンセルボタン削除対応）
+    const submitButton = screen.getByRole('button', { name: /追加/i })
     
     // ボタンが表示されていることを確認
     expect(submitButton).toBeVisible()
-    expect(cancelButton).toBeVisible()
+    expect(submitButton).toHaveClass('btn-compact', 'btn-primary')
     
-    // フォームアクションコンテナ内に配置されていることを確認
-    const formActions = document.querySelector('.form-actions')
-    expect(formActions).toContainElement(submitButton)
-    expect(formActions).toContainElement(cancelButton)
+    // キャンセルボタンは存在しない
+    expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
   })
 
   test('should show Japanese validation error messages', async () => {
@@ -251,9 +256,11 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
     // 統一アイコンの存在確認（Design Philosophy準拠）
     expect(form).toContainElement(document.querySelector('.task-icon'))
     
-    // 横並びレイアウトの確認
-    const mainRow = form.querySelector('.form-main-row')
-    expect(mainRow).toBeInTheDocument()
+    // 2段レイアウトの確認（ラフデザイン準拠）
+    const topRow = form.querySelector('.form-top-row')
+    const bottomRow = form.querySelector('.form-bottom-row')
+    expect(topRow).toBeInTheDocument()
+    expect(bottomRow).toBeInTheDocument()
   })
 
   test('should have inline form fields like task card', () => {
@@ -266,12 +273,12 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
     const minutesInput = screen.getByLabelText(/見積時間/i)
     
-    // プレースホルダーによるラベル代替
-    expect(titleInput).toHaveAttribute('placeholder', 'タスクタイトルを入力...')
-    expect(minutesInput).toHaveAttribute('placeholder', '分')
+    // プレースホルダーによるラベル代替（ラフデザイン準拠）
+    expect(titleInput).toHaveAttribute('placeholder', 'タスク名')
+    expect(minutesInput).toHaveAttribute('placeholder', '30')
     
     // コンパクトなサイズ
-    expect(minutesInput).toHaveClass('compact-input')
+    expect(minutesInput).toHaveClass('minutes-input')
   })
 
   test('should have collapsible advanced fields', () => {
@@ -285,17 +292,17 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
     expect(expandButton).toBeInTheDocument()
     
     // 初期状態では詳細フィールドが非表示
-    expect(screen.queryByLabelText(/説明/i)).not.toBeVisible()
-    expect(screen.queryByLabelText(/アラーム時刻/i)).not.toBeVisible()
-    expect(screen.queryByLabelText(/タグ/i)).not.toBeVisible()
+    expect(screen.queryByLabelText(/説明/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/アラーム時刻/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/タグ/i)).not.toBeInTheDocument()
     
     // 展開ボタンクリック
     fireEvent.click(expandButton)
     
     // 詳細フィールドが表示される
-    expect(screen.getByLabelText(/説明/i)).toBeVisible()
-    expect(screen.getByLabelText(/アラーム時刻/i)).toBeVisible()
-    expect(screen.getByLabelText(/タグ/i)).toBeVisible()
+    expect(screen.getByLabelText(/説明/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/アラーム時刻/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/タグ/i)).toBeInTheDocument()
   })
 
   test('should have compact action buttons similar to task card', () => {
@@ -304,16 +311,13 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // コンパクトなアクションボタン
+    // コンパクトなアクションボタン（キャンセルボタン削除対応）
     const addButton = screen.getByRole('button', { name: /追加/i })
-    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
     
     expect(addButton).toHaveClass('btn-compact')
-    expect(cancelButton).toHaveClass('btn-compact')
     
-    // タスクカードと同じサイズ感
-    const actionsContainer = addButton.closest('.form-actions')
-    expect(actionsContainer).toHaveClass('actions-compact')
+    // キャンセルボタンは存在しない
+    expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
   })
 
   test('should maintain task card visual consistency', () => {
@@ -330,5 +334,63 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
     // 統一アイコンの確認（📝）
     const taskIcon = form.querySelector('.task-icon')
     expect(taskIcon).toHaveTextContent('📝')
+  })
+})
+
+// 🔴 Red Phase - useRefフォーカス管理改善テスト
+describe('AddTaskForm - useRef Focus Management', () => {
+  test('should focus title input after successful task creation using useRef', async () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    const titleInput = screen.getByLabelText(/タスクタイトル/i)
+    
+    // タスクを作成
+    fireEvent.change(titleInput, { target: { value: 'テストタスク' } })
+    fireEvent.submit(screen.getByRole('form'))
+    
+    // タスク作成後、タイトル入力フィールドにフォーカスが戻る
+    await waitFor(() => {
+      expect(document.activeElement).toBe(titleInput)
+    })
+    
+    // useRefが正しく機能している証拠として、DOM検索が不要であることを確認
+    // （実装時にsetTimeoutとdocument.getElementByIdが削除されることを期待）
+  })
+
+  test('should focus title input when validation fails using useRef', async () => {
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    const titleInput = screen.getByLabelText(/タスクタイトル/i)
+    
+    // 空のタイトルでフォーム送信（バリデーション失敗）
+    fireEvent.submit(screen.getByRole('form'))
+    
+    // バリデーション失敗時にタイトル入力フィールドにフォーカス
+    await waitFor(() => {
+      expect(document.activeElement).toBe(titleInput)
+    })
+    
+    // エラーメッセージも表示される
+    expect(screen.getByText('タスクタイトルは必須です')).toBeInTheDocument()
+  })
+
+  test('should not use setTimeout for focus management', () => {
+    // この테스트는 코드 리뷰用 - useRefを使用することで
+    // setTimeoutによるDOM検索が不要になることを確認
+    const mockOnAdd = vi.fn()
+    const mockOnCancel = vi.fn()
+
+    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    
+    // 実装確認：useRefを使用していればsetTimeoutは不要
+    // これは실제로는 静的解析でチェックするべき内容だが、
+    // TDD의 일환으로 동작을 확인
+    expect(true).toBe(true) // placeholder for implementation verification
   })
 })

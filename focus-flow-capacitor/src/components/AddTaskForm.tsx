@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import type { Task } from '../types/Task'
 
@@ -8,6 +8,9 @@ interface AddTaskFormProps {
 }
 
 export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => {
+  // useRefでDOM要素への参照を作成
+  const titleInputRef = useRef<HTMLInputElement>(null)
+  
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [estimatedMinutes, setEstimatedMinutes] = useState(30)
@@ -16,6 +19,16 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
   const [error, setError] = useState('')
   const [showAdvanced, setShowAdvanced] = useState(false)
 
+  // フォームリセット処理を関数に切り出し（Refactor Phase）
+  const resetForm = () => {
+    setTitle('')
+    setDescription('')
+    setEstimatedMinutes(30)
+    setAlarmTime('')
+    setTags('')
+    setError('')
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -23,6 +36,8 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
     // バリデーション
     if (!title.trim()) {
       setError('タスクタイトルは必須です')
+      // useRefを使ったフォーカス管理（エラー時）
+      titleInputRef.current?.focus()
       return
     }
 
@@ -42,82 +57,71 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => 
 
     onAdd(newTask)
     
-    // フォームリセット
-    setTitle('')
-    setDescription('')
-    setEstimatedMinutes(30)
-    setAlarmTime('')
-    setTags('')
+    // フォームリセット（Refactor: 関数に切り出し）
+    resetForm()
     
-    // フォーカス管理：タイトル入力フィールドにフォーカスを戻す
-    setTimeout(() => {
-      const titleInput = document.getElementById('task-title')
-      if (titleInput) {
-        titleInput.focus()
-      }
-    }, 0)
+    // useRefを使ったフォーカス管理（成功時）
+    titleInputRef.current?.focus()
   }
 
   return (
     <form onSubmit={handleSubmit} className="add-task-form-slim" role="form">
       {error && <div className="error-message">{error}</div>}
       
-      {/* メインレイアウト：タスクカード準拠 */}
-      <div className="form-main-row">
+      {/* 上段：アイコン + タスク名 */}
+      <div className="form-top-row">
         {/* 統一アイコン（Design Philosophy必須要件） */}
         <div className="task-icon">
           📝
         </div>
         
-        {/* タイトル入力（インライン） */}
-        <div className="form-content">
-          <input
-            id="task-title"
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="タスクタイトルを入力..."
-            required
-            className="title-input"
-            aria-label="タスクタイトル"
-          />
-          
-          {/* メタ情報エリア */}
-          <div className="form-meta">
-            <input
-              id="estimated-minutes"
-              type="number"
-              value={estimatedMinutes}
-              onChange={(e) => setEstimatedMinutes(Number(e.target.value))}
-              min="1"
-              step="1"
-              placeholder="分"
-              className="compact-input"
-              aria-label="見積時間"
-            />
-            <span className="time-label">分</span>
-            
-            {/* 詳細オプション展開ボタン */}
-            <button
-              type="button"
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="expand-button"
-              aria-label="詳細オプション"
-            >
-              {showAdvanced ? '▲' : '▼'} 詳細
-            </button>
-          </div>
-        </div>
+        {/* タイトル入力（メイン） */}
+        <input
+          ref={titleInputRef}
+          id="task-title"
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="タスク名"
+          required
+          className="title-input-main"
+          aria-label="タスクタイトル"
+        />
+      </div>
 
+      {/* 下段：分・詳細・追加 */}
+      <div className="form-bottom-row">
+        {/* 見積時間入力 */}
+        <input
+          id="estimated-minutes"
+          type="number"
+          value={estimatedMinutes}
+          onChange={(e) => setEstimatedMinutes(Number(e.target.value))}
+          min="1"
+          step="1"
+          placeholder="30"
+          className="minutes-input"
+          aria-label="見積時間"
+        />
+        <span className="time-label">分</span>
+        
+        {/* 詳細オプション展開ボタン */}
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="expand-button"
+          aria-label="詳細オプション"
+        >
+          詳細
+        </button>
+        
+        {/* 可変幅スペーサー */}
+        <div className="spacer"></div>
+        
         {/* アクションボタン */}
-        <div className="form-actions actions-compact">
-          <button type="submit" className="btn-compact btn-primary">
-            追加
-          </button>
-          <button type="button" onClick={onCancel} className="btn-compact btn-secondary">
-            キャンセル
-          </button>
-        </div>
+        <button type="submit" className="btn-compact btn-primary">
+          追加
+        </button>
       </div>
 
       {/* 詳細オプション（展開可能） */}
