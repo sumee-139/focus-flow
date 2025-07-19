@@ -20,6 +20,19 @@ export interface DailyMemo {
   updatedAt: Date;
 }
 
+export interface TaskMemoData {
+  taskId: string;
+  content: string;
+  lastUpdated: string; // ISO string
+  taskSnapshot: {
+    title: string;
+    description?: string;
+    tags: string[];
+    estimatedMinutes: number;
+    createdAt: Date;
+  };
+}
+
 export interface FocusSession {
   id: string;
   duration: number; // minutes
@@ -36,11 +49,6 @@ export interface AppState {
     isActive: boolean;
     currentSession?: FocusSession;
     remainingTime?: number;
-  };
-  dailyMemo: {
-    date: string;
-    content: string;
-    lastSaved: Date;
   };
   ui: {
     selectedTask?: string;
@@ -63,8 +71,6 @@ export type AppAction =
   | { type: 'REORDER_TASKS'; payload: { dragIndex: number; hoverIndex: number } }
   | { type: 'START_FOCUS'; payload: { duration: number; taskId?: string } }
   | { type: 'END_FOCUS' }
-  | { type: 'UPDATE_MEMO'; payload: { date: string; content: string } }
-  | { type: 'SAVE_MEMO'; payload: { date: string; content: string } }
   | { type: 'SET_UI_STATE'; payload: Partial<AppState['ui']> }
   | { type: 'SHOW_DELETE_CONFIRM'; payload: string }
   | { type: 'HIDE_DELETE_CONFIRM' };

@@ -5,6 +5,7 @@ import type { AppState, AppAction, Task } from './types/Task'
 import { TaskItem } from './components/TaskItem'
 import { AddTaskForm } from './components/AddTaskForm'
 import { ConfirmDialog } from './components/ConfirmDialog'
+import { DailyMemo } from './components/DailyMemo'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import './App.css'
 
@@ -40,11 +41,6 @@ const getInitialState = (tasks: Task[]): AppState => ({
   tasks,
   focusMode: {
     isActive: false
-  },
-  dailyMemo: {
-    date: new Date().toISOString().split('T')[0],
-    content: '# 今日の集中ポイント\n\n- フォーカスモードでの作業に集中\n- 通知を最小限に抑える\n\n## 気づき\n\n集中できる環境作りの重要性を実感',
-    lastSaved: new Date()
   },
   ui: {
     isAddingTask: false,
@@ -102,15 +98,6 @@ function appReducer(state: AppState, action: AppAction): AppState {
         focusMode: {
           ...state.focusMode,
           isActive: false
-        }
-      }
-    case 'UPDATE_MEMO':
-      return {
-        ...state,
-        dailyMemo: {
-          ...state.dailyMemo,
-          content: action.payload.content,
-          lastSaved: new Date()
         }
       }
     case 'SET_UI_STATE':
@@ -311,17 +298,7 @@ function App() {
     // TODO: Implement reorder functionality
   }
 
-  const handleShowAddTask = () => {
-    dispatch({ type: 'SET_UI_STATE', payload: { isAddingTask: true } })
-  }
 
-  const handleCancelAddTask = () => {
-    dispatch({ type: 'SET_UI_STATE', payload: { isAddingTask: false } })
-  }
-
-  const handleMemoChange = (content: string) => {
-    dispatch({ type: 'UPDATE_MEMO', payload: { date: state.dailyMemo.date, content } })
-  }
 
   return (
     <div className="app">
@@ -349,10 +326,7 @@ function App() {
             
             {/* フォーム固定表示エリア */}
             <div className="form-fixed-area" data-testid="form-fixed-area">
-              <AddTaskForm
-                onAdd={handleAddTask}
-                onCancel={() => {}} // キャンセル不要（常時表示）
-              />
+              <AddTaskForm onAdd={handleAddTask} />
             </div>
             
             {/* スクロール可能なタスクリストエリア */}
@@ -374,16 +348,7 @@ function App() {
 
           {/* Daily Memo Editor (70% - Design Philosophy必須) */}
           <main className="memo-editor">
-            <h3>Daily Memo</h3>
-            <textarea
-              className="markdown-editor"
-              value={state.dailyMemo.content}
-              onChange={(e) => handleMemoChange(e.target.value)}
-              placeholder="# 今日の集中ポイント\n\n思考を自由に記録してください...\n\nMarkdown形式で書けます。"
-            />
-            <div className="memo-info">
-              最終保存: {state.dailyMemo.lastSaved.toLocaleTimeString()}
-            </div>
+            <DailyMemo />
           </main>
         </div>
 

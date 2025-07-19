@@ -4,10 +4,9 @@ import type { Task } from '../types/Task'
 
 interface AddTaskFormProps {
   onAdd: (task: Task) => void;
-  onCancel: () => void;
 }
 
-export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, onCancel }) => {
+export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
   // useRefでDOM要素への参照を作成
   const titleInputRef = useRef<HTMLInputElement>(null)
   

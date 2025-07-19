@@ -65,11 +65,11 @@ describe('App - LocalStorage Integration', () => {
 
     render(<App />)
 
-    // Add Taskボタンをクリック
-    fireEvent.click(screen.getByText('+ Add Task'))
+    // 追加ボタンをクリック（Phase 2.1: slim design対応）
+    fireEvent.click(screen.getByRole('button', { name: /追加/i }))
 
-    // フォームに入力
-    fireEvent.change(screen.getByLabelText(/title/i), {
+    // フォームに入力（Phase 2.1: 日本語ラベル対応）
+    fireEvent.change(screen.getByLabelText(/タスクタイトル/i), {
       target: { value: 'New Task from Test' }
     })
 

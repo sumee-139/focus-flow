@@ -1,6 +1,6 @@
 # Active Agent
 
-## Current Agent: planner
+## Current Agent: builder
 
 Last updated: 2025-07-19
-Status: Phase 2.1 design consultation needed for memo integration system
+Status: Phase 2.1b実装開始 - v4.0仕様書準備完了

@@ -6,9 +6,8 @@ import { AddTaskForm } from './AddTaskForm'
 describe('AddTaskForm', () => {
   test('should render add task form with required fields', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 必須フィールドの存在確認（キャンセルボタン削除対応）
     expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
@@ -20,9 +19,8 @@ describe('AddTaskForm', () => {
 
   test('should create task with unified icon when submitted', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // フォームに入力（日本語ラベル対応）
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
@@ -54,9 +52,8 @@ describe('AddTaskForm', () => {
 
   test('should not allow submission with empty title', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // タイトルを空のままでフォーム送信
     fireEvent.submit(screen.getByRole('form'))
@@ -72,20 +69,17 @@ describe('AddTaskForm', () => {
 
   test('should not have cancel button - permanent form display', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // キャンセルボタンは削除されました（常時表示フォーム）
     expect(screen.queryByRole('button', { name: /キャンセル/i })).not.toBeInTheDocument()
-    expect(mockOnCancel).not.toHaveBeenCalled()
   })
 
   test('should support optional fields', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 詳細オプションを展開
     fireEvent.click(screen.getByLabelText(/詳細オプション/i))
@@ -122,9 +116,8 @@ describe('AddTaskForm', () => {
 
   test('should comply with Design Philosophy - no priority or deadline fields', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // Design Philosophy禁止フィールドが存在しないことを確認
     expect(screen.queryByLabelText(/priority/i)).not.toBeInTheDocument()
@@ -138,9 +131,8 @@ describe('AddTaskForm', () => {
 describe('TaskForm - 改修版 (Phase 2.1)', () => {
   test('should accept valid estimated minutes input', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // ユーザーフィードバック：30分で「有効な値を入力してください」エラーが出る問題
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
@@ -164,9 +156,8 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 
   test('should display proper Japanese labels', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 基本フィールドの日本語ラベル確認
     expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
@@ -187,9 +178,8 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 
   test('should have unified design tone', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     const form = screen.getByRole('form')
     
@@ -206,9 +196,8 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 
   test('should render add button properly', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 追加ボタンが適切に表示されることを確認（キャンセルボタン削除対応）
     const submitButton = screen.getByRole('button', { name: /追加/i })
@@ -223,9 +212,8 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 
   test('should show Japanese validation error messages', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // タイトルを空のままでフォーム送信
     fireEvent.submit(screen.getByRole('form'))
@@ -244,9 +232,8 @@ describe('TaskForm - 改修版 (Phase 2.1)', () => {
 describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
   test('should have compact task-card style layout', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     const form = screen.getByRole('form')
     
@@ -265,9 +252,8 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 
   test('should have inline form fields like task card', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // インライン要素の確認
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
@@ -283,9 +269,8 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 
   test('should have collapsible advanced fields', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 詳細オプション展開ボタンの確認
     const expandButton = screen.getByRole('button', { name: /詳細オプション/i })
@@ -307,9 +292,8 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 
   test('should have compact action buttons similar to task card', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // コンパクトなアクションボタン（キャンセルボタン削除対応）
     const addButton = screen.getByRole('button', { name: /追加/i })
@@ -322,9 +306,8 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 
   test('should maintain task card visual consistency', () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     const form = screen.getByRole('form')
     
@@ -341,9 +324,8 @@ describe('AddTaskForm - スリムデザイン版 (TaskCard準拠)', () => {
 describe('AddTaskForm - useRef Focus Management', () => {
   test('should focus title input after successful task creation using useRef', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
     
@@ -362,9 +344,8 @@ describe('AddTaskForm - useRef Focus Management', () => {
 
   test('should focus title input when validation fails using useRef', async () => {
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     const titleInput = screen.getByLabelText(/タスクタイトル/i)
     
@@ -384,9 +365,8 @@ describe('AddTaskForm - useRef Focus Management', () => {
     // この테스트는 코드 리뷰用 - useRefを使用することで
     // setTimeoutによるDOM検索が不要になることを確認
     const mockOnAdd = vi.fn()
-    const mockOnCancel = vi.fn()
 
-    render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
+    render(<AddTaskForm onAdd={mockOnAdd} />)
     
     // 実装確認：useRefを使用していればsetTimeoutは不要
     // これは실제로는 静的解析でチェックするべき内容だが、
