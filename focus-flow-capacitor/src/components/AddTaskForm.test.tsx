@@ -10,11 +10,11 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // 必須フィールドの存在確認
-    expect(screen.getByLabelText(/task title/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/estimated minutes/i)).toBeInTheDocument()
-    expect(screen.getByText(/add task/i)).toBeInTheDocument()
-    expect(screen.getByText(/cancel/i)).toBeInTheDocument()
+    // 必須フィールドの存在確認（日本語ラベル対応）
+    expect(screen.getByLabelText(/タスクタイトル/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/見積時間/i)).toBeInTheDocument()
+    expect(screen.getByText(/タスクを追加/i)).toBeInTheDocument()
+    expect(screen.getByText(/キャンセル/i)).toBeInTheDocument()
   })
 
   test('should create task with unified icon when submitted', async () => {
@@ -23,9 +23,9 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // フォームに入力
-    const titleInput = screen.getByLabelText(/task title/i)
-    const minutesInput = screen.getByLabelText(/estimated minutes/i)
+    // フォームに入力（日本語ラベル対応）
+    const titleInput = screen.getByLabelText(/タスクタイトル/i)
+    const minutesInput = screen.getByLabelText(/見積時間/i)
     
     fireEvent.change(titleInput, {
       target: { value: 'Test Task' }
@@ -60,9 +60,9 @@ describe('AddTaskForm', () => {
     // タイトルを空のままでフォーム送信
     fireEvent.submit(screen.getByRole('form'))
     
-    // バリデーションエラーメッセージが表示される
+    // 日本語バリデーションエラーメッセージが表示される
     await waitFor(() => {
-      expect(screen.getByText(/title is required/i)).toBeInTheDocument()
+      expect(screen.getByText(/タスクタイトルは必須です/i)).toBeInTheDocument()
     })
     
     // onAddが呼ばれないことを確認
@@ -75,7 +75,7 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    const cancelButton = screen.getByRole('button', { name: /cancel/i })
+    const cancelButton = screen.getByRole('button', { name: /キャンセル/i })
     fireEvent.click(cancelButton)
     
     expect(mockOnCancel).toHaveBeenCalled()
@@ -87,20 +87,20 @@ describe('AddTaskForm', () => {
 
     render(<AddTaskForm onAdd={mockOnAdd} onCancel={mockOnCancel} />)
     
-    // 全フィールドに入力
-    fireEvent.change(screen.getByLabelText(/task title/i), {
+    // 全フィールドに入力（日本語ラベル対応）
+    fireEvent.change(screen.getByLabelText(/タスクタイトル/i), {
       target: { value: 'Complex Task' }
     })
-    fireEvent.change(screen.getByLabelText(/description/i), {
+    fireEvent.change(screen.getByLabelText(/説明/i), {
       target: { value: 'Task description' }
     })
-    fireEvent.change(screen.getByLabelText(/estimated minutes/i), {
+    fireEvent.change(screen.getByLabelText(/見積時間/i), {
       target: { value: '60' }
     })
-    fireEvent.change(screen.getByLabelText(/alarm time/i), {
+    fireEvent.change(screen.getByLabelText(/アラーム時刻/i), {
       target: { value: '14:30' }
     })
-    fireEvent.change(screen.getByLabelText(/tags/i), {
+    fireEvent.change(screen.getByLabelText(/タグ/i), {
       target: { value: 'work,urgent' }
     })
     

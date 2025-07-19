@@ -495,3 +495,161 @@ textarea:focus {
 *:focus {
   outline-offset: 2px;
 }
+
+/* AddTaskForm - Design Philosophy準拠スタイル */
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.add-task-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-task-form .form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-text);
+  margin: 0;
+}
+
+.add-task-form .form-group input,
+.add-task-form .form-group textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-task-form .form-group input:focus,
+.add-task-form .form-group textarea:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+.add-task-form .form-group input[type="number"] {
+  width: 120px;
+}
+
+.add-task-form .form-group input[type="time"] {
+  width: 160px;
+}
+
+.add-task-form .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.add-task-form .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.add-task-form .btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+  min-width: 120px;
+}
+
+.add-task-form .btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.add-task-form .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+.add-task-form .btn-secondary {
+  background-color: var(--background);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.add-task-form .btn-secondary:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+.add-task-form .error-message {
+  padding: 12px;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Mobile responsive for AddTaskForm */
+@media (max-width: 768px) {
+  .add-task-form {
+    padding: 16px;
+    margin: 0;
+  }
+  
+  .add-task-form .form-group input[type="number"],
+  .add-task-form .form-group input[type="time"] {
+    width: 100%;
+  }
+  
+  .add-task-form .form-actions {
+    flex-direction: column;
+  }
+  
+  .add-task-form .btn {
+    width: 100%;
+  }
+}
+
+/* Accessibility improvements for AddTaskForm */
+@media (prefers-reduced-motion: reduce) {
+  .add-task-form .form-group input,
+  .add-task-form .form-group textarea,
+  .add-task-form .btn {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .add-task-form .form-group input,
+  .add-task-form .form-group textarea {
+    border-color: #000000;
+  }
+  
+  .add-task-form .form-group input:focus,
+  .add-task-form .form-group textarea:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .add-task-form .error-message {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #991b1b;
+  }
+}
