@@ -164,4 +164,23 @@ describe('DailyMemo - データ永続化', () => {
       expect.stringMatching(/"content":"Test memo with spaces"/)
     )
   })
+
+  test('should display standalone header when not embedded', () => {
+    render(<DailyMemo embedded={false} />)
+    
+    const header = screen.getByRole('heading', { level: 2 })
+    expect(header).toBeInTheDocument()
+    expect(header).toHaveTextContent('📝 デイリーメモ')
+  })
+
+  test('should hide header when embedded in panel', () => {
+    render(<DailyMemo embedded={true} />)
+    
+    const header = screen.queryByRole('heading', { level: 2 })
+    expect(header).not.toBeInTheDocument()
+    
+    // But textarea should still be present
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    expect(textarea).toBeInTheDocument()
+  })
 })

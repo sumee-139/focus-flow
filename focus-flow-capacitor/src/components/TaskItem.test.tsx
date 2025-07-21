@@ -112,7 +112,7 @@ describe('TaskItem', () => {
     render(<TaskItem task={completedTask} {...mockHandlers} />)
     
     // 完了状態のタスクには completed クラスが付与される
-    const taskElement = screen.getByTestId('task-item')
+    const taskElement = screen.getByTestId(`task-item-${completedTask.id}`)
     expect(taskElement).toHaveClass('completed')
     
     // チェックボックスがチェック状態
@@ -131,7 +131,7 @@ describe('TaskItem', () => {
     render(<TaskItem task={mockTask} {...mockHandlers} />)
     
     // 未完了タスクには completed クラスが付与されない
-    const taskElement = screen.getByTestId('task-item')
+    const taskElement = screen.getByTestId(`task-item-${mockTask.id}`)
     expect(taskElement).not.toHaveClass('completed')
     
     // チェックボックスが未チェック状態

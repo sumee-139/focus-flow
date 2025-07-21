@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Task, TaskMemoData } from '../types/Task'
 import { useTaskMemoStorage } from '../hooks/useTaskMemoStorage'
+import { AUTO_SAVE } from '../constants/ui'
 
-// タイミング定数
-const AUTO_SAVE_DELAY = 3000 // 自動保存の間隔（3秒）
+// タイミング定数 (統一定数を使用)
+const AUTO_SAVE_DELAY = AUTO_SAVE.DELAY_MS // 自動保存の間隔（3秒）
 
 // テキスト定数
 const MEMO_PLACEHOLDER = 'このタスクに関するメモを記録してください...'
@@ -32,22 +33,25 @@ const HEADER_BORDER_RADIUS = '0.5rem'
 
 interface TaskMemoProps {
   taskId: string
-  task: Task
+  task?: Task
   onTaskAction?: (action: 'toggle' | 'delete' | 'focus', taskId: string) => void
 }
 
-export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction }) => {
+export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: _onTaskAction }) => {
   const [content, setContent] = useState('')
   const autoSaveTimerRef = useRef<number | null>(null)
   
-  // useTaskMemoStorageのエラーハンドリング
-  let taskMemo: any = null
-  let setTaskMemo: any = () => {}
+  // タスクメモストレージ（エラーハンドリング付き）
+  let taskMemo: TaskMemoData | null = null
+  let setTaskMemo: (data: TaskMemoData) => void = () => {}
   
   try {
     [taskMemo, setTaskMemo] = useTaskMemoStorage(taskId)
   } catch (error) {
-    console.warn('Failed to initialize task memo storage:', error)
+    console.warn('Failed to load task memo storage:', error)
+    // エラー時はnull値とダミー関数を使用
+    taskMemo = null
+    setTaskMemo = () => console.warn('Task memo save skipped due to storage error')
   }
 
   // タスクスナップショットを生成する
@@ -71,13 +75,18 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction }
 
   // LocalStorageにメモを保存
   const saveMemo = (memoContent: string): void => {
+    if (!setTaskMemo) {
+      console.warn('Task memo storage not available')
+      return
+    }
+    
     try {
       const trimmedContent = memoContent.trim()
       const memoData: TaskMemoData = {
         taskId,
         content: trimmedContent,
         lastUpdated: new Date().toISOString(),
-        taskSnapshot: createTaskSnapshot(task)
+        taskSnapshot: task ? createTaskSnapshot(task) : { title: '', description: '', tags: [], estimatedMinutes: 0, createdAt: new Date() }
       }
       setTaskMemo(memoData)
     } catch (error) {
@@ -101,12 +110,18 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction }
     }, AUTO_SAVE_DELAY)
   }
 
-  // 初回ロード時に保存されたメモを復元
+  // taskIdの変更時やメモデータの変更時にコンテンツを復元
   useEffect(() => {
+    // タスク切り替え時に自動保存タイマーをクリア
+    clearAutoSaveTimer()
+    
     if (taskMemo) {
       setContent(taskMemo.content)
+    } else {
+      // taskIdが変更されて新しいタスクのメモが空の場合、contentもクリア
+      setContent('')
     }
-  }, [taskMemo])
+  }, [taskMemo, taskId])
 
   // コンポーネントアンマウント時にタイマーをクリア
   useEffect(() => {

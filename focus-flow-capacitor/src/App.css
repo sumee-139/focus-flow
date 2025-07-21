@@ -101,15 +101,217 @@ body {
   overflow: hidden;
 }
 
-/* Tasks Sidebar (30%) - フォーム固定表示対応 */
-.tasks-sidebar {
-  width: 30%;
-  min-width: 400px;
+/* New CSS Grid Layout System (39%-41%-20%) - Tasks Sidebar 400px確保 */
+.main-layout-grid {
+  display: grid;
+  grid-template-columns: 39% 41% 20%;
+  grid-template-areas: "tasks memo tabs";
+  flex: 1;
+  overflow: hidden;
+  gap: 0; /* No gap for clean layout */
+  min-height: 0; /* Grid overflow fix */
+}
+
+/* Tasks Area (39%) - Tasks Sidebar 400px確保 */
+.tasks-area-30 {
+  grid-area: tasks;
+  display: flex;
+  flex-direction: column;
   border-right: 1px solid var(--border);
   background-color: var(--light-gray);
+  min-width: 0; /* Grid overflow fix */
+  min-height: 0; /* Flexbox内でのoverflow修正 */
+  height: 100%; /* Grid内で高さを確保 */
+}
+
+/* Memo Area (41%) - Tasks拡大に合わせて調整 */
+.memo-area-45 {
+  grid-area: memo;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  min-width: 0; /* Grid overflow fix */
+}
+
+/* Tab Area (20%) - Tasks拡大のため縮小 */
+.tab-area-25 {
+  grid-area: tabs;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--light-gray);
+  border-left: 1px solid var(--border);
+  min-width: 0; /* Grid overflow fix */
+}
+
+.tab-area-placeholder {
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.tab-area-placeholder h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tab-area-placeholder p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* TabArea Unlimited Scroll System - Day 3実装 */
+.tab-area-scroll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* デイリーメモタブ（固定表示） */
+.tab-daily-memo-sticky {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-daily-memo-sticky .tab-button {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-daily-memo-sticky .tab-button:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.tab-daily-memo-sticky .tab-button.tab-active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* スクロール可能なタスクタブリスト */
+.tab-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0; /* flexbox overflow fix */
+}
+
+/* 個別タスクタブアイテム */
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.tab-item:hover {
+  background-color: rgba(0, 102, 204, 0.05);
+}
+
+/* タブボタン（タスク用） */
+.tab-item .tab-button {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+  min-width: 0; /* text overflow対応 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-item .tab-button:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.tab-item .tab-button.tab-active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* 閉じるボタン */
+.tab-close-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--secondary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.tab-close-btn:hover {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.tab-close-btn:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Tasks Sidebar (38%) - フォーム固定表示対応 */
+.tasks-sidebar {
+  width: 100%; /* Grid Area内で100% */
+  border-right: none; /* 親のtasks-area-30がborderを管理 */
+  background-color: transparent; /* 親のtasks-area-30がbackgroundを管理 */
   display: flex;
   flex-direction: column;
   padding: 20px 20px 0 20px; /* 下のpaddingを削除 */
+  height: 100%; /* 親の高さに合わせる */
+  min-height: 0; /* フレックスボックスの制約を解除 */
+  
+  /* 文字レイアウト確保のため400px死守 */
+  min-width: 400px;
+}
+
+/* Legacy Flexbox Layout用のスタイル維持 */
+.main-layout .tasks-sidebar {
+  width: 30%;
+  border-right: 1px solid var(--border);
+  background-color: var(--light-gray);
 }
 
 /* フォーム固定表示エリア */
@@ -125,6 +327,8 @@ body {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 20px; /* 下部の余白 */
+  min-height: 0; /* flexbox overflow fix */
+  height: 0; /* flex: 1 を有効にするためのトリック */
 }
 
 .tasks-sidebar h3 {
@@ -164,11 +368,45 @@ body {
   overflow: hidden;
 }
 
+/* Grid Layout用のmemo-area-45スタイルは上部で定義済み */
+
 .memo-editor h3 {
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 600;
   color: var(--primary-text);
+}
+
+/* Memo Panel Button (Design Philosophy準拠) */
+.memo-header {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.open-memo-panel-btn {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.open-memo-panel-btn:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.open-memo-panel-btn:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
 }
 
 .markdown-editor {
@@ -257,23 +495,84 @@ body {
   }
 }
 
-/* Mobile First Responsive Design (Design Philosophy準拠) */
+/* Tablet Responsive Design (769px-1000px) - デスクトップとの境界を明確化 */
+@media (min-width: 769px) and (max-width: 1000px) {
+  .main-layout-grid {
+    grid-template-columns: 40% 60%; /* 35%→40%に拡大して可読性確保 */
+    grid-template-areas: "tasks memo";
+  }
+  
+  .tab-area-25 {
+    display: none; /* タブレットではタブエリアを非表示 */
+  }
+  
+  .memo-area-45 {
+    border-right: none;
+  }
+  
+  /* タブレット用 Tasks Sidebar 可読性確保 */
+  .tasks-sidebar {
+    min-width: 320px !important; /* 日本語可読性確保のため320px最低限 */
+    max-width: 100%; /* Grid Area内で100%を上限に */
+  }
+}
+
+/* Mobile Responsive Design (Design Philosophy準拠) */
 @media (max-width: 768px) {
   .main-layout {
     flex-direction: column;
+  }
+  
+  /* Grid Layout Mobile Responsive */
+  .main-layout-grid {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+  }
+  
+  .tasks-area-30 {
+    border-right: none;
+    border-bottom: none; /* memo-area非表示のためborder削除 */
+    flex: 1; /* 全高活用 */
+    max-height: none; /* 高さ制限を解除 */
+  }
+  
+  .memo-area-45 {
+    display: none !important; /* pointer-events干渉問題の緊急修正 */
+  }
+  
+  .memo-header {
+    display: none !important; /* pointer-events干渉問題の緊急修正 */
+    pointer-events: none !important;
+  }
+  
+  /* モバイルでデイリーメモを非表示（メモパネルからアクセス） */
+  .daily-memo.standalone {
+    display: none;
+  }
+  
+  .tab-area-25 {
+    display: none; /* モバイルではタブエリアを非表示 */
   }
   
   .tasks-sidebar {
     width: 100%;
     min-width: auto;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    flex: 0 0 auto;
-    max-height: 40vh;
+    border-bottom: none; /* memo-area非表示のためborder削除 */
+    flex: 1; /* タスクエリアを全高に拡大 */
+    max-height: none; /* 高さ制限を解除 */
   }
   
   .memo-editor {
     flex: 1;
+  }
+  
+  /* モバイルでタスク一覧領域を最大活用 */
+  .tasks-scrollable-area {
+    height: auto !important; /* height: 0 トリックを無効化 */
+    flex: 1;
+    min-height: 200px; /* 最低限の高さ確保 */
   }
   
   .header {
@@ -493,6 +792,11 @@ body {
   .confirm-dialog-footer .btn-secondary {
     border-color: #000000;
   }
+}
+
+/* Mobile Full Height Class - JS制御による条件分岐用 */
+.mobile-full-height {
+  flex: 1 !important;
 }
 
 /* 統一性の重視 - Design Philosophy準拠 */

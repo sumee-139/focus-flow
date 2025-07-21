@@ -58,6 +58,11 @@ export interface AppState {
       isOpen: boolean;
       taskId: string | null;
     };
+    memoPanel: {
+      isOpen: boolean;
+      mode: 'task' | 'daily';
+      selectedTaskId: string | null;
+    };
   };
 }
 
@@ -73,4 +78,9 @@ export type AppAction =
   | { type: 'END_FOCUS' }
   | { type: 'SET_UI_STATE'; payload: Partial<AppState['ui']> }
   | { type: 'SHOW_DELETE_CONFIRM'; payload: string }
-  | { type: 'HIDE_DELETE_CONFIRM' };
+  | { type: 'HIDE_DELETE_CONFIRM' }
+  | { type: 'OPEN_TASK_MEMO'; payload: { taskId: string } }
+  | { type: 'OPEN_DAILY_MEMO' }
+  | { type: 'CLOSE_MEMO_PANEL' }
+  | { type: 'SWITCH_MEMO_MODE'; payload: { mode: 'task' | 'daily' } }
+  | { type: 'QUOTE_TASK_TO_DAILY'; payload: { taskId: string } };

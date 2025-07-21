@@ -64,8 +64,8 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="add-task-form-slim" role="form">
-      {error && <div className="error-message">{error}</div>}
+    <form onSubmit={handleSubmit} className="add-task-form-slim" role="form" data-testid="task-form">
+      {error && <div className="error-message" data-testid="error-message">{error}</div>}
       
       {/* 上段：アイコン + タスク名 */}
       <div className="form-top-row">
@@ -85,6 +85,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
           required
           className="title-input-main"
           aria-label="タスクタイトル"
+          data-testid="task-title-input"
         />
       </div>
 
@@ -118,7 +119,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
         <div className="spacer"></div>
         
         {/* アクションボタン */}
-        <button type="submit" className="btn-compact btn-primary">
+        <button type="submit" className="btn-compact btn-primary" data-testid="add-task-button">
           追加
         </button>
       </div>
@@ -131,6 +132,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
             <textarea
               id="description"
               value={description}
+              data-testid="task-description-input"
               onChange={(e) => setDescription(e.target.value)}
               placeholder="任意の詳細..."
               rows={2}

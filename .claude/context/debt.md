@@ -15,14 +15,14 @@ tags: #debt #technical-debt #tracking
 ### Medium Priority ⚠️
 | Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
 |-----------|----------------|----------|--------------|----------|
-| [Debt item 1] | [X hours] | [Date] | [Range] | [Solution] |
-| [Debt item 2] | [X hours] | [Date] | [Range] | [Solution] |
+| MemoPanel.tsx matchMediaエラー処理不備 | 0.25 hours | 2025-07-22 | モバイル検出失敗時の動作 | try-catch + フォールバック追加 |
 
 ### Low Priority 📝
 | Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
 |-----------|----------------|----------|--------------|----------|
-| [Debt item 1] | [X hours] | [Date] | [Range] | [Solution] |
-| [Debt item 2] | [X hours] | [Date] | [Range] | [Solution] |
+| useCallback最適化（TaskItem等） | 1 hour | 2025-07-24 | パフォーマンス改善 | useCallback追加 |
+| 定数統一化（ブレークポイント等） | 0.5 hours | 2025-07-24 | メンテナンス性向上 | 定数ファイル作成 |
+| LocalStorage容量チェック | 2 hours | 2025-07-26 | 将来の拡張性 | 容量監視機能追加 |
 
 ## Cache Impact Analysis
 

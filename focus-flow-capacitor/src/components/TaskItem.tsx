@@ -8,6 +8,7 @@ interface TaskItemProps {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onReorder: (dragIndex: number, hoverIndex: number) => void;
+  onMemoClick?: (id: string) => void;
 }
 
 export const TaskItem: React.FC<TaskItemProps> = ({
@@ -15,7 +16,8 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   onToggle,
   onEdit,
   onDelete,
-  onReorder: _onReorder
+  onReorder: _onReorder,
+  onMemoClick
 }) => {
   const handleToggle = () => {
     onToggle(task.id)
@@ -29,8 +31,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({
     onDelete(task.id)
   }
 
+  const handleMemoClick = () => {
+    onMemoClick?.(task.id)
+  }
+
   return (
-    <div className={`task-item ${task.completed ? 'completed' : ''}`} data-testid="task-item">
+    <div className={`task-item ${task.completed ? 'completed' : ''}`} data-testid={`task-item-${task.id}`}>
       {/* ドラッグハンドル（Design Philosophy準拠） */}
       <div className="drag-handle" title="Drag to reorder">
         ⋮⋮
@@ -42,7 +48,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({
       </div>
 
       {/* タスクコンテンツ */}
-      <div className="task-content">
+      <div 
+        className="task-content" 
+        onClick={handleMemoClick}
+        style={{ cursor: onMemoClick ? 'pointer' : 'default' }}
+        title={onMemoClick ? 'Click to open task memo' : undefined}
+      >
         <div className="task-title">
           {task.title}
         </div>
@@ -80,17 +91,20 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           onChange={handleToggle}
           className="task-checkbox"
           aria-label={`Mark "${task.title}" as ${task.completed ? 'incomplete' : 'complete'}`}
+          data-testid="complete-task-button"
         />
         <button
           onClick={handleEdit}
           className="edit-button"
           aria-label={`Edit "${task.title}"`}
+          data-testid="edit-task-button"
         >
           ✏️
         </button>
         <button
           onClick={handleDelete}
           className="delete-button"
+          data-testid="delete-task-button"
           aria-label={`Delete "${task.title}"`}
         >
           🗑️

@@ -2,6 +2,21 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import App from './App'
 
+// Mock window.matchMedia for MemoPanel
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: query === '(max-width: 1200px)' ? false : true, // Default to desktop
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn()
+  }))
+})
+
 // Mock localStorage
 const localStorageMock = {
   getItem: vi.fn(),

@@ -10,7 +10,13 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:visual": "playwright test --grep=\"visual-regression\"",
+    "test:visual:update": "playwright test --grep=\"visual-regression\" --update-snapshots",
+    "test:all": "npm run test:run && npm run test:e2e"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",

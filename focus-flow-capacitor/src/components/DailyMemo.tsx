@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { AUTO_SAVE } from '../constants/ui'
 
 // DailyMemoのデータ型定義
 interface TaskReference {
@@ -14,8 +15,8 @@ interface DailyMemoData {
   taskReferences: TaskReference[]
 }
 
-// 定数定義
-const AUTO_SAVE_DELAY = 3000 // 自動保存の間隔（3秒）
+// 定数定義 (AUTO_SAVE_DELAY は統一定数を使用)
+const AUTO_SAVE_DELAY = AUTO_SAVE.DELAY_MS // 自動保存の間隔（3秒）
 const STORAGE_KEY_PREFIX = 'daily-memo-'
 const MEMO_PLACEHOLDER = '今日の出来事や気付きをメモしてください...'
 const MEMO_TITLE = '📝 デイリーメモ'
@@ -32,7 +33,15 @@ const INFO_TEXT_FONT_SIZE = '0.875rem'
 const INFO_TEXT_COLOR = '#718096'
 const INFO_TEXT_MARGIN_TOP = '0.5rem'
 
-export const DailyMemo: React.FC = () => {
+export interface DailyMemoProps {
+  embedded?: boolean
+  onQuoteRequest?: (content: string) => void
+}
+
+export const DailyMemo: React.FC<DailyMemoProps> = ({ 
+  embedded = false,
+  onQuoteRequest: _onQuoteRequest 
+}) => {
   const [content, setContent] = useState('')
   const autoSaveTimerRef = useRef<number | null>(null)
 
@@ -124,14 +133,15 @@ export const DailyMemo: React.FC = () => {
   }
 
   return (
-    <div className="daily-memo">
-      <h2>{MEMO_TITLE}</h2>
+    <div className={`daily-memo ${embedded ? 'embedded' : 'standalone'}`} data-testid="daily-memo">
+      {!embedded && <h2>{MEMO_TITLE}</h2>}
       <textarea
         value={content}
         onChange={handleContentChange}
         placeholder={MEMO_PLACEHOLDER}
         aria-label="デイリーメモ"
         className="daily-memo-textarea"
+        data-testid="daily-memo-textarea"
         rows={TEXTAREA_ROWS}
         style={{
           width: '100%',
