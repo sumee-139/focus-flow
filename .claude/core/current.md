@@ -1,45 +1,35 @@
-# Current Status
-tags: #current #status #active
+# Current Status - DEPRECATED
+tags: #deprecated #migration #claude-friends
 
-## 3-Line Summary
-- **Current Status**: プロジェクト開始・計画段階 #phase #development
-- **This Week's Focus**: 基盤整備とフェーズ1実装準備 #priority #weekly
-- **Next Milestone**: 2025-07-21 フェーズ1プロトタイプ完成 #milestone #deadline
+## ⚠️ このファイルは廃止されました
 
-## Today/This Week's Work
-- [x] Memory Bank情報更新 - 30分 #task #high
-- [x] TDD & Component Development ルール策定 - 60分 #task #high
-- [x] ドキュメント構造化 - 45分 #task #high
-- [x] テストガイドライン作成 - 30分 #task #high
-- [ ] 技術スタック調査 - 45分 #task #high
-- [ ] 開発環境セットアップ - 30分 #task #high
-- [ ] フェーズ1アーキテクチャ設計 - 5時間 #task #medium
-- [ ] フォーカスモード基本実装 - 8時間 #task #medium
+### Claude Friendsシステムへ移行しました
 
-## Ongoing Issues
-- **技術選定**: 調査中 - Electron vs Tauri性能比較 #issue #blocking
-- **OSレベル通知制御**: 検討中 - 実装複雑性の評価 #issue #monitoring
+現在の状態管理は、以下のファイルで行われています：
 
-## Git Status (auto)
-- **Branch**: main
-- **Changed**: 3 files
-- **Last Commit**: "Initial project setup" (今日)
+- **Plannerの作業状態**: @.claude/planner/notes.md
+- **Builderの作業状態**: @.claude/builder/notes.md  
+- **Phase/ToDo管理**: @.claude/shared/phase-todo.md
+- **アクティブなエージェント**: @.claude/agents/active.md
 
-## This Week's Learnings
-- Claude Code Memory Bank: 効率的なプロジェクト管理手法
-- 段階的機能解放: 複雑性管理の重要性
-- TDD実践: t-wadaスタイルの Red-Green-Refactor サイクル
-- ドキュメント構造化: 必読ドキュメント絞り込みの重要性
+### 移行方法
 
-## Time Tracking
-**Today's Schedule**:
-- 09:00-10:00: プロジェクト計画とMemory Bank更新
-- 10:00-10:45: 技術スタック調査
-- 10:45-11:15: 開発環境準備
+1. **現在の作業状態を確認**
+   ```
+   /agent:planner  # Plannerモードで計画を確認
+   /agent:builder  # Builderモードで実装を確認
+   ```
 
-**Results**: 計画通り進行中、技術調査で詳細確認必要
+2. **従来の情報の参照先**
+   - Git Status → 各エージェントのnotes.mdに記録
+   - This Week's Work → shared/phase-todo.mdで管理
+   - Ongoing Issues → 各エージェントのhandover.mdで引き継ぎ
+   - Learnings → 各エージェントのnotes.mdに記録
 
-## Quick Links
+### Quick Links (変更なし)
 - Technical details → @.claude/context/tech.md
 - Past history → @.claude/context/history.md
 - Project overview → @.claude/core/overview.md
+
+---
+*このファイルは互換性のために残されていますが、新しい情報は更新されません。*

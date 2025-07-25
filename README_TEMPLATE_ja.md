@@ -1,6 +1,8 @@
-# Claude Code 軽量プロジェクトテンプレート v1.2.0
+# Claude Friends プロジェクトテンプレート v2.0.0
 
-**AIネイティブ開発のために設計された次世代知識管理システム**
+🌐 **日本語** | **[English](README_TEMPLATE.md)**
+
+**AIパワード・マルチエージェント開発システム - あなた専用のAIチーム**
 
 ## 🚀 なぜこのテンプレートが革新的なのか
 
@@ -64,14 +66,11 @@ docs/adr/template.md         # ADRテンプレート
 ├── debug/                  # デバッグ情報
 │   └── latest.md           # 最新のデバッグセッション（100行以内）
 ├── archive/                # 定期整理
-├── commands/               # カスタムコマンド
-│   ├── plan.md             # 計画立案
-│   ├── act.md              # 実装実行
+├── commands/               # コアコマンド
+│   ├── agent-planner.md    # Plannerエージェント（新機能設計含む）
+│   ├── agent-builder.md    # Builderエージェント（デバッグ＆レビュー含む）
 │   ├── daily.md            # 日次更新
-│   ├── focus.md            # フォーカスモード
-│   ├── debug-start.md      # デバッグ特化モード
-│   ├── feature-plan.md     # 新機能設計モード
-│   └── review-check.md     # コードレビューモード
+│   └── focus.md            # フォーカスモード
 ├── scripts/                # セキュリティ＆ログスクリプト
 │   ├── deny-check.sh       # 危険コマンドブロック
 │   ├── allow-check.sh      # 安全コマンド許可
@@ -90,6 +89,15 @@ docs/adr/template.md         # ADRテンプレート
 cp -r claude_file_template/ your-project/
 cd your-project/
 
+# 日本語版ファイルを使用（推奨）
+mv CLAUDE.md CLAUDE_en.md          # 英語版を保存
+mv CLAUDE_ja.md CLAUDE.md           # 日本語版をメインに
+mv README_TEMPLATE.md README_TEMPLATE_en.md  # 英語版を保存
+mv README_TEMPLATE_ja.md README.md  # 日本語版をメインに
+mv .clauderules .clauderules_en     # 英語版を保存
+mv .clauderules_ja .clauderules     # 日本語版をメインに
+# 必要に応じて他の_jaファイルも同様に置き換え
+
 # プロジェクト情報をカスタマイズ
 # - CLAUDE.md の [プロジェクト名] を置換
 # - docs/requirements.md を記入
@@ -98,19 +106,21 @@ cd your-project/
 
 ### 2. 日常の開発フロー
 
-#### 基本サイクル（毎日）
+#### Claude Friends活用（推奨）
 ```
-朝: /project:plan     # 今日の作業計画（5分）
-↓
-実装作業: /project:act    # 計画に基づく実装実行
-（状況に応じて）
-↓ /debug:start      # バグ対応時
-↓ /feature:plan     # 新機能設計時
-↓ /review:check     # コードレビュー時
-↓
-集中作業: /project:focus  # タスク切り替え・集中時
-↓
-夕方: /project:daily    # 日次更新（3分）
+朝: /agent:planner    # 今日の作業計画と機能設計
+    ↓
+    「ユーザー認証機能を追加したい」
+    → Plannerが自動で図付きの詳細仕様書を作成
+    ↓
+作業: /agent:builder    # 計画に基づいて実装開始
+      ↓
+      エラー発生？ → Builderが自動でデバッグモードへ
+      実装完了？ → Builderでレビューモード起動可能
+      ↓
+集中: /project:focus    # 集中が必要なときに
+      ↓
+夕方: /project:daily    # 日次振り返り（3分）
 ```
 
 #### タグ検索（必要時）
@@ -135,22 +145,37 @@ cd your-project/
 - 日次更新: 3分以内
 - Memory Bank更新: 必要時のみ
 
-## 🛠 カスタムコマンド
+## 🤖 Claude Friends マルチエージェントシステム
 
-### 基本コマンド
-| コマンド | 用途 | 所要時間 |
-|---------|------|----------|
-| `/project:plan` | 作業計画立案 | 5分 |
-| `/project:act` | 計画に基づく実装実行 | 実装時間 |
-| `/project:focus` | 現在タスクに集中 | 即座 |
-| `/project:daily` | 日次振り返り | 3分 |
+ひとり開発をAIエージェントとのチーム開発体験に変えます：
 
-### 専門化モード
-| コマンド | 用途 | 参照ファイル |
-|---------|------|-------------|
-| `/debug:start` | デバッグ特化モード | current.md + tech.md + debug/latest.md |
-| `/feature:plan` | 新機能設計モード | overview.md + next.md + 要件定義 |
-| `/review:check` | コードレビューモード | history.md + チェックリスト |
+### コアコマンド（たった4つ！）
+| コマンド | 用途 | 詳細 |
+|---------|------|------|
+| `/agent:planner` | 戦略計画＋設計 | Mermaid図付きで仕様書作成 |
+| `/agent:builder` | 実装＋デバッグ＋レビュー | すべてのコーディング作業 |
+| `/project:focus` | 現在のタスクに集中 | どのエージェントでも使用可 |
+| `/project:daily` | 日次振り返り | どのエージェントでも使用可 |
+
+### スマートエージェント機能
+- **Planner特殊モード**: 新機能計画時に自動で新機能設計モードへ
+- **Builder特殊モード**: 
+  - デバッグモード: エラー発生時に自動起動
+  - コードレビューモード: 実装後の品質確保
+  - TDD厳守: Red→Green→Refactorサイクル必須
+- **スムーズな引き継ぎ**: エージェントが次のエージェントに最適なモードを推奨
+
+**[→ Claude Friends 完全ガイド](.claude/claude-friends-guide_ja.md)**
+
+## 🛠 コマンドシステム概要
+
+Claude Friendsシステムは、たった4つのコアコマンドで開発を簡素化します。以前の専門モードはすべてエージェントシステムに統合されました：
+
+### クイックリファレンス
+- **計画・設計** → `/agent:planner` （新機能設計モード含む）
+- **コーディング・デバッグ・レビュー** → `/agent:builder` （デバッグ＆レビューモード含む）
+- **集中作業** → `/project:focus`
+- **日次レビュー** → `/project:daily`
 
 ### タグ検索
 - タグ形式: `#tag_name` でMemory Bank内検索
@@ -160,7 +185,7 @@ cd your-project/
 
 ### 開発規約（Core Development Rules）
 - パッケージ管理統一方針
-- コード品質基準・テスト要件
+- コード品質基準・TDD必須要件
 - Git/PR規約（コミット形式・トレーラー・レビュー規約）
 
 ### 実行コマンド一覧
@@ -233,59 +258,46 @@ cd your-project/
 
 ### 🚀 初日のフロー
 
-#### 人間主導開発の場合
+#### Claude Friendsシステムで
 ```
 09:00 テンプレートコピー & カスタマイズ
-09:15 /project:plan - 最初の作業計画立案
-09:30 開発作業開始
-12:00 進捗確認
+09:15 /agent:planner - プロジェクト構造と最初の機能を計画
+      → PlannerがMermaidアーキテクチャ図付きでプロジェクト概要を作成
+09:30 /agent:builder - Plannerの設計に基づいて実装開始
+      → Builderが計画に従い、コードを書き、テストする
+12:00 Plannerで進捗確認と優先順位調整
+16:00 /agent:builder - コード品質を確認（レビューモード）
 17:00 /project:daily - 初日の振り返り
-```
-
-#### AI主導開発の場合
-```
-09:00 テンプレートコピー & カスタマイズ（人間）
-09:15 /project:plan - 最初の作業計画立案（人間→AI）
-09:30 AI開発作業開始（AI実装、人間はチェック・提案）
-12:00 進捗チェック & 方向性調整（人間）
-16:00 成果物レビュー & フィードバック（人間）
-17:00 /project:daily - 初日の振り返り（人間→AI）
 ```
 
 ### 📅 日常運用（2日目以降）
 
-#### 人間主導開発
+#### Claude Friendsワークフロー
 ```
-09:00 /project:plan     # 今日のタスク整理
-09:30 開発作業開始      # 状況に応じて Quick Modes使用
-      /debug:start      # バグ対応時
-      /feature:plan     # 新機能設計時
-      /review:check     # コードレビュー時
-12:00 /project:focus    # 午後のタスクに集中
-17:00 /project:daily    # 今日の振り返り
-```
-
-#### AI主導開発（推奨タイムライン）
-```
-09:00-09:30  人間: /project:plan で今日の作業指示
-09:30-11:30  AI: /project:act で集中実装（人間は並行作業可）
-             （状況に応じて /debug:start, /feature:plan 等使用）
-11:30-12:00  人間: 中間レビュー・フィードバック
-13:00-15:00  AI: 実装継続（人間は設計・企画）
-             /review:check でコード品質確認
-15:00-15:30  人間: 軌道修正・追加指示
-15:30-16:30  AI: 最終実装・調整
-16:30-17:00  人間: 最終レビュー・明日準備
-17:00-17:15  人間: /project:daily で振り返り
+09:00 /agent:planner    # 進捗確認と今日の作業計画
+      → 「ユーザー通知機能を追加」
+      → Plannerがシーケンス図付きの詳細仕様書を作成
+      
+10:00 /agent:builder    # 新機能の実装開始
+      → Builderが通知システムに取り組む
+      → エラー？自動的にデバッグモードへ切り替え
+      
+14:00 /project:focus    # 複雑なロジックに深く集中
+      
+16:00 /agent:builder    # まとめる前にコードレビュー
+      → 「通知実装をレビューして」
+      → Builderがコード品質を分析し改善提案
+      
+17:00 /project:daily    # 振り返りと明日の計画
 ```
 
 ### 👥 人間とAIの役割分担
 
 #### 人間の担当
-- **戦略的判断**: `/project:plan`での計画立案
-- **品質管理**: 定期的なレビューとフィードバック
-- **方向性制御**: 実装の軌道修正
-- **要件調整**: 新しい要求の追加・変更
+- **戦略的判断**: Plannerエージェントと高レベル計画を作成
+- **要件定義**: Plannerに要望を説明し詳細仕様書を作成
+- **品質管理**: Builderのコードレビューモードを要求
+- **方向性制御**: 引き継ぎを通じてエージェントを誘導
 - **振り返り**: `/project:daily`での進捗管理
 
 #### AIの担当
@@ -308,13 +320,13 @@ AI実装中（30-90分）の並行作業:
 
 | 頻度 | コマンド | タイミング |
 |------|---------|------------|
-| 毎日 | `/project:plan` | 朝の作業開始時 |
-| 毎日 | `/project:daily` | 夕方の振り返り時 |
-| 作業時 | `/project:act` | 実装作業実行時 |
-| 必要時 | `/project:focus` | 集中実装時 |
-| 状況別 | `/debug:start` | バグ対応時 |
-| 状況別 | `/feature:plan` | 新機能設計時 |
-| 状況別 | `/review:check` | コードレビュー時 |
+| 毎日 | `/agent:planner` | 朝の計画立案＆設計 |
+| 毎日 | `/agent:builder` | 実装＆デバッグ |
+| 毎日 | `/project:daily` | 夕方の振り返り |
+| 必要時 | `/project:focus` | 深い集中が必要な時 |
+| 自動 | Planner新機能モード | 新機能設計時 |
+| 自動 | Builderデバッグモード | エラー発生時 |
+| 自動 | Builderレビューモード | コード品質確認時 |
 | 随時 | `#タグ検索` | 関連情報検索時 |
 
 ## 🎉 始めよう
@@ -322,8 +334,9 @@ AI実装中（30-90分）の並行作業:
 1. テンプレートをコピー
 2. CLAUDE.mdをカスタマイズ
 3. セキュリティ設定をテスト: `.claude/scripts/test-security.sh`を実行
-4. `/project:plan`で最初の計画を立案
-5. 上記の運用例を参考に効率的な開発を開始！
+4. `/agent:planner`でプロジェクトを設計
+5. `/agent:builder`でコーディング開始
+6. AIパワーのチーム開発を楽しもう！
 
 このテンプレートで、Claude Codeを使った効率的な個人開発を実現しましょう！
 

@@ -1,0 +1,1472 @@
+/* FocusFlow App Styles - Design Philosophy準拠 */
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Design Philosophy: 色による区別の禁止 - 統一カラーパレット */
+  --primary-text: #333333;
+  --secondary-text: #666666;
+  --background: #FFFFFF;
+  --border: #E0E0E0;
+  --focus-color: #0066CC;
+  --light-gray: #F5F5F5;
+
+  color: var(--primary-text);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+/* 🔥 CRITICAL FIX: 未定義ボタンスタイル追加 */
+.btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+/* 🚨 CRITICAL FIX: 新規未定義クラス7個対応（2025-07-23） */
+.accordion-trigger {
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  color: var(--primary-text);
+  transition: background-color 0.2s ease;
+}
+
+.accordion-trigger:hover {
+  background-color: var(--light-gray);
+}
+
+.delete {
+  color: #dc3545;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.delete:hover {
+  background-color: #f8d7da;
+}
+
+.edit-button,
+.edit-button:hover {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--secondary-text);
+  transition: all 0.2s ease;
+}
+
+.edit-button:hover {
+  background-color: var(--light-gray);
+  border-color: #a0aec0;
+  color: var(--primary-text);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.estimated-time {
+  font-size: 12px;
+  color: var(--secondary-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.focus {
+  color: var(--focus-color);
+  font-weight: 500;
+}
+
+.daily-memo-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.daily-memo-textarea:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-color: var(--focus-color);
+}
+
+.btn:hover {
+  background-color: var(--light-gray);
+  border-color: #a0aec0;
+}
+
+.btn:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-color: var(--focus-color);
+}
+
+.btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+.btn-secondary {
+  background-color: var(--light-gray);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+  color: var(--primary-text);
+}
+
+.btn-compact {
+  padding: 6px 12px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+/* Tab Area スタイル */
+.tab-area {
+  background-color: var(--light-gray);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.tab-area-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* タブボタン（デイリーメモボタン用） */
+.tab-button {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--secondary-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background-color: var(--light-gray);
+  color: var(--primary-text);
+}
+
+.tab-button.tab-active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* フォーム関連スタイル */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-top-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.form-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form-advanced {
+  background-color: var(--light-gray);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+/* 入力フィールド */
+.title-input-main {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.title-input-main:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-color: var(--focus-color);
+}
+
+.minutes-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.time-label {
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+/* テキストエリア */
+.daily-memo-textarea,
+.task-memo-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--primary-text);
+  resize: vertical;
+}
+
+.daily-memo-textarea:focus,
+.task-memo-textarea:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+  border-color: var(--focus-color);
+}
+
+/* エラーメッセージ */
+.error-message,
+.task-memo-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* スペーサー */
+.spacer {
+  flex: 1;
+}
+
+/* モバイル関連 */
+.mobile-accordion {
+  background-color: var(--light-gray);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.mobile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-memo {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.app {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* Header (Design Philosophy: 最小限のボタン配置) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+}
+
+.title-section h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.title-section .subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+/* Focus Mode Toggle (Design Philosophy: Calm Technology) */
+.focus-toggle .focus-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.focus-toggle .focus-btn:hover {
+  border-color: var(--focus-color);
+}
+
+.focus-toggle .focus-btn.active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* Main Layout (Design Philosophy: 70%以上をMarkdownエディタが占有) */
+.main-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* New CSS Grid Layout System (39%-41%-20%) - Tasks Sidebar 400px確保 */
+.main-layout-grid {
+  display: grid;
+  grid-template-columns: 39% 41% 20%;
+  grid-template-areas: "tasks memo tabs";
+  flex: 1;
+  overflow: hidden;
+  gap: 0; /* No gap for clean layout */
+  min-height: 0; /* Grid overflow fix */
+}
+
+/* Tasks Area (39%) - Tasks Sidebar 400px確保 */
+.tasks-area-30 {
+  grid-area: tasks;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background-color: var(--light-gray);
+  min-width: 0; /* Grid overflow fix */
+  min-height: 0; /* Flexbox内でのoverflow修正 */
+  height: 100%; /* Grid内で高さを確保 */
+}
+
+/* Memo Area (41%) - Tasks拡大に合わせて調整 */
+.memo-area-45 {
+  grid-area: memo;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  min-width: 0; /* Grid overflow fix */
+}
+
+/* Tab Area (20%) - Tasks拡大のため縮小 */
+.tab-area-25 {
+  grid-area: tabs;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--light-gray);
+  border-left: 1px solid var(--border);
+  min-width: 0; /* Grid overflow fix */
+}
+
+.tab-area-placeholder {
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.tab-area-placeholder h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tab-area-placeholder p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* TabArea Unlimited Scroll System - Day 3実装 */
+.tab-area-scroll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* デイリーメモタブ（固定表示） */
+.tab-daily-memo-sticky {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-daily-memo-sticky .tab-button {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-daily-memo-sticky .tab-button:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.tab-daily-memo-sticky .tab-button.tab-active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* スクロール可能なタスクタブリスト */
+.tab-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0; /* flexbox overflow fix */
+}
+
+/* 個別タスクタブアイテム */
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.tab-item:hover {
+  background-color: rgba(0, 102, 204, 0.05);
+}
+
+/* タブボタン（タスク用） */
+.tab-item .tab-button {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+  min-width: 0; /* text overflow対応 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-item .tab-button:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.tab-item .tab-button.tab-active {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+/* 閉じるボタン */
+.tab-close-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--secondary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.tab-close-btn:hover {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.tab-close-btn:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* Tasks Sidebar (38%) - フォーム固定表示対応 */
+.tasks-sidebar {
+  width: 100%; /* Grid Area内で100% */
+  border-right: none; /* 親のtasks-area-30がborderを管理 */
+  background-color: transparent; /* 親のtasks-area-30がbackgroundを管理 */
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 0 20px; /* 下のpaddingを削除 */
+  height: 100%; /* 親の高さに合わせる */
+  min-height: 0; /* フレックスボックスの制約を解除 */
+  
+  /* 文字レイアウト確保のため400px死守 */
+  min-width: 400px;
+}
+
+/* Legacy Flexbox Layout用のスタイル維持 */
+.main-layout .tasks-sidebar {
+  width: 30%;
+  border-right: 1px solid var(--border);
+  background-color: var(--light-gray);
+}
+
+/* フォーム固定表示エリア */
+.form-fixed-area {
+  flex-shrink: 0; /* 縮小されない */
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* スクロール可能なタスクリストエリア */
+.tasks-scrollable-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px; /* 下部の余白 */
+  min-height: 0; /* flexbox overflow fix */
+  height: 0; /* flex: 1 を有効にするためのトリック */
+}
+
+.tasks-sidebar h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.tasks-list {
+  margin-bottom: 16px;
+}
+
+.add-task-btn {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--secondary-text);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.add-task-btn:hover {
+  border-color: var(--focus-color);
+  color: var(--focus-color);
+}
+
+/* Daily Memo Editor (70%) - Design Philosophy必須 */
+.memo-editor {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Grid Layout用のmemo-area-45スタイルは上部で定義済み */
+
+.memo-editor h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+/* Memo Panel Button (Design Philosophy準拠) */
+.memo-header {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.open-memo-panel-btn {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.open-memo-panel-btn:hover {
+  border-color: var(--focus-color);
+  background-color: var(--light-gray);
+}
+
+.open-memo-panel-btn:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.markdown-editor {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+.markdown-editor:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.memo-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--secondary-text);
+  text-align: right;
+}
+
+/* Debug Information (開発中のみ) */
+.debug-info {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background-color: var(--light-gray);
+}
+
+.debug-info summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+
+.debug-content {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--secondary-text);
+}
+
+.debug-content p {
+  margin: 4px 0;
+}
+
+.btn.btn-test {
+  margin-top: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+
+/* Status Message */
+.status-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  background-color: var(--primary-text);
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Tablet Responsive Design (769px-1000px) - デスクトップとの境界を明確化 */
+@media (min-width: 769px) and (max-width: 1000px) {
+  .main-layout-grid {
+    grid-template-columns: 40% 60%; /* 35%→40%に拡大して可読性確保 */
+    grid-template-areas: "tasks memo";
+  }
+  
+  .tab-area-25 {
+    display: none; /* タブレットではタブエリアを非表示 */
+  }
+  
+  .memo-area-45 {
+    border-right: none;
+  }
+  
+  /* タブレット用 Tasks Sidebar 可読性確保 */
+  .tasks-sidebar {
+    min-width: 320px !important; /* 日本語可読性確保のため320px最低限 */
+    max-width: 100%; /* Grid Area内で100%を上限に */
+  }
+}
+
+/* Mobile Responsive Design (Design Philosophy準拠) */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  
+  /* Grid Layout Mobile Responsive */
+  .main-layout-grid {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+  }
+  
+  .tasks-area-30 {
+    border-right: none;
+    border-bottom: none; /* memo-area非表示のためborder削除 */
+    flex: 1; /* 全高活用 */
+    max-height: none; /* 高さ制限を解除 */
+  }
+  
+  .memo-area-45 {
+    display: none !important; /* pointer-events干渉問題の緊急修正 */
+  }
+  
+  .memo-header {
+    display: none !important; /* pointer-events干渉問題の緊急修正 */
+    pointer-events: none !important;
+  }
+  
+  /* モバイルでデイリーメモを非表示（メモパネルからアクセス） */
+  .daily-memo.standalone {
+    display: none;
+  }
+  
+  .tab-area-25 {
+    display: none; /* モバイルではタブエリアを非表示 */
+  }
+  
+  .tasks-sidebar {
+    width: 100%;
+    min-width: auto;
+    border-right: none;
+    border-bottom: none; /* memo-area非表示のためborder削除 */
+    flex: 1; /* タスクエリアを全高に拡大 */
+    max-height: none; /* 高さ制限を解除 */
+  }
+  
+  .memo-editor {
+    flex: 1;
+  }
+  
+  /* モバイルでタスク一覧領域を最大活用 */
+  .tasks-scrollable-area {
+    height: auto !important; /* height: 0 トリックを無効化 */
+    flex: 1;
+    min-height: 200px; /* 最低限の高さ確保 */
+  }
+  
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .title-section h1 {
+    font-size: 20px;
+  }
+  
+  .title-section .subtitle {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  
+  .tasks-sidebar,
+  .memo-editor {
+    padding: 16px;
+  }
+  
+  .markdown-editor {
+    font-size: 13px;
+  }
+}
+
+/* Accessibility (Design Philosophy: Accessibility First) */
+@media (prefers-reduced-motion: reduce) {
+  .focus-btn,
+  .add-task-btn,
+  .status-message {
+    transition: none;
+  }
+  
+  @keyframes slideIn {
+    from, to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --primary-text: #000000;
+    --secondary-text: #333333;
+    --border: #000000;
+  }
+  
+  .markdown-editor:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ConfirmDialog - Design Philosophy準拠 */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-dialog {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: confirmDialogSlideIn 0.3s ease-out;
+}
+
+@keyframes confirmDialogSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.confirm-dialog-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.confirm-dialog-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.confirm-dialog-body {
+  padding: 20px 24px;
+}
+
+.confirm-dialog-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--secondary-text);
+}
+
+.confirm-dialog-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.confirm-dialog-footer .btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.confirm-dialog-footer .btn-secondary {
+  background-color: var(--background);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.confirm-dialog-footer .btn-secondary:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+.confirm-dialog-footer .btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.confirm-dialog-footer .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+/* Mobile responsive - Design Philosophy準拠 */
+@media (max-width: 480px) {
+  .confirm-dialog {
+    width: 90%;
+    max-width: 400px;
+    margin: 20px;
+  }
+  
+  .confirm-dialog-header {
+    padding: 16px 20px 12px;
+  }
+  
+  .confirm-dialog-header h3 {
+    font-size: 16px;
+  }
+  
+  .confirm-dialog-body {
+    padding: 16px 20px;
+  }
+  
+  .confirm-dialog-footer {
+    padding: 12px 20px 20px;
+    gap: 8px;
+  }
+  
+  .confirm-dialog-footer .btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Accessibility - Design Philosophy準拠 */
+@media (prefers-reduced-motion: reduce) {
+  .confirm-dialog {
+    animation: none;
+  }
+  
+  @keyframes confirmDialogSlideIn {
+    from, to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-contrast: high) {
+  .confirm-dialog {
+    border-color: #000000;
+  }
+  
+  .confirm-dialog-header,
+  .confirm-dialog-footer {
+    border-color: #000000;
+  }
+  
+  .confirm-dialog-footer .btn-secondary {
+    border-color: #000000;
+  }
+}
+
+/* Mobile Full Height Class - JS制御による条件分岐用 */
+.mobile-full-height {
+  flex: 1 !important;
+}
+
+/* 統一性の重視 - Design Philosophy準拠 */
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* 静寂の美学 - 派手な演出を避ける */
+* {
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline-offset: 2px;
+}
+
+/* AddTaskForm - スリムデザイン版（タスクカード準拠） */
+.add-task-form-slim {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  margin-bottom: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim:hover {
+  border-color: var(--focus-color);
+}
+
+/* 上段：アイコン + タスク名（ラフデザイン準拠） */
+.add-task-form-slim .form-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* 下段：分・詳細・追加（ラフデザイン準拠） */
+.add-task-form-slim .form-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+/* 可変幅スペーサー（詳細と追加ボタンの間） */
+.add-task-form-slim .spacer {
+  flex: 1;
+}
+
+/* 統一アイコン（TaskItemと同じ） */
+.add-task-form-slim .task-icon {
+  font-size: 18px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* メインタイトル入力（ラフデザイン準拠） */
+.add-task-form-slim .title-input-main {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease;
+  min-width: 200px;
+}
+
+.add-task-form-slim .title-input-main:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+/* 見積時間入力（下段） */
+.add-task-form-slim .minutes-input {
+  width: 70px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: center;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim .minutes-input:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+.add-task-form-slim .time-label {
+  font-size: 13px;
+  color: var(--secondary-text);
+  margin-right: 4px;
+}
+
+/* 詳細ボタン（下段） */
+.add-task-form-slim .expand-button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--secondary-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-task-form-slim .expand-button:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+/* 追加ボタン（下段・ラフデザイン準拠） */
+.add-task-form-slim .btn-compact {
+  border: 1px solid var(--focus-color);
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.add-task-form-slim .btn-compact.btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.add-task-form-slim .btn-compact.btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+/* 詳細オプション（展開時のみ表示） */
+.add-task-form-slim .form-advanced {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.add-task-form-slim .form-advanced .form-group {
+  margin-bottom: 12px;
+}
+
+.add-task-form-slim .form-advanced .form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.add-task-form-slim .form-advanced .form-row .form-group {
+  flex: 1;
+}
+
+.add-task-form-slim .form-advanced label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary-text);
+  margin-bottom: 4px;
+}
+
+.add-task-form-slim .form-advanced input,
+.add-task-form-slim .form-advanced textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease;
+}
+
+.add-task-form-slim .form-advanced input:focus,
+.add-task-form-slim .form-advanced textarea:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+.add-task-form-slim .form-advanced textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+/* 従来の大きなフォーム（後方互換性のため残す） */
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.add-task-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-task-form .form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-text);
+  margin: 0;
+}
+
+.add-task-form .form-group input,
+.add-task-form .form-group textarea {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: var(--background);
+  color: var(--primary-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-task-form .form-group input:focus,
+.add-task-form .form-group textarea:focus {
+  border-color: var(--focus-color);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+  outline: none;
+}
+
+.add-task-form .form-group input[type="number"] {
+  width: 120px;
+}
+
+.add-task-form .form-group input[type="time"] {
+  width: 160px;
+}
+
+.add-task-form .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.add-task-form .form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.add-task-form .btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+  min-width: 120px;
+}
+
+.add-task-form .btn-primary {
+  background-color: var(--focus-color);
+  color: white;
+  border-color: var(--focus-color);
+}
+
+.add-task-form .btn-primary:hover {
+  background-color: #0052a3;
+  border-color: #0052a3;
+}
+
+.add-task-form .btn-secondary {
+  background-color: var(--background);
+  color: var(--secondary-text);
+  border-color: var(--border);
+}
+
+.add-task-form .btn-secondary:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+.add-task-form .error-message {
+  padding: 12px;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* Mobile responsive for AddTaskForm */
+@media (max-width: 768px) {
+  .add-task-form {
+    padding: 16px;
+    margin: 0;
+  }
+  
+  .add-task-form .form-group input[type="number"],
+  .add-task-form .form-group input[type="time"] {
+    width: 100%;
+  }
+  
+  .add-task-form .form-actions {
+    flex-direction: column;
+  }
+  
+  .add-task-form .btn {
+    width: 100%;
+  }
+}
+
+/* Accessibility improvements for AddTaskForm */
+@media (prefers-reduced-motion: reduce) {
+  .add-task-form .form-group input,
+  .add-task-form .form-group textarea,
+  .add-task-form .btn {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .add-task-form .form-group input,
+  .add-task-form .form-group textarea {
+    border-color: #000000;
+  }
+  
+  .add-task-form .form-group input:focus,
+  .add-task-form .form-group textarea:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .add-task-form .error-message {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    color: #991b1b;
+  }
+}

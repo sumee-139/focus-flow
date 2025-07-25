@@ -5,47 +5,45 @@ cache_control: {"type": "ephemeral"}
 tags: #overview #project #summary
 
 ## 3-Line Summary
-- **Purpose**: 個人の集中と知的生産性を最大化するデジタル伴走者 #purpose #problem
-- **Target**: 集中力向上を求める知的労働者・学習者 #target #users
-- **Success Criteria**: フロー状態の日常化と段階的習慣化の実現 #success #metrics
+- **Purpose**: デジタルノイズに埋もれた現代人の集中力を回復し、知的生産性を向上させる #purpose #problem
+- **Target**: 集中できない自分に悩む知識労働者・学習者（特に30-40代のビジネスパーソン） #target #users
+- **Success Criteria**: ユーザーがフロー状態を日常的に体験し、「自分はできる」という自信を獲得 #success #metrics
 
 ## Project Basic Information
-- **Start Date**: 2025-07-14
-- **Deadline**: 2025-09-14（2ヶ月）
-- **Current Progress**: 0%（計画段階）
+- **Start Date**: 2024年後半
+- **Deadline**: 2025年中にMVP完成予定
+- **Current Progress**: 20% (基本設計・プロトタイプ完成)
 
 ## Core Features (Priority Order)
-1. **フォーカスモード**: OSレベル通知制御による集中バリア #feature #core #p1
-2. **クイックメモ**: 思考中断を防ぐ瞬時メモ機能 #feature #core #p2
-3. **時間見積もり**: 現実的な時間管理と改善サイクル #feature #core #p3
-4. **ディスカバーモード**: 知識の可視化と関連性発見 #feature #core #p4
+1. **フォーカスモード（集中バリア）**: OSレベル通知遮断によるデジタルノイズ完全遮断 #feature #core #p1
+2. **クイックメモシステム**: 思考中断なしのアイデア瞬時記録（音声入力対応） #feature #core #p2
+3. **成長の木（ゲーミフィケーション）**: 集中時間の可視化と習慣化サポート #feature #core #p3
+4. **プロジェクトテンプレート**: Markdownベースの知的生産ワークフロー #feature #core #p4
 
 ## Technology Stack
-- **Language**: TypeScript v5+ #tech #language
-- **Frontend**: React v18+ + Chakra UI v2+ #tech #framework
-- **Build Tool**: Vite v5+ #tech #build
-- **PWA**: Workbox v7+ #tech #pwa
-- **Database**: IndexedDB (Dexie.js) #tech #database
-- **State Management**: React Context + useReducer #tech #state
-- **Package Manager**: npm #tech #tools
+- **Language**: TypeScript, JavaScript #tech #language
+- **Framework**: React (Capacitor版), Electron (デスクトップ版) #tech #framework
+- **DB**: ローカルストレージ中心、将来的にはSQLite #tech #database
+- **Others**: Chakra UI, Vite, Capacitor, Framer Motion #tech #tools
 
 ## Constraints & Assumptions
-- 個人利用に特化（チーム機能は外部連携で対応）
-- 段階的機能解放による複雑性管理
-- 既存ツールとの協調（競合回避）
+- 個人の集中に特化（チーム機能は既存ツールとの連携で実現）
+- プライバシー重視（データはローカル保存中心）
+- 段階的機能解放でユーザーを圧倒しない設計
 
 ## Success Criteria & Progress
-- [ ] フェーズ1: 基本集中機能（フォーカスモード + タスク入力）- PWA基盤
+- [ ] フォーカスモードでデジタルノイズ遮断機能 - [設計完了、実装中]
+- [ ] クイックメモの瞬時記録機能 - [基本機能実装完了]
+- [ ] 成長の木による習慣化サポート - [コンセプト設計完了]
 - [ ] フェーズ2: 思考支援機能（クイックメモ + 検索）+ Flutter Widget
 - [ ] フェーズ3: 時間管理機能（見積もり + レポート）
 - [ ] フェーズ4-5: サーバーレス連携（Firebase + AWS Lambda）
 
 ## Problem Definition
-デジタルノイズと情報過多による集中力低下、既存ツールの複雑性による導入障壁、完璧主義によるツール利用の挫折
+現代の知識労働者は情報過多とデジタルノイズに囲まれ、深い集中が困難になっている。従来のタスク管理ツールは機能が多すぎて逆にストレスとなり、「完璧を求める」プレッシャーが挫折を招いている。
 
 ## User Value
-「自分は集中できる」という自信を育み、日常的なフロー状態を実現する優しいデジタル伴走者
+「デジタルノイズから解放された静かな集中環境で、自分の可能性を最大限に発揮できる」
 
-**First Reference**: Design Philosophy → @docs/design-philosophy.md ⭐**必須**
 Detailed technical information → @.claude/context/tech.md
 Detailed specifications → @docs/requirements.md

@@ -2,37 +2,37 @@
 tags: #next #actions #planning
 
 ## 3-Line Summary
-- **Today's Tasks**: 技術スタック調査完了 #today #urgent
-- **This Week's Goal**: フェーズ1プロトタイプ完成 #weekly #goal
-- **Blockers**: なし #blocker #risk
+- **Today's Tasks**: プロダクトオーナーフィードバック緊急対応 #today #urgent
+- **This Week's Goal**: Phase 2.2d モバイルUX改善完了 #weekly #goal
+- **Blockers**: None #blocker #risk
 
 ## Priority Matrix
 ### 🔥 Urgent & Important
-- 技術スタック調査（Electron/Tauri） - 今日 #urgent #important #critical
-- 開発環境セットアップ - 今日 #urgent #important #critical
+- インジケーター配置変更（右上→右下） - 2025-07-25 #urgent #important #critical
+- モバイルStatistics配置変更（ヘッダー側移動） - 2025-07-25 #urgent #important #critical
 
 ### ⭐ Important & Not Urgent
-- フェーズ1アーキテクチャ設計 - 今週 #important #planned #strategic
-- フォーカスモード基本実装 - 今週 #important #planned #strategic
+- TDD手順明記（リファクタリング後コミット） - 2025-07-25 #important #planned #strategic
+- ヘッダー日付ボタンレイアウト確認 - 2025-07-26 #important #planned #strategic
 
 ### ⚡ Urgent & Not Important
-- セキュリティ設定確認 - 今日 #urgent #reactive #quick
-- プロジェクト構造決定 - 今日 #urgent #reactive #quick
+- Phase 2.2b/2.2c戦略検討 - 2025-07-26 #urgent #reactive #quick
 
 ### 📋 Not Urgent & Not Important
-- 高度機能の詳細設計 - 来月 #backlog #someday #optional
+- 次期Phase計画（フォーカスモード強化） - Next Week #backlog #someday #optional
 
 ## Today's 3 Goals
-1. デスクトップアプリフレームワークの選定完了
-2. 基本的な開発環境セットアップ
-3. 次週実装計画の詳細化
+1. T006: モバイル日付設定バグ修正（UTC/JST時差問題の根本解決）
+2. T007: モバイルタスクメモ保存機能実装（3秒自動保存・戻るボタン保存）
+3. T008: CSSクラス検証スクリプト改善（複合セレクタ対応）
 
 ## Required Preparation
-- Electron/Tauri公式ドキュメント: 性能比較
-- TypeScript環境: 開発環境構築
-- UI/UXライブラリ情報: フレームワーク連携
+- Playwright Browser Tool: UI変更確認・レイアウト検証
+- TodoWrite Tool: タスク進捗管理・優先度調整
+- Phase 2.2d フィードバック詳細: プロダクトオーナー要求仕様
 
 ## Definition of Done
 Completion criteria for each task:
-- 技術スタック調査: フレームワーク選定理由を明文化
-- 開発環境セットアップ: 基本プロジェクト作成とビルド成功
+- インジケーター配置変更: 右下配置・モバイル動作確認・テスト通過
+- モバイルStatistics移動: ヘッダー統合・画面効率化・レスポンシブ対応
+- TDD手順明記: リファクタリング後コミット手順・ガイド更新完了

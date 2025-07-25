@@ -243,11 +243,14 @@ cache_control: {"type": "ephemeral"}
 # Quick Templates
 
 ## Basic Patterns
-### `/project:plan` - Planning
-[Project-specific planning template]
+### `/agent:planner` - Strategic Planning & Design
+[Project-specific planning template with Mermaid diagrams]
+
+### `/agent:builder` - Implementation & Debugging
+[Template for technical implementation tasks]
 
 ### `/project:daily` - Daily Update
-[Simple format for current.md updates]
+[Simple format for retrospective notes]
 ```
 
 #### Expected Benefits

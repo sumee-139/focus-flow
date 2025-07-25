@@ -6,6 +6,8 @@ description: "Focus on current task - 現在のタスクに集中"
 
 To concentrate on the current task, display only the minimum necessary information.
 
+**Note**: This command is available in both English and Japanese contexts. Use natural language appropriate to your environment.
+
 ## Execution Steps
 
 1. **Load Core Information**

@@ -60,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/scripts/deny-check.sh"
+            "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/deny-check.sh"
           }
         ]
       }
@@ -71,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/scripts/auto-format.sh"
+            "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/auto-format.sh"
           }
         ]
       },
@@ -80,11 +80,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/scripts/activity-logger.sh"
+            "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/activity-logger.sh"
           },
           {
             "type": "command",
-            "command": ".claude/scripts/ai-logger.sh"
+            "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/ai-logger.sh"
           }
         ]
       }
@@ -95,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": ".claude/scripts/session-complete.sh"
+            "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/session-complete.sh"
           }
         ]
       }
