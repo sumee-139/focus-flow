@@ -77,11 +77,30 @@
   color: #666666;
 }
 
+/* 🔵 Blue Phase: Phase 2.2a 日付・統計情報スタイル */
+.target-date,
 .estimated-time,
+.actual-time,
+.completed-time,
 .alarm-time {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Phase 2.2a: 特別な統計情報スタイル */
+.target-date {
+  font-weight: 500;
+  color: #0066CC; /* Today-First UX での強調 */
+}
+
+.actual-time {
+  color: #00AA00; /* 実績時間の成功色（Design Philosophy準拠の控えめな色） */
+}
+
+.completed-time {
+  color: #666666;
+  font-style: italic;
 }
 
 .tags {
@@ -130,6 +149,7 @@
 }
 
 /* モバイル対応（Design Philosophy: Mobile First） */
+/* 小画面モバイル: ≤480px (BREAKPOINTS.SMALL_MOBILE_MAX) */
 @media (max-width: 480px) {
   .task-item {
     padding: 10px;
@@ -155,12 +175,69 @@
   .task-meta {
     font-size: 11px;
     gap: 8px;
+    /* 🔵 Blue Phase: Phase 2.2a モバイル最適化 */
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* 🔵 Blue Phase: Phase 2.2a 統計情報のモバイル表示改善 */
+  .target-date,
+  .estimated-time,
+  .actual-time,
+  .completed-time,
+  .alarm-time {
+    font-size: 11px;
+    min-height: 20px; /* タッチしやすい高さ確保 */
+  }
+  
+  .target-date {
+    order: -1; /* 日付を最優先表示 */
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  
+  .actual-time {
+    font-weight: 500; /* モバイルで実績時間を強調 */
   }
   
   .edit-button,
   .delete-button {
     font-size: 13px;
-    padding: 6px;
+    padding: 8px; /* タッチターゲット拡大（TOUCH_TARGET.MIN_SIZE対応） */
+    min-width: 44px; /* TOUCH_TARGET.MIN_SIZE */
+    min-height: 44px; /* TOUCH_TARGET.MIN_SIZE */
+  }
+  
+  .task-checkbox {
+    width: 20px;
+    height: 20px; /* モバイル用チェックボックス拡大 */
+  }
+}
+
+/* タブレット対応（Phase 2.2a 中間画面最適化） */
+/* タブレット範囲: 481px-768px (BREAKPOINTS.SMALL_MOBILE_MAX+1 to BREAKPOINTS.MOBILE_MAX) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .task-item {
+    padding: 11px;
+    gap: 11px;
+  }
+  
+  .task-meta {
+    font-size: 12px;
+    gap: 10px;
+    /* タブレットでは横並びを維持しつつ適度な間隔 */
+    flex-wrap: wrap;
+  }
+  
+  .target-date {
+    font-weight: 550; /* タブレットでの適度な強調 */
+  }
+  
+  .edit-button,
+  .delete-button {
+    padding: 7px;
+    min-width: 40px; /* TOUCH_TARGET.SMALL_MOBILE_SIZE */
+    min-height: 40px; /* TOUCH_TARGET.SMALL_MOBILE_SIZE */
   }
 }
 

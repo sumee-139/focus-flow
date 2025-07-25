@@ -37,7 +37,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('📸 ベースラインスクリーンショット', () => {
   // 各ビューポートでのベースライン作成
-  for (const [key, viewport] of Object.entries(VIEWPORTS)) {
+  for (const [_key, viewport] of Object.entries(VIEWPORTS)) {
     test(`should capture ${viewport.name} layout baseline`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(500); // レイアウト安定化

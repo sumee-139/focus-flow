@@ -3,6 +3,12 @@ import { Task, TaskMemoData } from '../types/Task'
 import { useTaskMemoStorage } from '../hooks/useTaskMemoStorage'
 import { AUTO_SAVE } from '../constants/ui'
 
+// 自動保存状態の型定義
+interface SaveStatus {
+  status: 'idle' | 'saving' | 'success' | 'error'
+  message?: string
+}
+
 // タイミング定数 (統一定数を使用)
 const AUTO_SAVE_DELAY = AUTO_SAVE.DELAY_MS // 自動保存の間隔（3秒）
 
@@ -39,20 +45,11 @@ interface TaskMemoProps {
 
 export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: _onTaskAction }) => {
   const [content, setContent] = useState('')
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>({ status: 'idle' })
   const autoSaveTimerRef = useRef<number | null>(null)
   
-  // タスクメモストレージ（エラーハンドリング付き）
-  let taskMemo: TaskMemoData | null = null
-  let setTaskMemo: (data: TaskMemoData) => void = () => {}
-  
-  try {
-    [taskMemo, setTaskMemo] = useTaskMemoStorage(taskId)
-  } catch (error) {
-    console.warn('Failed to load task memo storage:', error)
-    // エラー時はnull値とダミー関数を使用
-    taskMemo = null
-    setTaskMemo = () => console.warn('Task memo save skipped due to storage error')
-  }
+  // タスクメモストレージ
+  const [taskMemo, setTaskMemo] = useTaskMemoStorage(taskId)
 
   // タスクスナップショットを生成する
   const createTaskSnapshot = (task: Task) => {
@@ -73,12 +70,9 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
     }
   }
 
-  // LocalStorageにメモを保存
-  const saveMemo = (memoContent: string): void => {
-    if (!setTaskMemo) {
-      console.warn('Task memo storage not available')
-      return
-    }
+  // LocalStorageにメモを保存（状態インジケーター付き）
+  const saveWithStatus = async (memoContent: string): Promise<void> => {
+    setSaveStatus({ status: 'saving' })
     
     try {
       const trimmedContent = memoContent.trim()
@@ -88,8 +82,20 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
         lastUpdated: new Date().toISOString(),
         taskSnapshot: task ? createTaskSnapshot(task) : { title: '', description: '', tags: [], estimatedMinutes: 0, createdAt: new Date() }
       }
-      setTaskMemo(memoData)
+      
+      // 保存処理を非同期で実行（テスト時のPromise解決を待つ）
+      await Promise.resolve(setTaskMemo(memoData))
+      
+      setSaveStatus({ status: 'success' })
+      
+      // 2秒後にアイドル状態に戻す
+      window.setTimeout(() => setSaveStatus({ status: 'idle' }), 2000)
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      setSaveStatus({ 
+        status: 'error', 
+        message: errorMessage 
+      })
       console.warn('Failed to save task memo:', error)
     }
   }
@@ -106,7 +112,7 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
   const scheduleAutoSave = (memoContent: string): void => {
     clearAutoSaveTimer()
     autoSaveTimerRef.current = window.setTimeout(() => {
-      saveMemo(memoContent)
+      saveWithStatus(memoContent)
     }, AUTO_SAVE_DELAY)
   }
 
@@ -143,6 +149,47 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
     console.log('Quote button clicked')
   }
 
+  // 保存状態インジケーターコンポーネント
+  const SaveStatusIndicator: React.FC<{ status: SaveStatus }> = ({ status }) => {
+    if (status.status === 'idle') return null
+
+    return (
+      <div className={`save-indicator ${status.status}`} style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        padding: '8px 12px',
+        borderRadius: '4px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        zIndex: 1000,
+        transition: 'all 0.3s ease',
+        backgroundColor: status.status === 'saving' ? '#fbbf24' : 
+                        status.status === 'success' ? '#10b981' : '#ef4444',
+        color: status.status === 'saving' ? '#92400e' : 'white'
+      }}>
+        {status.status === 'saving' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>save</span>
+            保存中...
+          </>
+        )}
+        {status.status === 'success' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>check_circle</span>
+            保存完了
+          </>
+        )}
+        {status.status === 'error' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>error</span>
+            保存失敗: {status.message}
+          </>
+        )}
+      </div>
+    )
+  }
+
   // タスクが存在しない場合のハンドリング
   if (!task) {
     return (
@@ -154,6 +201,7 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
 
   return (
     <div className="task-memo">
+      <SaveStatusIndicator status={saveStatus} />
       {/* タスク情報ヘッダー */}
       <div className="task-header" style={{ 
         marginBottom: HEADER_MARGIN_BOTTOM, 

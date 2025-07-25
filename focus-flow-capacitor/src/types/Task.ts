@@ -12,6 +12,10 @@ export interface Task {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
+  // 🆕 Phase 2.2a: 日付管理拡張
+  targetDate: string; // YYYY-MM-DD format
+  actualMinutes?: number; // Actual time spent
+  completedAt?: Date; // Completion timestamp
 }
 
 export interface DailyMemo {
@@ -40,6 +44,34 @@ export interface FocusSession {
   endTime?: Date;
   taskId?: string;
   createdAt: Date;
+}
+
+// 🆕 Phase 2.2a: 日付フィルタ管理型
+export interface TaskFilter {
+  viewDate: string; // YYYY-MM-DD format
+  mode: 'today' | 'date' | 'archive';
+  showCompleted: boolean;
+  showArchived: boolean;
+}
+
+// 🆕 Phase 2.2a: 日付統計情報型
+export interface DateStatistics {
+  date: string; // YYYY-MM-DD
+  totalTasks: number;
+  completedTasks: number;
+  totalEstimatedMinutes: number;
+  totalActualMinutes: number;
+  completionPercentage: number; // 達成率 (0-100)
+}
+
+// 🆕 Phase 2.2a: タスク作成用入力型
+export interface TaskCreateInput {
+  title: string;
+  description?: string;
+  estimatedMinutes: number;
+  targetDate: string;
+  alarmTime?: string;
+  tags: string[];
 }
 
 // App State Types

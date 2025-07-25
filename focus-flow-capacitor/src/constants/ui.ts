@@ -1,5 +1,6 @@
 // UI関連の定数定義
 // Day 3: ISS-003対応 - ブレークポイント等の統一化
+// Hook test - lint should run automatically
 
 // レスポンシブブレークポイント (768px境界統一)
 export const BREAKPOINTS = {

@@ -1,5 +1,6 @@
 import React from 'react'
 import type { Task } from '../types/Task'
+import { formatTaskDate } from '../utils/taskDate'
 import './TaskItem.css'
 
 interface TaskItemProps {
@@ -63,16 +64,46 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           </div>
         )}
         <div className="task-meta">
+          {/* 🔵 Blue Phase: Phase 2.2a Today-First UX 日付表示 */}
+          <span className="target-date">
+            📅 {formatTaskDate(task.targetDate, { format: 'relative' })}
+          </span>
+          
+          {/* 見積時間 */}
           {task.estimatedMinutes > 0 && (
             <span className="estimated-time">
               ⏱️ {task.estimatedMinutes}分
             </span>
           )}
+          
+          {/* 🔵 Blue Phase: 完了タスクの統計情報表示 */}
+          {task.completed && (
+            <>
+              {task.actualMinutes && (
+                <span className="actual-time">
+                  実際: {task.actualMinutes}分
+                </span>
+              )}
+              
+              {task.completedAt && (
+                <span className="completed-time">
+                  完了: {task.completedAt.toLocaleTimeString('ja-JP', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  })}
+                </span>
+              )}
+            </>
+          )}
+          
+          {/* アラーム時刻 */}
           {task.alarmTime && (
             <span className="alarm-time">
               ⏰ {task.alarmTime}
             </span>
           )}
+          
+          {/* タグ */}
           {task.tags.length > 0 && (
             <span className="tags">
               {task.tags.map(tag => (

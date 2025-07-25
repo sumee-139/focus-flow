@@ -110,7 +110,7 @@ describe('Mobile Layout Click Interference Fix', () => {
     const { unmount } = render(<App />)
     
     // デスクトップでmemo-area-45が表示されることを確認
-    let memoArea = screen.getByTestId('memo-area-45')
+    const memoArea = screen.getByTestId('memo-area-45')
     expect(memoArea).toBeVisible()
     
     // コンポーネントをアンマウントしてモバイルで再レンダー

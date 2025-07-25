@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { AUTO_SAVE } from '../constants/ui'
 
+// 自動保存状態の型定義
+interface SaveStatus {
+  status: 'idle' | 'saving' | 'success' | 'error'
+  message?: string
+}
+
 // DailyMemoのデータ型定義
 interface TaskReference {
   taskId: string
@@ -43,6 +49,7 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
   onQuoteRequest: _onQuoteRequest 
 }) => {
   const [content, setContent] = useState('')
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>({ status: 'idle' })
   const autoSaveTimerRef = useRef<number | null>(null)
 
   // 今日の日付キーを取得
@@ -80,8 +87,11 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
     return ''
   }
 
-  // LocalStorageにメモを保存
-  const saveMemo = (memoContent: string): void => {
+  // LocalStorageにメモを保存（状態インジケーター付き）
+  const saveWithStatus = async (memoContent: string): Promise<void> => {
+    console.log('[DEBUG] saveWithStatus called, setting status to saving')
+    setSaveStatus({ status: 'saving' })
+    
     try {
       const trimmedContent = memoContent.trim()
       const memoData: DailyMemoData = {
@@ -90,8 +100,28 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
         lastUpdated: new Date().toISOString(),
         taskReferences: []
       }
+      
       localStorage.setItem(getTodayKey(), JSON.stringify(memoData))
+      setSaveStatus({ status: 'success' })
+      
+      // 2秒後にアイドル状態に戻す
+      setTimeout(() => setSaveStatus({ status: 'idle' }), 2000)
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      
+      // QuotaExceededErrorの特別処理
+      if (error instanceof Error && error.name === 'QuotaExceededError') {
+        setSaveStatus({ 
+          status: 'error', 
+          message: '容量不足のため保存できません' 
+        })
+      } else {
+        setSaveStatus({ 
+          status: 'error', 
+          message: errorMessage 
+        })
+      }
+      
       console.warn('Failed to save memo:', error)
     }
   }
@@ -106,9 +136,11 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
 
   // 自動保存タイマーを設定する
   const scheduleAutoSave = (memoContent: string): void => {
+    console.log('[DEBUG] scheduleAutoSave called, setting timer for', AUTO_SAVE_DELAY, 'ms')
     clearAutoSaveTimer()
     autoSaveTimerRef.current = window.setTimeout(() => {
-      saveMemo(memoContent)
+      console.log('[DEBUG] Timer fired, calling saveWithStatus')
+      saveWithStatus(memoContent)
     }, AUTO_SAVE_DELAY)
   }
 
@@ -132,9 +164,52 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
     scheduleAutoSave(newContent)
   }
 
+  // 保存状態インジケーターコンポーネント
+  const SaveStatusIndicator: React.FC<{ status: SaveStatus }> = ({ status }) => {
+    console.log('[DEBUG] SaveStatusIndicator render, status:', status.status)
+    if (status.status === 'idle') return null
+
+    return (
+      <div className={`save-indicator ${status.status}`} style={{
+        position: 'fixed',
+        bottom: '20px',
+        right: '20px',
+        padding: '8px 12px',
+        borderRadius: '4px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        zIndex: 1000,
+        transition: 'all 0.3s ease',
+        backgroundColor: status.status === 'saving' ? '#fbbf24' : 
+                        status.status === 'success' ? '#10b981' : '#ef4444',
+        color: status.status === 'saving' ? '#92400e' : 'white'
+      }}>
+        {status.status === 'saving' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>save</span>
+            保存中...
+          </>
+        )}
+        {status.status === 'success' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>check_circle</span>
+            保存完了
+          </>
+        )}
+        {status.status === 'error' && (
+          <>
+            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>error</span>
+            保存失敗: {status.message}
+          </>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className={`daily-memo ${embedded ? 'embedded' : 'standalone'}`} data-testid="daily-memo">
       {!embedded && <h2>{MEMO_TITLE}</h2>}
+      <SaveStatusIndicator status={saveStatus} />
       <textarea
         value={content}
         onChange={handleContentChange}

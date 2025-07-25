@@ -49,7 +49,7 @@ export const MemoPanel: React.FC<MemoPanelProps> = ({
     return () => {
       try {
         mediaQuery?.removeEventListener('change', checkIsMobile)
-      } catch (error) {
+      } catch (_error) {
         // cleanup error は無視
       }
     }

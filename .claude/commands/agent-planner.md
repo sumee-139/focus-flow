@@ -37,6 +37,9 @@
 #### 現在の状態
 - Phase/ToDo: @.claude/shared/phase-todo.md
 - 作業メモ: @.claude/planner/notes.md
+- ユーザーからの要求: @.claude/product-owner/idea-note.md
+- 未整理の要求一覧： @.claude/shared/feature-roadmap.md
+- 設計方針： @.claude/planner/design-policy/README.md
 
 さあ、計画を立てましょう！
 
@@ -50,3 +53,4 @@
 ## 注意事項
 - 前のエージェントがhandover.mdを作成していない場合は、作成を促してください
 - 割り込みの場合は、handover-interrupt-[日時].mdの作成を検討してください
+- ユーザーからの要求は一度要件として整理し、確認を取ってからタスクとして整理してください。

@@ -1,12 +1,16 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import type { Task } from '../types/Task'
+import { DatePicker } from './DatePicker'
+import { formatTaskDate } from '../utils/taskDate'
+import './AddTaskForm.css'
 
 interface AddTaskFormProps {
   onAdd: (task: Task) => void;
+  currentDate?: string; // 🔥 FIX: Phase 2.2a統合 - 現在選択中の日付
 }
 
-export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
+export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, currentDate }) => {
   // useRefでDOM要素への参照を作成
   const titleInputRef = useRef<HTMLInputElement>(null)
   
@@ -17,6 +21,17 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
   const [tags, setTags] = useState('')
   const [error, setError] = useState('')
   const [showAdvanced, setShowAdvanced] = useState(false)
+  
+  // 🟢 Green Phase: 日付選択機能の最小限実装
+  const [targetDate, setTargetDate] = useState(currentDate || new Date().toISOString().split('T')[0])
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  
+  // currentDateが変更されたときに、targetDateを自動更新
+  useEffect(() => {
+    if (currentDate) {
+      setTargetDate(currentDate)
+    }
+  }, [currentDate])
 
   // フォームリセット処理を関数に切り出し（Refactor Phase）
   const resetForm = () => {
@@ -26,6 +41,8 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
     setAlarmTime('')
     setTags('')
     setError('')
+    // 🟢 Green Phase: 日付も今日にリセット
+    setTargetDate(new Date().toISOString().split('T')[0])
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -47,6 +64,7 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
       description: description.trim() || undefined,
       estimatedMinutes,
       alarmTime: alarmTime || undefined,
+      targetDate, // 🟢 Green Phase: ステートから取得
       order: Date.now(), // 仮実装：現在時刻をorderとして使用
       completed: false,
       tags: tags ? tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
@@ -115,6 +133,16 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
           詳細
         </button>
         
+        {/* 🟢 Green Phase: 日付選択ボタン */}
+        <button
+          type="button"
+          onClick={() => setShowDatePicker(true)}
+          className="date-button"
+          aria-label="日付を選択"
+        >
+          {formatTaskDate(targetDate, { format: 'relative' })}
+        </button>
+        
         {/* 可変幅スペーサー */}
         <div className="spacer"></div>
         
@@ -165,6 +193,20 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 🟢 Green Phase: DatePickerモーダル */}
+      {showDatePicker && (
+        <DatePicker
+          isOpen={showDatePicker}
+          selectedDate={targetDate}
+          onDateSelect={(date) => {
+            setTargetDate(date)
+            setShowDatePicker(false)
+          }}
+          onClose={() => setShowDatePicker(false)}
+          availableDates={[]} // 制限なし、すべての日付を選択可能
+        />
       )}
     </form>
   )

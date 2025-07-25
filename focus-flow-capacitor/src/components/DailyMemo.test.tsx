@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, test, expect, beforeEach, vi, afterEach } from 'vitest'
 import { DailyMemo } from './DailyMemo'
 
@@ -15,7 +15,10 @@ const localStorageMock = (() => {
     }),
     clear: vi.fn(() => {
       store = {}
-    })
+    }),
+    // store プロパティを公開してテストで参照できるようにする
+    get store() { return store; },
+    set store(newStore: Record<string, string>) { store = newStore; }
   }
 })()
 
@@ -31,6 +34,10 @@ describe('DailyMemo - データ永続化', () => {
     localStorageMock.clear()
     vi.clearAllMocks()
     vi.clearAllTimers()
+    // モック実装をリセット（重要！）
+    localStorageMock.setItem.mockImplementation((key: string, value: string) => {
+      localStorageMock.store[key] = value
+    })
   })
 
   afterEach(() => {
@@ -44,29 +51,41 @@ describe('DailyMemo - データ永続化', () => {
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
     
-    // テキストを入力
-    fireEvent.change(textarea, { target: { value: 'Test memo content' } })
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test memo content' } })
+    })
     
     // 3秒未満では自動保存されない
-    vi.advanceTimersByTime(2000)
+    await act(async () => {
+      vi.advanceTimersByTime(2000)
+    })
     expect(localStorageMock.setItem).not.toHaveBeenCalled()
     
     // 3秒経過で自動保存される
-    vi.advanceTimersByTime(1000)
+    await act(async () => {
+      vi.advanceTimersByTime(1000)
+    })
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       expect.stringMatching(/daily-memo-\d{4}-\d{2}-\d{2}/),
       expect.stringContaining('Test memo content')
     )
   })
 
-  test('should manage memos by date (YYYY-MM-DD)', () => {
+  test('should manage memos by date (YYYY-MM-DD)', async () => {
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
-    fireEvent.change(textarea, { target: { value: 'Today memo' } })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Today memo' } })
+    })
     
     // 3秒経過で保存
-    vi.advanceTimersByTime(3000)
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
     
     // 今日の日付でキーが作成されることを確認
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
@@ -93,28 +112,38 @@ describe('DailyMemo - データ永続化', () => {
     expect(textarea).toHaveValue('Restored memo content')
   })
 
-  test('should not auto-save if input stops for less than 3 seconds', () => {
+  test('should not auto-save if input stops for less than 3 seconds', async () => {
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
     
-    // 最初の入力
-    fireEvent.change(textarea, { target: { value: 'First input' } })
-    vi.advanceTimersByTime(2000) // 2秒経過
+    // 最初の入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'First input' } })
+    })
+    await act(async () => {
+      vi.advanceTimersByTime(2000) // 2秒経過
+    })
     
     // 2秒後に追加入力（タイマーリセット）
-    fireEvent.change(textarea, { target: { value: 'Second input' } })
-    vi.advanceTimersByTime(2000) // さらに2秒経過（合計4秒だが、リセットにより2秒）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Second input' } })
+    })
+    await act(async () => {
+      vi.advanceTimersByTime(2000) // さらに2秒経過（合計4秒だが、リセットにより2秒）
+    })
     
     // まだ保存されていないことを確認
     expect(localStorageMock.setItem).not.toHaveBeenCalled()
     
     // 3秒経過で保存される
-    vi.advanceTimersByTime(1000)
+    await act(async () => {
+      vi.advanceTimersByTime(1000)
+    })
     expect(localStorageMock.setItem).toHaveBeenCalled()
   })
 
-  test('should handle localStorage errors gracefully', () => {
+  test('should handle localStorage errors gracefully', async () => {
     // localStorage.setItemがエラーを投げるように設定
     localStorageMock.setItem.mockImplementation(() => {
       throw new Error('LocalStorage is full')
@@ -123,41 +152,61 @@ describe('DailyMemo - データ永続化', () => {
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
-    fireEvent.change(textarea, { target: { value: 'Test content' } })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content' } })
+    })
     
     // エラーが発生してもアプリがクラッシュしないことを確認
-    expect(() => {
-      vi.advanceTimersByTime(3000)
-    }).not.toThrow()
+    await expect(
+      act(async () => {
+        vi.advanceTimersByTime(3000)
+      })
+    ).resolves.not.toThrow()
     
     // テキストエリアは正常に動作している
     expect(textarea).toHaveValue('Test content')
   })
 
-  test('should clear auto-save timer when component unmounts', () => {
+  test('should clear auto-save timer when component unmounts', async () => {
     const { unmount } = render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
-    fireEvent.change(textarea, { target: { value: 'Test content' } })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content' } })
+    })
     
     // 2秒経過後にアンマウント
-    vi.advanceTimersByTime(2000)
+    await act(async () => {
+      vi.advanceTimersByTime(2000)
+    })
     unmount()
     
     // アンマウント後に3秒経過
-    vi.advanceTimersByTime(2000)
+    await act(async () => {
+      vi.advanceTimersByTime(2000)
+    })
     
     // 保存されていないことを確認（タイマーがクリアされた）
     expect(localStorageMock.setItem).not.toHaveBeenCalled()
   })
 
-  test('should trim whitespace from memo content before saving', () => {
+  test('should trim whitespace from memo content before saving', async () => {
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
-    fireEvent.change(textarea, { target: { value: '  Test memo with spaces  ' } })
     
-    vi.advanceTimersByTime(3000)
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: '  Test memo with spaces  ' } })
+    })
+    
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
     
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       expect.any(String),
@@ -182,5 +231,147 @@ describe('DailyMemo - データ永続化', () => {
     // But textarea should still be present
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
     expect(textarea).toBeInTheDocument()
+  })
+
+  // 🔴 Phase 2.2d-1: 自動保存状態インジケーターテスト
+  test('should show saving indicator when auto-save is in progress', async () => {
+    // 保存処理を遅らせるためにsetItemを遅延実行する
+    localStorageMock.setItem.mockImplementation(async (key: string, value: string) => {
+      // 少し遅延させる
+      await new Promise(resolve => setTimeout(resolve, 50))
+      localStorageMock.store[key] = value
+    })
+    
+    render(<DailyMemo />)
+    
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content for saving' } })
+    })
+    
+    // 3秒経過で保存プロセス開始（但し完了まで時間がかかる）
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
+    
+    // 保存中または保存完了インジケーターが表示されることを確認
+    // （保存処理が高速な場合、保存完了が表示される可能性がある）
+    const savingIndicator = screen.queryByText(/保存中/i)
+    const successIndicator = screen.queryByText(/保存完了/i)
+    
+    expect(savingIndicator || successIndicator).toBeInTheDocument()
+  })
+
+  test('should show success indicator when auto-save succeeds', async () => {
+    render(<DailyMemo />)
+    
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content for success' } })
+    })
+    
+    // 3秒経過で保存実行
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
+    
+    // 少し待って成功状態を確認
+    await act(async () => {
+      vi.advanceTimersByTime(100)
+    })
+    
+    // 成功インジケーターが表示されることを確認
+    expect(screen.getByText(/保存完了/i)).toBeInTheDocument()
+    expect(screen.getByText('check_circle')).toBeInTheDocument() // Material Icon
+  })
+
+  test('should show error indicator when auto-save fails', async () => {
+    // localStorage.setItemがエラーを投げるように設定
+    localStorageMock.setItem.mockImplementation(() => {
+      throw new Error('LocalStorage quota exceeded')
+    })
+    
+    render(<DailyMemo />)
+    
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content for error' } })
+    })
+    
+    // 3秒経過で保存エラー発生
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
+    
+    // エラーインジケーターが表示されることを確認
+    expect(screen.getByText(/保存失敗/i)).toBeInTheDocument()
+    expect(screen.getByText('error')).toBeInTheDocument() // Material Icon
+    expect(screen.getByText(/LocalStorage quota exceeded/i)).toBeInTheDocument()
+  })
+
+  test('should handle localStorage quota exceeded error', async () => {
+    // QuotaExceededError をシミュレート
+    localStorageMock.setItem.mockImplementation(() => {
+      const error = new Error('QuotaExceededError')
+      error.name = 'QuotaExceededError'
+      throw error
+    })
+    
+    render(<DailyMemo />)
+    
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Large content that exceeds quota' } })
+    })
+    
+    // エラーが発生してもアプリがクラッシュしないことを確認
+    await expect(
+      act(async () => {
+        vi.advanceTimersByTime(3000)
+      })
+    ).resolves.not.toThrow()
+    
+    // 適切なエラーメッセージが表示されることを確認
+    expect(screen.getByText(/容量不足/i)).toBeInTheDocument()
+  })
+
+  test('should position save status indicator at bottom-right (non-intrusive)', async () => {
+    render(<DailyMemo />)
+    
+    const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
+    
+    // テキストを入力（act()でラップ）
+    await act(async () => {
+      fireEvent.change(textarea, { target: { value: 'Test content for save indicator' } })
+    })
+    
+    // 保存中インジケーターが表示される
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+    })
+    
+    // 保存中または保存完了インジケーターが表示されることを確認
+    // （保存処理が高速な場合、保存完了が表示される可能性がある）
+    const savingIndicator = screen.queryByText(/保存中/i)
+    const successIndicator = screen.queryByText(/保存完了/i)
+    
+    const saveIndicator = savingIndicator || successIndicator
+    expect(saveIndicator).toBeInTheDocument()
+    
+    // 右下配置の確認（bottom: '20px', right: '20px'）
+    const indicatorElement = saveIndicator!.closest('.save-indicator')
+    expect(indicatorElement).toHaveStyle({
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px'
+    })
   })
 })

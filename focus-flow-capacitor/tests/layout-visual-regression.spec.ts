@@ -56,7 +56,7 @@ test.beforeEach(async ({ page }) => {
 
 test.describe('📸 基本レイアウトスクリーンショット', () => {
   // 各ブレークポイントでのベースラインスクリーンショット
-  for (const [key, viewport] of Object.entries(BREAKPOINTS)) {
+  for (const [_key, viewport] of Object.entries(BREAKPOINTS)) {
     test(`should capture ${viewport.name} layout baseline`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       
@@ -71,7 +71,7 @@ test.describe('📸 基本レイアウトスクリーンショット', () => {
 
 test.describe('🔍 特定エリアの詳細スクリーンショット', () => {
   test('should capture tasks sidebar in all breakpoints', async ({ page }) => {
-    for (const [key, viewport] of Object.entries(BREAKPOINTS)) {
+    for (const [_key, viewport] of Object.entries(BREAKPOINTS)) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(300);
       
@@ -83,7 +83,7 @@ test.describe('🔍 特定エリアの詳細スクリーンショット', () => 
   });
 
   test('should capture memo area in all breakpoints', async ({ page }) => {
-    for (const [key, viewport] of Object.entries(BREAKPOINTS)) {
+    for (const [_key, viewport] of Object.entries(BREAKPOINTS)) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(300);
       
@@ -283,7 +283,7 @@ test.describe('🔄 回帰比較テスト', () => {
     }
     
     // 各ブレークポイントでの最終的な見た目を記録
-    for (const [key, viewport] of Object.entries(BREAKPOINTS)) {
+    for (const [_key, viewport] of Object.entries(BREAKPOINTS)) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(400);
       

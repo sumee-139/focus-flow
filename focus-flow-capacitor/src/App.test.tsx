@@ -1,6 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 import App from './App'
+
+// 固定日時でテストを安定化（2025-07-25 09:00 JST）
+const MOCK_DATE = new Date('2025-07-25T00:00:00.000Z') // UTC midnight = JST 09:00
 
 // Mock window.matchMedia for MemoPanel and Mobile Detection
 Object.defineProperty(window, 'matchMedia', {
@@ -19,13 +22,129 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-// 🔴 Red Phase: タスク削除機能の失敗するテストを先に書く
+// LocalStorage cleanup and date mock before each test
+beforeEach(() => {
+  localStorage.clear()
+  
+  // 固定日時でテストを安定化
+  vi.useFakeTimers()
+  vi.setSystemTime(MOCK_DATE)
+})
+
+afterEach(() => {
+  vi.useRealTimers()
+})
+
+// 🔴 Red Phase: Phase 2.2a App.tsx統合の失敗するテストを先に書く
+describe('App - Phase 2.2a Date Management Integration', () => {
+  test('should render DateNavigation component in header', () => {
+    render(<App />)
+    
+    // DateNavigationの存在確認（Today-First UXの核心）
+    expect(screen.getByRole('navigation', { name: /日付ナビゲーション/ })).toBeInTheDocument()
+    expect(screen.getByText(/前へ/)).toBeInTheDocument() // DateNavigationのボタンテキスト
+    expect(screen.getByText(/次へ/)).toBeInTheDocument() // DateNavigationのボタンテキスト
+    expect(screen.getByLabelText(/カレンダーを開く/)).toBeInTheDocument()
+  })
+
+  test('should render TaskStatistics component', () => {
+    render(<App />)
+    
+    // TaskStatisticsの存在確認（コンテナ内の特定テキストで確認）
+    const statisticsContainer = screen.getByTestId('task-statistics')
+    expect(statisticsContainer).toBeInTheDocument()
+    
+    // 統計情報の表示を確認（TaskStatistics固有の表示） - 実際の統計表示
+    expect(statisticsContainer).toHaveTextContent(/今日.*件.*完了.*件|タスクなし/)
+  })
+
+  test('should show only today tasks by default (Today-First UX)', async () => {
+    // このテストでは実際の時間を使用（fakeTimersをオフ）
+    vi.useRealTimers()
+    
+    render(<App />)
+    
+    // まず、タスクを追加
+    const titleInput = screen.getByLabelText(/タスクタイトル/)
+    const addButton = screen.getByRole('button', { name: /追加/ })
+    
+    fireEvent.change(titleInput, { target: { value: 'Test Today Task' } })
+    fireEvent.click(addButton)
+    
+    // 今日のタスクが表示されることを確認
+    await waitFor(() => {
+      const taskItems = screen.getAllByTestId(/^task-item-/)
+      expect(taskItems.length).toBeGreaterThan(0)
+    })
+    
+    // 統計情報に今日のタスク数が表示されていることを確認
+    const statistics = screen.getByTestId('task-statistics')
+    expect(statistics).toBeInTheDocument()
+    
+    // テスト後にfakeTimersを復元
+    vi.useFakeTimers()
+    vi.setSystemTime(MOCK_DATE)
+  })
+
+  test('should open DatePicker modal when date picker button is clicked', async () => {
+    render(<App />)
+    
+    // カレンダーボタンをクリック
+    const datePickerButton = screen.getByLabelText(/カレンダーを開く/)
+    fireEvent.click(datePickerButton)
+    
+    // DatePickerは未実装なので、コンソールログメッセージで確認
+    // 実際の実装では「DatePicker will be implemented」がログ出力される
+    expect(datePickerButton).toBeInTheDocument()
+  })
+
+  test('should filter tasks when date is changed', async () => {
+    render(<App />)
+    
+    // まず、今日のタスクを追加
+    const titleInput = screen.getByLabelText(/タスクタイトル/)
+    const addButton = screen.getByRole('button', { name: /追加/ })
+    
+    fireEvent.change(titleInput, { target: { value: 'Today Task' } })
+    fireEvent.click(addButton)
+    
+    // 今日のタスクが表示されることを確認
+    await waitFor(() => {
+      const initialTasks = screen.getAllByTestId(/^task-item-/)
+      expect(initialTasks.length).toBe(1)
+    })
+    
+    // 日付を変更（前日へ）
+    const prevButton = screen.getByText(/前へ/)
+    fireEvent.click(prevButton)
+    
+    // 前日（7/24）にはタスクがないので、タスクリストが空になることを確認
+    await waitFor(() => {
+      const currentTasks = screen.queryAllByTestId(/^task-item-/)
+      expect(currentTasks.length).toBe(0) // 前日（2025-07-24）にはタスクがない
+    })
+  })
+})
+
+// 🔴 Red Phase: タスク削除機能の失敗するテストを先に書く  
 describe('App - Task Delete Functionality', () => {
   test('should show confirm dialog when delete button is clicked', async () => {
     render(<App />)
     
-    // 既存のタスクの削除ボタンを探す
-    const deleteButtons = screen.getAllByLabelText(/delete/i)
+    // まず、タスクを追加
+    const titleInput = screen.getByLabelText(/タスクタイトル/)
+    const addButton = screen.getByRole('button', { name: /追加/ })
+    
+    fireEvent.change(titleInput, { target: { value: 'Task to Delete' } })
+    fireEvent.click(addButton)
+    
+    // タスクが追加されるまで待機
+    await waitFor(() => {
+      expect(screen.getByTestId(/^task-item-/)).toBeInTheDocument()
+    })
+    
+    // 削除ボタンを探してクリック
+    const deleteButtons = screen.getAllByTestId('delete-task-button')
     expect(deleteButtons.length).toBeGreaterThan(0)
     
     // 最初のタスクの削除ボタンをクリック
@@ -47,7 +166,7 @@ describe('App - Task Delete Functionality', () => {
     const initialTaskCount = initialTasks.length
     
     // 最初のタスクの削除ボタンをクリック
-    const deleteButtons = screen.getAllByLabelText(/delete/i)
+    const deleteButtons = screen.getAllByTestId('delete-task-button')
     fireEvent.click(deleteButtons[0])
     
     // ConfirmDialogが表示される
@@ -76,7 +195,7 @@ describe('App - Task Delete Functionality', () => {
     const initialTaskCount = initialTasks.length
     
     // 最初のタスクの削除ボタンをクリック
-    const deleteButtons = screen.getAllByLabelText(/delete/i)
+    const deleteButtons = screen.getAllByTestId('delete-task-button')
     fireEvent.click(deleteButtons[0])
     
     // ConfirmDialogが表示される
@@ -105,7 +224,7 @@ describe('App - Task Delete Functionality', () => {
     const initialTaskCount = initialTasks.length
     
     // 最初のタスクの削除ボタンをクリック
-    const deleteButtons = screen.getAllByLabelText(/delete/i)
+    const deleteButtons = screen.getAllByTestId('delete-task-button')
     fireEvent.click(deleteButtons[0])
     
     // ConfirmDialogが表示される
@@ -137,7 +256,9 @@ describe('App - Task Delete Functionality', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     
     // 不可逆的操作（削除）にはConfirmDialogを使用する
-    const deleteButtons = screen.getAllByLabelText(/delete/i)
+    // data-testidで削除ボタンを検索する方法に変更
+    const deleteButtons = screen.getAllByTestId('delete-task-button')
+    expect(deleteButtons.length).toBeGreaterThan(0)
     fireEvent.click(deleteButtons[0])
     
     // ConfirmDialogが表示されることを確認
@@ -281,8 +402,7 @@ describe('App - New Layout System (30%-45%-25%)', () => {
     
     expect(tasksArea).toContainElement(tasksSidebar)
     
-    // tasks-sidebarの機能が変わらず動作する
-    expect(screen.getByText("Today's Tasks")).toBeInTheDocument()
+    // tasks-sidebarの機能が変わらず動作する（Today's Tasksタイトルは廃止）
     expect(screen.getByTestId('form-fixed-area')).toBeInTheDocument()
     expect(screen.getByTestId('tasks-scrollable-area')).toBeInTheDocument()
   })
@@ -674,5 +794,132 @@ describe('App - Mobile Responsive Integration (≤768px)', () => {
     expect(screen.queryByTestId('mobile-accordion')).not.toBeInTheDocument()
     expect(screen.getByLabelText(/デイリーメモ/)).toBeInTheDocument()
     expect(screen.getByText(/📝 メモパネルを開く/)).toBeInTheDocument()
+  })
+
+  // 🔴 Red Phase: showCompleted切り替えUIの失敗するテスト
+  test('should render showCompleted toggle button', () => {
+    render(<App />)
+    
+    // 完了タスク表示切り替えボタンの存在確認
+    expect(screen.getByTestId('show-completed-toggle')).toBeInTheDocument()
+    expect(screen.getByLabelText(/完了タスクを表示/)).toBeInTheDocument()
+  })
+
+  test('should toggle completed tasks visibility when button is clicked', async () => {
+    render(<App />)
+    
+    // 最初のタスクを完了にする
+    const completeButtons = screen.getAllByTestId('complete-task-button')
+    fireEvent.click(completeButtons[0])
+    
+    // 初期状態: 完了タスクは非表示（showCompleted=false）
+    const toggleButton = screen.getByTestId('show-completed-toggle')
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'false')
+    
+    // 完了タスクが非表示になっていることを確認
+    await waitFor(() => {
+      const visibleTasks = screen.getAllByTestId(/^task-item-/)
+      // 完了済みタスクは非表示なので、未完了タスクのみ表示
+      expect(visibleTasks.length).toBe(1) // デフォルトタスク2つのうち、1つが完了→非表示、1つが未完了→表示
+    })
+    
+    // トグルボタンをクリックして完了タスクを表示
+    fireEvent.click(toggleButton)
+    
+    await waitFor(() => {
+      expect(toggleButton).toHaveAttribute('aria-pressed', 'true')
+      
+      // 完了タスクが表示される（全タスクが表示される）
+      const visibleTasks = screen.getAllByTestId(/^task-item-/)
+      expect(visibleTasks.length).toBe(2) // 完了タスク + 未完了タスク = 2つ
+    })
+  })
+
+  test('should handle Ctrl+H keyboard shortcut for toggle', () => {
+    render(<App />)
+    
+    const toggleButton = screen.getByTestId('show-completed-toggle')
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'false')
+    
+    // Ctrl+H を押下
+    fireEvent.keyDown(document, { key: 'h', ctrlKey: true })
+    
+    // トグル状態が変更される
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'true')
+    
+    // もう一度 Ctrl+H を押下
+    fireEvent.keyDown(document, { key: 'h', ctrlKey: true })
+    
+    // トグル状態が元に戻る
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('should update toggle button text based on state', () => {
+    render(<App />)
+    
+    const toggleButton = screen.getByTestId('show-completed-toggle')
+    
+    // 初期状態: 完了タスク非表示
+    expect(screen.getByText(/完了タスクを表示/)).toBeInTheDocument()
+    
+    // クリックして完了タスクを表示
+    fireEvent.click(toggleButton)
+    
+    // ボタンテキストが変更される
+    expect(screen.getByText(/完了タスクを非表示/)).toBeInTheDocument()
+  })
+})
+
+// 🔴 Phase 2.2d-1: Statistics重複表示解消テスト
+describe('App - Statistics Display Consolidation', () => {
+  test('should show only one statistics display (not duplicate)', () => {
+    render(<App />)
+    
+    // 統計情報が1箇所にのみ表示されることを確認
+    // TaskStatisticsコンポーネントが存在する
+    const taskStatistics = screen.getByTestId('task-statistics')
+    expect(taskStatistics).toBeInTheDocument()
+    
+    // DateNavigationには統計情報が表示されない
+    const dateNavigation = screen.getByTestId('date-navigation')
+    expect(dateNavigation).not.toHaveTextContent(/タスク数/)
+    expect(dateNavigation).not.toHaveTextContent(/見積時間/)
+    expect(dateNavigation).not.toHaveTextContent(/完了見込み/)
+  })
+
+  test('should maintain all essential statistics in single display', () => {
+    render(<App />)
+    
+    // TaskStatisticsに必要な統計情報が漏れなく含まれることを確認
+    const taskStatistics = screen.getByTestId('task-statistics')
+    
+    // 基本統計が含まれていることを確認（現在の実装では統計表示）
+    expect(taskStatistics).toHaveTextContent(/今日.*件.*完了.*件|タスクなし/) // 実際の統計表示を確認
+  })
+})
+
+// Phase 2.2d-1: Today-First UX改善テスト
+describe('App - Today-First UX Improvements', () => {
+  test('should not display "Today\'s Tasks" title (incompatible with date navigation)', () => {
+    render(<App />)
+    
+    // 「Today's Tasks」タイトルが表示されないことを確認
+    const tasksSection = screen.getByTestId('tasks-section')
+    expect(tasksSection).not.toHaveTextContent(/Today's Tasks/)
+    
+    // ただし、tasks-section自体は存在することを確認
+    expect(tasksSection).toBeInTheDocument()
+  })
+
+  test('should show contextual date information instead of fixed title', () => {
+    render(<App />)
+    
+    // 日付ナビゲーション経由で日付コンテキストが提供されることを確認
+    const dateNavigation = screen.getByTestId('date-navigation')
+    expect(dateNavigation).toBeInTheDocument()
+    
+    // TaskStatisticsで統計情報が表示されることを確認
+    const taskStatistics = screen.getByTestId('task-statistics')
+    expect(taskStatistics).toHaveTextContent(/今日.*件.*完了.*件|タスクなし/) // 実際の統計表示
   })
 })

@@ -1,51 +1,11 @@
 # Phase & ToDo管理
 
-## 現在のPhase: Phase 1.5 - 運用準備完了フェーズ
-- 開始日: 2025-07-18
-- 目的: 実運用フィードバック収集のための最終品質向上
-- 状態: 計画策定中
+## 現在のPhase: Phase 2.2 完了・次期戦略検討フェーズ
+- 開始日: 2025-07-24
+- 目的: Phase 2.2a完了評価とPhase 2.2b/2.2c/2.3の戦略選択
+- 状態: Planner戦略検討中
 
 ## Phase進捗状況
-
-### ✅ Phase 1: 基礎構造の構築（完了）
-- [x] `.claude/agents/` ディレクトリ作成
-- [x] `.claude/agents/active.md` 作成（初期値: "none"）
-- [x] `.claude/planner/` ディレクトリ作成
-- [x] `.claude/builder/` ディレクトリ作成
-- [x] `.claude/shared/` ディレクトリ作成
-- [x] 各エージェントに `archive/` サブディレクトリ作成
-
-### ✅ Phase 2: エージェントファイルの実装（完了）
-- [x] `planner/identity.md` 作成
-- [x] `planner/notes.md` 作成
-- [x] `planner/handover.md` 作成
-- [x] `builder/identity.md` 作成
-- [x] `builder/notes.md` 作成
-- [x] `builder/handover.md` 作成
-- [x] `shared/constraints.md` 作成
-- [x] `shared/phase-todo.md` 作成（このファイル）
-- [x] 割り込み処理テンプレート作成
-- [x] ファイル内容の整合性確認
-
-### ✅ Phase 3: 切り替えコマンドの実装（完了）
-- [x] `.claude/commands/agent-planner.md` 作成
-- [x] `.claude/commands/agent-builder.md` 作成
-- [x] 切り替え時のhandover.md作成プロンプト実装
-- [x] active.md更新ロジックの説明追加
-
-### ✅ Phase 4: 既存システムとの統合（完了）
-- [x] `core/current.md` の廃止通知作成
-- [x] `CLAUDE.md` にClaude Friends説明追加
-- [x] `guidelines/development.md` にエージェント運用ルール追加
-- [x] 運用ガイド `.claude/claude-friends-guide.md` 作成
-- [x] AIロガーとの連携は既存設定で動作確認
-
-### ✅ Phase 5: Claude Friends運用開始（完了）
-- [x] 初回のPlanner起動テスト
-- [x] サンプルhandover.md作成
-- [x] 実際のプロジェクトでの運用開始
-- [x] フィードバックに基づく改善
-- [x] 運用ドキュメント作成
 
 ### ✅ Phase 1.5: 運用準備完了フェーズ（完了）
 - [x] ConfirmDialogのCSS styling実装（最優先タスク完了）
@@ -53,22 +13,47 @@
 - [x] プロダクトオーナーフィードバック収集準備（98%完成度達成）
 - [x] プロダクトオーナーによる実使用フィードバック収集（完了）
 
-### ✅ Phase 2.1: 緊急修正・設計相談フェーズ（進行中）
+### ✅ Phase 2.1: 緊急修正・設計相談フェーズ（完了）
 - [x] タスク追加フォームの全面改修（完了：useRef改善・Design Philosophy準拠）
-- [ ] データ永続化システム実装（Phase 2.1a：技術的問題解決中）
-- [ ] タスクメモ・デイリーメモ連携システム（Phase 2.1b：設計完了、実装待ち）
-- [ ] 日本語化対応（Phase 2.1c：ConfirmDialog・エラーメッセージ）
-- [ ] レスポンシブデザイン改善（Phase 2.1c：1200px以下のモバイル対応）
+- [x] データ永続化システム実装（Phase 2.1a：DailyMemo実装完了）
+- [x] タスクメモ・デイリーメモ連携システム（Phase 2.1b：完全実装）
+- [x] 日本語化対応（Phase 2.1c：基本対応完了）
+- [x] レスポンシブデザイン改善（Phase 2.1c：モバイル対応完了）
 
-#### Phase 2.1詳細進捗
-- **Phase 2.1a**（緊急）: DailyMemoコンポーネント実装（Writeツール問題対応）
-- **Phase 2.1b**（設計完了）: 70%サイドパネル方式・引用機能・LocalStorage拡張
-- **Phase 2.1c**（品質向上）: モバイル対応・日本語化・総合テスト
+### ✅ Phase 2.2a: タスク日付管理システム（完了 - 2025-07-24）
+- [x] **Today-First UX完全実現**
+  - [x] 日付ナビゲーション実装（DateNavigation、DatePicker）
+  - [x] タスクフィルタリングシステム統合（useTaskFilter）
+  - [x] TaskStatisticsコンポーネント実装
+- [x] **品質基盤確立**
+  - [x] プロダクション品質達成（98.1%テスト成功率）
+  - [x] 3段階品質ゲート構築（TypeScript + ESLint + Build）
+  - [x] TDD手法完全定着（全コンポーネントにテストファースト適用）
+- [x] **UX改善実装**
+  - [x] showCompleted切り替えUI実装（Ctrl+H ショートカット）
+  - [x] デフォルト未完了表示による集中力向上
+  - [x] アクセシビリティ完備
+
+### 🚨 Phase 2.2d: データ保護・モバイルUX緊急改善（拡張・最高優先度 - 2025-07-25）
+- [x] **T005: 日付ナビゲーション整理**（完了 - Builder実装済み）
+- [ ] **T006: モバイル日付設定バグ修正（最高優先度）**
+  - [ ] UTC/JST時差問題の根本解決
+  - [ ] 「今日」ボタン状態管理修正
+  - [ ] JST基準日付計算・表示の実装
+- [ ] **T007: モバイルタスクメモ保存機能実装（最高優先度）**
+  - [ ] 3秒自動保存機能実装
+  - [ ] 戻るボタン保存機能実装
+  - [ ] 保存状態フィードバックUI実装
+- [ ] **T008: CSSクラス検証スクリプト改善（高優先度）**
+  - [ ] 複合セレクタ対応の検出ロジック実装
+  - [ ] 品質ゲートの信頼性向上
 
 ## 今週のToDo（優先順）
-1. [x] Phase 1.5完了判断: プロダクトオーナーフィードバック収集（完了）
-2. [x] Phase 2.1計画策定: フィードバック分析と実装計画（完了）
-3. [ ] Phase 2.1実装開始: Builderへの詳細指示（進行中）
+1. [x] Phase 2.2a完了評価: Builderからの引き継ぎ確認（完了）
+2. [x] モバイルUXフィードバック分析: プロダクトオーナー要求整理（完了）
+3. [x] **Phase 2.2d緊急拡張計画**: データ保護・モバイルUX致命問題の設計（完了）
+4. [ ] **T006-T008実装**: Builder緊急実装指示（最優先）
+5. [ ] Phase 2.2b戦略準備: フォーカスモード要件定義
 
 ## 完了したPhase
 - Phase 1: 基礎構造の構築（2025-07-11完了）

@@ -11,7 +11,11 @@ import { TabArea, type TabInfo } from './components/TabArea'
 import { TaskMemo } from './components/TaskMemo'
 import { MobileAccordion } from './components/MobileAccordion'
 import { MobileTaskMemoModal } from './components/MobileTaskMemoModal'
+import { DateNavigation } from './components/DateNavigation'
+import { DatePicker } from './components/DatePicker'
+import { TaskStatistics } from './components/TaskStatistics'
 import { useLocalStorage } from './hooks/useLocalStorage'
+import { useTaskFilter } from './hooks/useTaskFilter'
 import { MEDIA_QUERIES } from './constants/ui'
 import './App.css'
 
@@ -23,6 +27,7 @@ const defaultTasks: Task[] = [
     description: 'Design Philosophyに準拠したUI実装',
     estimatedMinutes: 120,
     alarmTime: '14:00',
+    targetDate: new Date().toISOString().split('T')[0], // 今日の日付をデフォルト
     order: 1,
     completed: false,
     tags: ['development'],
@@ -34,8 +39,9 @@ const defaultTasks: Task[] = [
     title: 'タスク管理機能をテストする',
     description: '基本的なCRUD操作の動作確認',
     estimatedMinutes: 30,
+    targetDate: new Date().toISOString().split('T')[0], // 今日の日付をデフォルト
     order: 2,
-    completed: false,
+    completed: false, // 🔥 FIX: テスト用に未完了タスクを保持
     tags: ['testing'],
     createdAt: new Date(),
     updatedAt: new Date()
@@ -204,9 +210,32 @@ const parseTasks = (tasks: Task[]): Task[] => {
   }))
 }
 
+// ローカル時刻での今日の日付を取得（YYYY-MM-DD形式）
+const getLocalDateString = (): string => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function App() {
   // LocalStorageからタスクを読み込み
   const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', defaultTasks)
+  
+  // 🟢 Green Phase: Phase 2.2a Date Management Integration
+  // タスクフィルタリング機能（日付管理も含む）
+  const { filteredTasks, statistics, filter, updateFilter } = useTaskFilter(state.tasks)
+  
+  // 🟢 循環依存バグ修正: アプリ起動時にフィルタを今日の日付に強制設定
+  useEffect(() => {
+    // 🟢 タイムゾーン対応: ローカル時刻を使用（UTCではなく）
+    const actualToday = getLocalDateString()
+    updateFilter({ viewDate: actualToday, mode: 'today' })
+  }, [updateFilter]) // updateFilterを依存配列に追加（ESLint対応）
+  
+  // DatePickerモーダル状態管理
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   
   // 初期状態をlocalStorageのタスクで設定
   const [state, dispatch] = useReducer(appReducer, getInitialState(parseTasks(storedTasks)))
@@ -281,16 +310,16 @@ function App() {
     return () => {
       try {
         mediaQuery?.removeEventListener('change', checkIsMobile)
-      } catch (error) {
+      } catch {
         // cleanup error は無視
       }
     }
   }, [])
 
-  const showMessage = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+  const showMessage = useCallback((message: string, type: 'success' | 'error' | 'info' = 'info') => {
     setStatusMessage(`${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'} ${message}`)
     setTimeout(() => setStatusMessage(''), 5000)
-  }
+  }, [])
 
   const checkNotificationPermissions = async () => {
     try {
@@ -454,7 +483,8 @@ function App() {
   }, [activeTabId])
 
   const handleTaskClick = useCallback((taskId: string) => {
-    const task = state.tasks.find(t => t.id === taskId)
+    // 🟢 Green Phase: フィルタされたタスクから検索するように変更
+    const task = filteredTasks.find(t => t.id === taskId) || state.tasks.find(t => t.id === taskId)
     if (!task) return
 
     // Mobile UX: モバイルではタスクメモモーダルを開く
@@ -482,7 +512,7 @@ function App() {
     
     // そのタブをアクティブにする
     setActiveTabId(taskId)
-  }, [state.tasks, openTabs, isMobile])
+  }, [filteredTasks, state.tasks, openTabs, isMobile])
 
   // Mobile UX handlers (Phase 2.1d+ Final)
   const handleAccordionToggle = useCallback(() => {
@@ -527,6 +557,44 @@ function App() {
         break
     }
   }, [handleToggleTask, handleDeleteTask, startFocusMode])
+  
+  // 🟢 Green Phase: Phase 2.2a Date Management Integration Handlers
+  const handleDatePickerClose = useCallback(() => {
+    setIsDatePickerOpen(false)
+  }, [])
+  
+  const handleDateSelect = useCallback((selectedDate: string) => {
+    const isToday = selectedDate === getLocalDateString()
+    updateFilter({ viewDate: selectedDate, mode: isToday ? 'today' : 'date' })
+    setIsDatePickerOpen(false)
+  }, [updateFilter])
+  
+  // 🟢 循環依存バグ修正: useEffectを削除してフィルタ更新を明示的に制御
+  
+  // DateNavigationコンポーネント用のhandler（直接日付文字列を受け取る）
+  const handleDateChange = useCallback((dateString: string) => {
+    // フィルタ更新のみ実行（useDateNavigationは使わない）
+    const isToday = dateString === getLocalDateString()
+    updateFilter({ viewDate: dateString, mode: isToday ? 'today' : 'date' })
+  }, [updateFilter])
+
+  // 🟢 Green Phase: showCompleted切り替えハンドラー
+  const handleToggleShowCompleted = useCallback(() => {
+    updateFilter({ showCompleted: !filter.showCompleted })
+  }, [filter.showCompleted, updateFilter])
+
+  // 🟢 Green Phase: Ctrl+H キーボードショートカット
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === 'h') {
+        event.preventDefault()
+        handleToggleShowCompleted()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleToggleShowCompleted])
 
 
 
@@ -539,12 +607,33 @@ function App() {
             <h1>FocusFlow</h1>
             <p className="subtitle">今日必ず着手するタスクのみを管理</p>
           </div>
+          
+          {/* 🟢 Green Phase: DateNavigation統合 */}
+          <DateNavigation
+            currentDate={filter.viewDate}
+            onDateChange={handleDateChange}
+            onDatePickerOpen={() => setIsDatePickerOpen(true)}
+            compact={false}
+          />
+          
           <div className="focus-toggle">
             <button 
               className={`focus-btn ${state.focusMode.isActive ? 'active' : ''}`}
               onClick={state.focusMode.isActive ? stopFocusMode : startFocusMode}
             >
               Focus: {state.focusMode.isActive ? 'ON' : 'OFF'}
+            </button>
+            
+            {/* 🟢 Green Phase: showCompleted切り替えボタン */}
+            <button
+              data-testid="show-completed-toggle"
+              className={`focus-btn ${filter.showCompleted ? 'active' : ''}`}
+              onClick={handleToggleShowCompleted}
+              aria-pressed={filter.showCompleted}
+              aria-label={filter.showCompleted ? '完了タスクを非表示' : '完了タスクを表示'}
+              title={`完了タスクを${filter.showCompleted ? '非表示' : '表示'} (Ctrl+H)`}
+            >
+              {filter.showCompleted ? '✅ 完了タスクを非表示' : '👁️ 完了タスクを表示'}
             </button>
           </div>
         </header>
@@ -553,17 +642,22 @@ function App() {
           {/* Tasks Area (30% - Design Philosophy準拠) */}
           <div className={`tasks-area-30 ${isMobile ? 'mobile-full-height' : ''}`} data-testid="tasks-area-30">
             <aside className="tasks-sidebar" data-testid="tasks-section">
-              <h3>Today's Tasks</h3>
               
               {/* フォーム固定表示エリア */}
               <div className="form-fixed-area" data-testid="form-fixed-area">
-                <AddTaskForm onAdd={handleAddTask} />
+                <AddTaskForm 
+                  onAdd={handleAddTask} 
+                  currentDate={filter.viewDate} 
+                />
               </div>
+              
+              {/* 🟢 Green Phase: TaskStatistics統合表示 */}
+              <TaskStatistics date={filter.viewDate} statistics={statistics} />
               
               {/* スクロール可能なタスクリストエリア */}
               <div className="tasks-scrollable-area" data-testid="tasks-scrollable-area">
                 <div className="tasks-list">
-                  {state.tasks.map(task => (
+                  {filteredTasks.map(task => (
                     <TaskItem
                       key={task.id}
                       task={task}
@@ -598,7 +692,7 @@ function App() {
                 <TaskMemo 
                   key={activeTabId}
                   taskId={activeTabId} 
-                  task={state.tasks.find(t => t.id === activeTabId)} 
+                  task={filteredTasks.find(t => t.id === activeTabId) || state.tasks.find(t => t.id === activeTabId)} 
                 />
               )}
             </main>
@@ -645,7 +739,9 @@ function App() {
           isOpen={state.ui.memoPanel.isOpen}
           mode={state.ui.memoPanel.mode}
           selectedTaskId={state.ui.memoPanel.selectedTaskId || undefined}
-          selectedTask={state.ui.memoPanel.selectedTaskId ? state.tasks.find(t => t.id === state.ui.memoPanel.selectedTaskId) : undefined}
+          selectedTask={state.ui.memoPanel.selectedTaskId ? 
+            (filteredTasks.find(t => t.id === state.ui.memoPanel.selectedTaskId) || 
+             state.tasks.find(t => t.id === state.ui.memoPanel.selectedTaskId)) : undefined}
           onClose={handleCloseMemoPanel}
           onModeChange={handleSwitchMemoMode}
           onTaskAction={handleTaskAction}
@@ -660,6 +756,16 @@ function App() {
           cancelLabel="Cancel"
           onConfirm={handleConfirmDelete}
           onCancel={handleCancelDelete}
+        />
+
+        {/* 🟢 Green Phase: DatePicker Modal */}
+        <DatePicker
+          selectedDate={filter.viewDate}
+          onDateSelect={handleDateSelect}
+          onClose={handleDatePickerClose}
+          isOpen={isDatePickerOpen}
+          availableDates={[]} // 🔥 FIX: 全日付選択可能（制限なし）
+          showStatistics={false} // 🔥 FIX: 統計表示を無効化（availableDatesが空のため意味がない）
         />
 
         {/* Mobile UX Components (Phase 2.1d+ Final) - 768px以下でのみ表示 */}
