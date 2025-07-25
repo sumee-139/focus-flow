@@ -615,7 +615,7 @@ Sidebar Navigation:
   container-type: inline-size;
 }
 
-@container (min-width: 300px) {
+@container (min-width: 400px) {
   .task-card .task-actions {
     display: flex;
     gap: 8px;

@@ -1,4 +1,34 @@
 {
+  "name": "claude-friends-templates",
+  "version": "2.0.0",
+  "description": "Claude Friends - AI-powered multi-agent development system for Claude Code",
+  "keywords": [
+    "claude",
+    "claude-friends",
+    "ai-agents",
+    "multi-agent",
+    "planner",
+    "builder",
+    "template",
+    "development",
+    "memory-bank",
+    "ai-development",
+    "mermaid",
+    "debug-mode",
+    "code-review"
+  ],
+  "author": "Claude Friends Template Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/claude-friends-templates.git"
+  },
+  "homepage": "https://github.com/yourusername/claude-friends-templates#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.54.1"
+  }
+}
+{
   "name": "claude-file-template",
   "version": "1.2.0",
   "description": "Claude Code lightweight project template for personal development",

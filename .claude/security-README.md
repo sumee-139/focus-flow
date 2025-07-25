@@ -1,5 +1,7 @@
 # Claude Code Security Settings
 
+🌐 **English** | **[日本語](security-README_ja.md)**
+
 This project includes security settings for safe use of Claude Code.
 
 ## Implementation

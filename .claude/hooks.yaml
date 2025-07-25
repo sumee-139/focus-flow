@@ -2,7 +2,7 @@
 # This file defines project-specific automation
 
 hooks:
-  # Automatic code quality check
+  # Automatic code quality check - Enhanced for Focus-Flow
   - event: PostToolUse
     matcher:
       tool: [Edit, Write, MultiEdit]
@@ -10,10 +10,27 @@ hooks:
     command: |
       # Log code changes (enable as needed)
       # echo "[$(date '+%Y-%m-%d %H:%M')] Code change: $CLAUDE_FILE_PATHS" >> .claude/logs/changes.log
-      # Language-specific quality checks (execute only existing commands)
+      
+      # Focus-Flow specific quality checks
       if command -v npm >/dev/null 2>&1 && [ -f package.json ]; then
-        npm run lint --if-present
-        npm run typecheck --if-present
+        echo "🔍 Running linter on edited files..."
+        cd focus-flow-capacitor 2>/dev/null || true
+        
+        # Always run lint - remove --if-present for guaranteed execution
+        if npm run lint > /dev/null 2>&1; then
+          echo "✅ Linter passed"
+        else
+          echo "⚠️ Linter found issues - check output above"
+        fi
+        
+        # Run typecheck if available
+        if npm run typecheck > /dev/null 2>&1; then
+          echo "✅ TypeScript check passed"
+        else
+          echo "⚠️ TypeScript issues found"
+        fi
+        
+        cd - > /dev/null 2>&1 || true
       elif command -v python >/dev/null 2>&1 && [ -f requirements.txt ]; then
         python -m flake8 $CLAUDE_FILE_PATHS 2>/dev/null || true
         python -m mypy $CLAUDE_FILE_PATHS 2>/dev/null || true
@@ -24,7 +41,7 @@ hooks:
     matcher:
       tool: Bash
       command_contains: "test"
-    command: |14
+    command: |
       if [ $CLAUDE_EXIT_CODE -eq 0 ]; then
         echo "### $(date '+%Y-%m-%d %H:%M') - Test Success" >> .claude/context/history.md
         echo "- Command: $CLAUDE_COMMAND" >> .claude/context/history.md

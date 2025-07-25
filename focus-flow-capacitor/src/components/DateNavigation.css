@@ -1,0 +1,395 @@
+/* DateNavigation.css - Phase 2.2a レスポンシブ対応 + T005ボタンサイズバランス */
+
+/* T005: 新しい日付ナビゲーションボタンレイアウト */
+.date-navigation-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+}
+
+.date-navigation {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+}
+
+.date-nav-button {
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #4a5568;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.date-nav-button:hover {
+  background-color: #f7fafc;
+}
+
+.date-nav-button:focus {
+  outline: 2px solid #3182ce;
+  outline-offset: 2px;
+}
+
+.today-button-active {
+  background-color: #3182ce;
+  color: #fff;
+  font-weight: bold;
+}
+
+.today-button-inactive {
+  background-color: #fff;
+  color: #4a5568;
+  font-weight: normal;
+}
+
+.date-display {
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  flex: 1;
+  font-size: 18px;
+  min-width: 200px;
+}
+
+.date-display.compact {
+  font-size: 16px;
+  min-width: 80px;
+}
+
+.statistics-display {
+  font-size: 13px;
+  color: #718096;
+  margin-left: auto;
+  white-space: nowrap; /* 統計情報の改行防止 */
+}
+
+/* 🔵 Blue Phase: レスポンシブ対応（Phase 2.2a） */
+
+/* タブレット対応: 481px-768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .date-navigation {
+    gap: 12px;
+    padding: 7px 14px;
+  }
+  
+  .date-nav-button {
+    padding: 5px 10px;
+    font-size: 13px;
+    min-width: 40px; /* TOUCH_TARGET.SMALL_MOBILE_SIZE */
+    min-height: 40px;
+  }
+  
+  .date-display {
+    font-size: 15px;
+  }
+  
+  .statistics-display {
+    font-size: 12px;
+  }
+}
+
+/* 小画面モバイル対応: ≤480px */
+@media (max-width: 480px) {
+  .date-navigation {
+    gap: 8px;
+    padding: 6px 12px;
+    flex-wrap: wrap; /* モバイルで必要に応じて折り返し */
+  }
+  
+  .date-nav-button {
+    padding: 8px 10px; /* タッチターゲット拡大 */
+    font-size: 12px;
+    min-width: 44px; /* TOUCH_TARGET.MIN_SIZE */
+    min-height: 44px;
+  }
+  
+  .date-display {
+    font-size: 14px;
+    order: 1; /* モバイルで日付表示を優先 */
+    width: 100%;
+    margin: 4px 0;
+  }
+  
+  .statistics-display {
+    font-size: 11px;
+    order: 2;
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+    margin-top: 4px;
+  }
+  
+  /* モバイルでボタンを横並び */
+  .date-nav-button:first-child,
+  .date-nav-button:nth-child(2) {
+    flex: 1;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .date-nav-button {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .date-navigation {
+    border-color: #000;
+  }
+  
+  .date-nav-button {
+    border-color: #000;
+    color: #000;
+  }
+  
+  .today-button-active {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  .date-display {
+    color: #000;
+  }
+}
+
+/* T005: ボタンサイズバランス階層のCSS */
+
+/* ベースボタンスタイル */
+.nav-btn {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-height: 44px; /* WCAG準拠 */
+  font-family: inherit;
+}
+
+/* サイズバリエーション */
+.nav-btn.nav-small {
+  padding: 8px 10px;
+  font-size: 12px;
+  min-width: 44px;
+}
+
+.nav-btn.nav-medium {
+  padding: 10px 14px;
+  font-size: 13px;
+  min-width: 60px;
+}
+
+.nav-btn.nav-large {
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 80px;
+  background: linear-gradient(135deg, #3182ce, #2b6cb0);
+  color: white;
+  border-color: #2b6cb0;
+}
+
+/* ホバー・フォーカス状態 */
+.nav-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn.nav-large:hover {
+  background: linear-gradient(135deg, #2b6cb0, #2c5aa0);
+}
+
+/* アクティブ状態 */
+.nav-btn:active {
+  transform: translateY(0);
+}
+
+/* フォーカス状態 */
+.nav-btn:focus {
+  outline: 2px solid #3182ce;
+  outline-offset: 2px;
+}
+
+/* Material Icons */
+.nav-btn .material-icons {
+  font-size: inherit;
+  line-height: 1;
+}
+
+/* 個別ボタンクラス - T005実装 */
+.nav-previous {
+  /* 前へボタン：左端配置で左アイコン */
+  flex-direction: row;
+}
+
+.nav-today {
+  /* 今日ボタン：プライマリアクション強調 */
+  font-weight: 600;
+}
+
+.nav-today-active {
+  /* 今日ボタンアクティブ状態：📍アイコン付き */
+  font-weight: 600;
+  background: linear-gradient(135deg, #2b6cb0, #1e40af) !important;
+  color: white !important;
+  border-color: #1e40af !important;
+  box-shadow: 0 2px 4px rgba(30, 64, 175, 0.3);
+}
+
+.nav-tomorrow {
+  /* 明日ボタン：プライマリアクション強調 */
+  font-weight: 600;
+}
+
+.nav-next {
+  /* 次へボタン：右端配置で右アイコン */
+  flex-direction: row-reverse;
+}
+
+.nav-calendar {
+  /* カレンダーボタン：最小サイズでアイコンのみ */
+  justify-content: center;
+}
+
+/* Material Iconsクラス定義 */
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* レスポンシブレイアウト - T005仕様 */
+
+/* モバイル対応 */
+@media (max-width: 767px) {
+  .date-navigation-buttons {
+    gap: 6px;
+  }
+  
+  .nav-btn.nav-medium {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-width: 50px;
+  }
+  
+  .nav-btn.nav-large {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 70px;
+  }
+}
+
+/* タブレット対応 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .date-navigation-buttons {
+    gap: 10px;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn {
+    transition: none;
+  }
+  
+  .nav-btn:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .date-navigation-buttons {
+    border-color: #000;
+    background-color: #fff;
+  }
+  
+  .nav-btn {
+    border-color: #000;
+    color: #000;
+  }
+  
+  .nav-btn.nav-large {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+  
+  .nav-btn.nav-large:hover {
+    background: #333;
+  }
+  
+  .nav-btn:focus {
+    outline: 3px solid #000;
+    outline-offset: 2px;
+  }
+}
+
+/* ダークモード対応準備 */
+@media (prefers-color-scheme: dark) {
+  .date-navigation-buttons {
+    background-color: #2d3748;
+    border-color: #4a5568;
+  }
+  
+  .nav-btn {
+    background-color: #4a5568;
+    color: #e2e8f0;
+    border-color: #4a5568;
+  }
+  
+  .nav-btn:hover {
+    background-color: #718096;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .nav-btn.nav-large {
+    background: linear-gradient(135deg, #2b6cb0, #2c5aa0);
+    color: #fff;
+    border-color: #2c5aa0;
+  }
+  
+  .nav-btn.nav-large:hover {
+    background: linear-gradient(135deg, #2c5aa0, #2a4365);
+  }
+  
+  .nav-btn:focus {
+    outline-color: #63b3ed;
+  }
+}
+
+/* 高解像度ディスプレイ対応 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .nav-btn {
+    border-width: 0.5px;
+  }
+}

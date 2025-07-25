@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>FocusFlow - OSレベル通知制御テスト</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <h1>🎯 FocusFlow</h1>
+    <p>個人の集中と知的生産性を最大化するデジタル伴走者</p>
+    
+    <div id="platform-info">
+      <h3>Platform Information</h3>
+      <p>OS: <span id="os-info">Loading...</span></p>
+      <p>Node.js: <span id="node-info">Loading...</span></p>
+      <p>Electron: <span id="electron-info">Loading...</span></p>
+    </div>
+    
+    <div id="focus-mode-controls">
+      <h3>Focus Mode Controls</h3>
+      <div style="margin: 10px 0;">
+        <button id="start-focus-btn">🎯 Start Focus Mode</button>
+        <button id="stop-focus-btn">⏹️ Stop Focus Mode</button>
+        <button id="test-notification-btn">🔔 Test Notification</button>
+      </div>
+      <div id="focus-status">
+        <p>Status: <span id="focus-mode-status">⚪ Off</span></p>
+      </div>
+    </div>
+    
+    <div id="notification-test">
+      <h3>Notification Control Test</h3>
+      <p>通知制御テストが5秒後に自動実行されます</p>
+      <ul>
+        <li>通知ポップアップ表示テスト（音なし）</li>
+        <li>フォーカスモード開始（3秒後）</li>
+        <li>通知ブロックテスト（6秒後）</li>
+        <li>フォーカスモード終了（11秒後）</li>
+      </ul>
+    </div>
+    
+    <div id="windows-focus-assist">
+      <h3>Windows 集中モード連携</h3>
+      <p>アプリ開始2秒後にコンソールで確認手順を表示します</p>
+      <ol>
+        <li>Windows設定 (Win + I) を開く</li>
+        <li>「システム」→「集中モード」を開く</li>
+        <li>FocusFlowで「Start Focus Mode」をクリック</li>
+        <li>集中モードの状態変化を確認</li>
+      </ol>
+    </div>
+    
+    <script>
+      // デバッグ情報を表示
+      console.log('FocusFlow frontend: Script starting');
+      
+      // electronAPIが利用可能かチェック
+      if (window.electronAPI) {
+        console.log('FocusFlow frontend: electronAPI available');
+        
+        // プラットフォーム情報を非同期で取得
+        async function loadSystemInfo() {
+          try {
+            const systemInfo = await window.electronAPI.getSystemInfo();
+            document.getElementById('os-info').innerText = systemInfo.platform;
+            document.getElementById('node-info').innerText = systemInfo.nodeVersion;
+            document.getElementById('electron-info').innerText = systemInfo.electronVersion;
+            console.log('FocusFlow frontend: System info loaded successfully');
+          } catch (error) {
+            console.error('System info error:', error);
+            document.getElementById('os-info').innerText = 'Error loading info';
+            document.getElementById('node-info').innerText = 'Error loading info';
+            document.getElementById('electron-info').innerText = 'Error loading info';
+          }
+        }
+        
+        // システム情報を読み込み
+        loadSystemInfo();
+        
+        // フォーカスモード制御
+        let focusModeActive = false;
+        
+        document.getElementById('start-focus-btn').addEventListener('click', async () => {
+          try {
+            console.log('FocusFlow frontend: Starting focus mode');
+            const result = await window.electronAPI.startFocusMode();
+            console.log('Focus mode result:', result);
+            
+            // サーバーから実際の状態を取得
+            const statusResult = await window.electronAPI.getFocusStatus();
+            console.log('Focus status after start:', statusResult);
+            
+            focusModeActive = statusResult.focusMode;
+            document.getElementById('focus-mode-status').innerHTML = focusModeActive ? '🔴 On' : '⚪ Off';
+          } catch (error) {
+            console.error('Start focus mode error:', error);
+            alert('Focus mode start failed: ' + error.message);
+          }
+        });
+        
+        document.getElementById('stop-focus-btn').addEventListener('click', async () => {
+          try {
+            console.log('FocusFlow frontend: Stopping focus mode');
+            const result = await window.electronAPI.stopFocusMode();
+            console.log('Stop focus mode result:', result);
+            
+            // サーバーから実際の状態を取得
+            const statusResult = await window.electronAPI.getFocusStatus();
+            console.log('Focus status after stop:', statusResult);
+            
+            focusModeActive = statusResult.focusMode;
+            document.getElementById('focus-mode-status').innerHTML = focusModeActive ? '🔴 On' : '⚪ Off';
+          } catch (error) {
+            console.error('Stop focus mode error:', error);
+            alert('Focus mode stop failed: ' + error.message);
+          }
+        });
+        
+        document.getElementById('test-notification-btn').addEventListener('click', async () => {
+          try {
+            console.log('FocusFlow frontend: Testing notification');
+            console.log('Current focus mode active:', focusModeActive);
+            
+            const result = await window.electronAPI.testNotification();
+            console.log('Test notification result:', result);
+            
+            if (result.success) {
+              if (result.blocked) {
+                console.log('✅ Notification BLOCKED - Focus mode working correctly');
+                alert('✅ Focus Mode Working!\nNotification was blocked because Focus Mode is active.');
+              } else {
+                console.log('✅ Notification SENT - Normal mode working correctly');
+                alert('✅ Normal Mode Working!\nNotification was sent because Focus Mode is off.');
+              }
+            } else {
+              console.warn('Notification failed:', result.status);
+              alert('Notification test failed: ' + result.status);
+            }
+          } catch (error) {
+            console.error('Test notification error:', error);
+            alert('Notification test failed: ' + error.message);
+          }
+        });
+        
+      } else {
+        console.error('FocusFlow frontend: electronAPI not available');
+        document.getElementById('os-info').innerText = 'electronAPI not available';
+        document.getElementById('node-info').innerText = 'Check console for errors';
+        document.getElementById('electron-info').innerText = 'Reload app';
+        
+        // ボタンを無効化
+        document.getElementById('start-focus-btn').disabled = true;
+        document.getElementById('stop-focus-btn').disabled = true;
+        document.getElementById('test-notification-btn').disabled = true;
+        
+        alert('electronAPI not available. Check console for errors.');
+      }
+      
+      console.log('FocusFlow frontend loaded');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+/* AddTaskForm.css - Design Philosophy準拠スタイル */
+
+/* 日付ボタン - CRITICAL BUG FIX */
+.date-button {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #fff; /* 🔥 FIX: 白背景 */
+  color: #4a5568; /* 🔥 FIX: グレー文字 */
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-button:hover {
+  background-color: #f7fafc;
+  border-color: #a0aec0;
+}
+
+.date-button:focus {
+  outline: 2px solid #3182ce;
+  outline-offset: 2px;
+  border-color: #3182ce;
+}
+
+.date-button:active {
+  background-color: #edf2f7;
+}
+
+/* 詳細オプションボタン */
+.expand-button {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #666666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expand-button:hover {
+  background-color: #f7fafc;
+  color: #4a5568;
+}
+
+.expand-button:focus {
+  outline: 2px solid #3182ce;
+  outline-offset: 2px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+  .date-button,
+  .expand-button {
+    padding: 10px 12px;
+    min-height: 44px; /* TOUCH_TARGET.MIN_SIZE */
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .date-button,
+  .expand-button {
+    padding: 9px 12px;
+    min-height: 40px; /* TOUCH_TARGET.SMALL_MOBILE_SIZE */
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .date-button,
+  .expand-button {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .date-button,
+  .expand-button {
+    border-color: #000;
+    color: #000;
+  }
+  
+  .date-button:hover,
+  .expand-button:hover {
+    background-color: #f0f0f0;
+  }
+}
