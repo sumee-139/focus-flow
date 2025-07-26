@@ -35,7 +35,9 @@ export default tseslint.config([
       '@typescript-eslint/no-explicit-any': [
         'warn',
         { ignoreRestArgs: true }
-      ]
+      ],
+      // useEffectの依存配列を必須にする (バグ防止)
+      'react-hooks/exhaustive-deps': 'error'
     }
   },
 ])

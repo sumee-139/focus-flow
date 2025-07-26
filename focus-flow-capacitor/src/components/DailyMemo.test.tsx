@@ -43,7 +43,6 @@ describe('DailyMemo - データ永続化', () => {
   afterEach(() => {
     vi.runOnlyPendingTimers()
     vi.useRealTimers()
-    vi.useFakeTimers()
   })
 
   test('should auto-save memo after 3 seconds of inactivity', async () => {
@@ -62,9 +61,11 @@ describe('DailyMemo - データ永続化', () => {
     })
     expect(localStorageMock.setItem).not.toHaveBeenCalled()
     
-    // 3秒経過で自動保存される
+    // 3秒経過で自動保存される - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(1000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       expect.stringMatching(/daily-memo-\d{4}-\d{2}-\d{2}/),
@@ -73,6 +74,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should manage memos by date (YYYY-MM-DD)', async () => {
+    vi.useFakeTimers()
+    
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -82,9 +85,11 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Today memo' } })
     })
     
-    // 3秒経過で保存
+    // 3秒経過で保存 - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     // 今日の日付でキーが作成されることを確認
@@ -113,6 +118,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should not auto-save if input stops for less than 3 seconds', async () => {
+    vi.useFakeTimers()
+    
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -136,14 +143,21 @@ describe('DailyMemo - データ永続化', () => {
     // まだ保存されていないことを確認
     expect(localStorageMock.setItem).not.toHaveBeenCalled()
     
-    // 3秒経過で保存される
+    // 3秒経過で保存される - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(1000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     expect(localStorageMock.setItem).toHaveBeenCalled()
   })
 
   test('should handle localStorage errors gracefully', async () => {
+    vi.useFakeTimers()
+    
+    // console.warnをモック化してエラー出力をキャッチ
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    
     // localStorage.setItemがエラーを投げるように設定
     localStorageMock.setItem.mockImplementation(() => {
       throw new Error('LocalStorage is full')
@@ -158,18 +172,28 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content' } })
     })
     
-    // エラーが発生してもアプリがクラッシュしないことを確認
-    await expect(
-      act(async () => {
-        vi.advanceTimersByTime(3000)
-      })
-    ).resolves.not.toThrow()
+    // エラーが発生してもアプリがクラッシュしないことを確認 - 状態更新を待つ
+    await act(async () => {
+      vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
+    })
+    
+    // console.warnが呼ばれたことを確認
+    expect(consoleWarnSpy).toHaveBeenCalledWith('Failed to save memo:', expect.any(Error))
     
     // テキストエリアは正常に動作している
     expect(textarea).toHaveValue('Test content')
+    
+    // モックをクリーンアップ
+    consoleWarnSpy.mockRestore()
+    vi.useRealTimers()
   })
 
   test('should clear auto-save timer when component unmounts', async () => {
+    vi.useRealTimers()
+    vi.useFakeTimers()
+    
     const { unmount } = render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -195,6 +219,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should trim whitespace from memo content before saving', async () => {
+    vi.useFakeTimers()
+    
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -206,6 +232,8 @@ describe('DailyMemo - データ永続化', () => {
     
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
@@ -235,6 +263,8 @@ describe('DailyMemo - データ永続化', () => {
 
   // 🔴 Phase 2.2d-1: 自動保存状態インジケーターテスト
   test('should show saving indicator when auto-save is in progress', async () => {
+    vi.useFakeTimers()
+    
     // 保存処理を遅らせるためにsetItemを遅延実行する
     localStorageMock.setItem.mockImplementation(async (key: string, value: string) => {
       // 少し遅延させる
@@ -251,9 +281,11 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for saving' } })
     })
     
-    // 3秒経過で保存プロセス開始（但し完了まで時間がかかる）
+    // 3秒経過で保存プロセス開始（但し完了まで時間がかかる） - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     // 保存中または保存完了インジケーターが表示されることを確認
@@ -265,6 +297,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should show success indicator when auto-save succeeds', async () => {
+    vi.useFakeTimers()
+    
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -274,14 +308,17 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for success' } })
     })
     
-    // 3秒経過で保存実行
+    // 3秒経過で保存実行 - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     // 少し待って成功状態を確認
     await act(async () => {
       vi.advanceTimersByTime(100)
+      await vi.runAllTimersAsync()
     })
     
     // 成功インジケーターが表示されることを確認
@@ -290,6 +327,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should show error indicator when auto-save fails', async () => {
+    vi.useFakeTimers()
+    
     // localStorage.setItemがエラーを投げるように設定
     localStorageMock.setItem.mockImplementation(() => {
       throw new Error('LocalStorage quota exceeded')
@@ -304,9 +343,11 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for error' } })
     })
     
-    // 3秒経過で保存エラー発生
+    // 3秒経過で保存エラー発生 - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     // エラーインジケーターが表示されることを確認
@@ -316,6 +357,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should handle localStorage quota exceeded error', async () => {
+    vi.useFakeTimers()
+    
     // QuotaExceededError をシミュレート
     localStorageMock.setItem.mockImplementation(() => {
       const error = new Error('QuotaExceededError')
@@ -332,10 +375,12 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Large content that exceeds quota' } })
     })
     
-    // エラーが発生してもアプリがクラッシュしないことを確認
+    // エラーが発生してもアプリがクラッシュしないことを確認 - 状態更新を待つ
     await expect(
       act(async () => {
         vi.advanceTimersByTime(3000)
+        // setTimeout callbacks for state updates
+        await vi.runAllTimersAsync()
       })
     ).resolves.not.toThrow()
     
@@ -344,6 +389,8 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   test('should position save status indicator at bottom-right (non-intrusive)', async () => {
+    vi.useFakeTimers()
+    
     render(<DailyMemo />)
     
     const textarea = screen.getByRole('textbox', { name: /デイリーメモ/i })
@@ -353,9 +400,11 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for save indicator' } })
     })
     
-    // 保存中インジケーターが表示される
+    // 保存中インジケーターが表示される - 状態更新を待つ
     await act(async () => {
       vi.advanceTimersByTime(3000)
+      // setTimeout callbacks for state updates
+      await vi.runAllTimersAsync()
     })
     
     // 保存中または保存完了インジケーターが表示されることを確認

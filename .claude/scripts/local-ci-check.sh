@@ -24,6 +24,21 @@ if [ $? -ne 0 ]; then
 fi
 echo -e "${GREEN}静的解析クリア！${NC}"
 
+# 1.5. useEffectの使用状況チェック (警告のみ)
+echo -e "\n${YELLOW}1.5/4: useEffectの使用状況をチェック中...${NC}"
+# srcディレクトリ内のts,tsx,js,jsxファイルでuseEffectの使用を検索
+# node_modulesとdistは除外
+USE_EFFECT_COUNT=$(grep -r "useEffect" src/ --exclude-dir={node_modules,dist} | wc -l)
+
+if [ "$USE_EFFECT_COUNT" -gt 0 ]; then
+    echo -e "${YELLOW}警告: プロジェクト内でuseEffectが ${USE_EFFECT_COUNT}回 使用されています。${NC}"
+    echo -e "${YELLOW}詳細は技術的負債 DM005 を参照してください。リファクタリングが推奨されます。${NC}"
+    grep -r "useEffect" src/ --exclude-dir={node_modules,dist} --color=always
+else
+    echo -e "${GREEN}useEffectの使用は検出されませんでした。${NC}"
+fi
+
+
 # 2. 単体・結合テスト (Vitest)
 echo -e "\n${YELLOW}2/4: 単体・結合テスト (Vitest) を実行中...${NC}"
 npm run test:run

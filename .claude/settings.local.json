@@ -60,7 +60,8 @@
       "mcp__playwright__browser_console_messages",
       "Bash(/tmp/check_css_classes.sh:*)",
       "Bash(date:*)",
-      "Bash(timeout 120s npm test)"
+      "Bash(timeout 120s npm test)",
+      "Bash(timeout 60s npm test)"
     ],
     "deny": []
   }

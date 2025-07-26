@@ -3,6 +3,7 @@
 
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { calculateDateDifference, parseTaskDate } from '../utils/taskDate';
+import { getJSTDateString } from '../utils/dateUtils';
 
 /**
  * DatePicker コンポーネントのプロパティ
@@ -59,7 +60,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 }) => {
   const [currentMonth, setCurrentMonth] = useState(() => {
     const parsed = parseTaskDate(selectedDate);
-    return parsed.isValid ? parsed.date!.substring(0, 7) : getCurrentDate().toISOString().split('T')[0].substring(0, 7);
+    return parsed.isValid ? parsed.date!.substring(0, 7) : getJSTDateString(getCurrentDate()).substring(0, 7);
   });
 
   const [focusedDate, setFocusedDate] = useState(selectedDate);
@@ -75,7 +76,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     startDate.setDate(startDate.getDate() - firstDay.getDay()); // 週の始まり（日曜日）に調整
 
     const days: CalendarDay[] = [];
-    const today = getCurrentDate().toISOString().split('T')[0];
+    const today = getJSTDateString(getCurrentDate());
 
     // 6週間分の日付を生成（最大42日）
     for (let i = 0; i < 42; i++) {

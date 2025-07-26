@@ -26,11 +26,33 @@
 
 - **[Bug Memos](./troubleshooting/bug-memos.md)**
 
-## 4. コード例 (Code Examples)
+## 4. Builder実装ガイド (Implementation Guides)
+
+Builderエージェントが実際の開発で発見したベストプラクティスと解決手法です。
+
+### 4.1. タイムゾーン・日付処理
+- **[T006 UTC/JST時差問題修正 - ベストプラクティス](./t006-timezone-best-practices.md)**
+  - TDD手法によるタイムゾーン処理の確実な実装
+  - 境界条件テストの重要性とテクニック
+  - E2Eテストでの日付検証手法
+
+### 4.2. プロダクション品質管理
+- **[プロダクション環境でのログ制御](./troubleshooting/console-log-production-fix.md)**
+  - デバッグログ残存問題の特定と解決
+  - 環境別ログレベル制御の実装パターン
+  - ESLint rule活用によるログ品質管理
+
+### 4.3. React Hooks
+- **[React `useEffect` 利用ガイドライン](./useEffect_guide.md)**
+  - `useEffect`の機能、副作用の適切な管理方法
+  - `useEffect`を避けるべきケースと代替アプローチ
+
+## 5. コード例 (Code Examples)
 
 具体的な実装の参考となるコードスニペットです。
 
-- *現在作成中です。*
+- **タイムゾーン処理**: [t006-timezone-best-practices.md](./t006-timezone-best-practices.md)内に実装例あり
+- **ログ制御システム**: [console-log-production-fix.md](./troubleshooting/console-log-production-fix.md)内に実装例あり
 
 ---
 

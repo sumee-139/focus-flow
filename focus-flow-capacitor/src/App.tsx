@@ -16,6 +16,7 @@ import { DatePicker } from './components/DatePicker'
 import { TaskStatistics } from './components/TaskStatistics'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { useTaskFilter } from './hooks/useTaskFilter'
+import { useTaskMemoStorage } from './hooks/useTaskMemoStorage'
 import { MEDIA_QUERIES } from './constants/ui'
 import './App.css'
 
@@ -223,9 +224,15 @@ function App() {
   // LocalStorageからタスクを読み込み
   const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', defaultTasks)
   
+  // 初期状態をlocalStorageのタスクで設定
+  const [state, dispatch] = useReducer(appReducer, getInitialState(parseTasks(storedTasks)))
+  
   // 🟢 Green Phase: Phase 2.2a Date Management Integration
   // タスクフィルタリング機能（日付管理も含む）
   const { filteredTasks, statistics, filter, updateFilter } = useTaskFilter(state.tasks)
+  
+  // DatePickerモーダル状態管理
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
   
   // 🟢 循環依存バグ修正: アプリ起動時にフィルタを今日の日付に強制設定
   useEffect(() => {
@@ -233,12 +240,6 @@ function App() {
     const actualToday = getLocalDateString()
     updateFilter({ viewDate: actualToday, mode: 'today' })
   }, [updateFilter]) // updateFilterを依存配列に追加（ESLint対応）
-  
-  // DatePickerモーダル状態管理
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  
-  // 初期状態をlocalStorageのタスクで設定
-  const [state, dispatch] = useReducer(appReducer, getInitialState(parseTasks(storedTasks)))
   
   const [platformInfo] = useState({
     platform: Capacitor.getPlatform(),
@@ -259,6 +260,9 @@ function App() {
   const [isTaskMemoModalOpen, setIsTaskMemoModalOpen] = useState(false)
   const [selectedTaskForMobile, setSelectedTaskForMobile] = useState<Task | null>(null)
   const [dailyMemoContent, setDailyMemoContent] = useState('')
+  
+  // 🟢 Green Phase: T007 Mobile Task Memo Storage Integration
+  const [currentTaskMemo, setCurrentTaskMemo] = useTaskMemoStorage(selectedTaskForMobile?.id || '')
 
   // タスクの変更をlocalStorageに保存
   useEffect(() => {
@@ -598,6 +602,7 @@ function App() {
 
 
 
+
   return (
     <div className="app">
       <div className="container">
@@ -785,11 +790,30 @@ function App() {
                 isOpen={isTaskMemoModalOpen}
                 taskId={selectedTaskForMobile.id}
                 taskTitle={selectedTaskForMobile.title}
-                taskMemoContent="" // Task memo content will be loaded from localStorage
+                taskMemoContent={currentTaskMemo?.content || ''} // 🟢 Load from localStorage
                 onSave={(content) => {
-                  // Save task memo using existing save logic
-                  console.log(`Saving task memo for ${selectedTaskForMobile.id}:`, content)
-                  // TODO: Integrate with existing task memo save logic
+                  // 🟢 Green Phase: T007 Actual Task Memo Save Implementation
+                  if (!selectedTaskForMobile) return
+                  
+                  const taskMemoData = {
+                    taskId: selectedTaskForMobile.id,
+                    content: content.trim(),
+                    taskSnapshot: {
+                      title: selectedTaskForMobile.title,
+                      description: selectedTaskForMobile.description || '',
+                      tags: selectedTaskForMobile.tags,
+                      estimatedMinutes: selectedTaskForMobile.estimatedMinutes,
+                      createdAt: selectedTaskForMobile.createdAt
+                    },
+                    lastUpdated: new Date().toISOString()
+                  }
+                  
+                  try {
+                    setCurrentTaskMemo(taskMemoData)
+                    console.log(`✅ Task memo saved for ${selectedTaskForMobile.id}:`, content)
+                  } catch (error) {
+                    console.error('❌ Failed to save task memo:', error)
+                  }
                 }}
                 onClose={handleTaskMemoModalClose}
               />
