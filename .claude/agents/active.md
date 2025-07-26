@@ -1,6 +1,6 @@
 # Active Agent
 
-## Current Agent: planner
+## Current Agent: builder
 
-Last updated: 2025-07-25 09:00
-Status: T005完了後の次期タスク選定・プロダクトオーナー要望分析中
+Last updated: 2025-07-26 23:31
+Status: T009テストエラー修正中（27件の失敗テスト対応）
