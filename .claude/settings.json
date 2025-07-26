@@ -85,6 +85,14 @@
           {
             "type": "command",
             "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/ai-logger.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/ja-space-format.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/auto-comment.sh"
           }
         ]
       }
@@ -93,6 +101,10 @@
       {
         "matcher": "",
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/check-continue.sh"
+          },
           {
             "type": "command",
             "command": "/home/yuta_sakamoto/claude_test/focus-flow/.claude/scripts/session-complete.sh"
