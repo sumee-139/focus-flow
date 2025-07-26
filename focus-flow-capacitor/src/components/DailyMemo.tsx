@@ -68,7 +68,7 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
     try {
       return JSON.parse(savedData) as DailyMemoData
     } catch (error) {
-      console.warn('Failed to parse saved memo:', error)
+      // プロダクション環境向けにconsole.warnを除去
       return null
     }
   }
@@ -82,14 +82,13 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
         return parsed?.content || ''
       }
     } catch (error) {
-      console.warn('Failed to load saved memo:', error)
+      // プロダクション環境向けにconsole.warnを除去
     }
     return ''
   }
 
   // LocalStorageにメモを保存（状態インジケーター付き）
   const saveWithStatus = async (memoContent: string): Promise<void> => {
-    console.log('[DEBUG] saveWithStatus called, setting status to saving')
     setSaveStatus({ status: 'saving' })
     
     try {
@@ -122,7 +121,7 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
         })
       }
       
-      console.warn('Failed to save memo:', error)
+      // プロダクション環境向けにconsole.warnを除去
     }
   }
 
@@ -136,10 +135,8 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
 
   // 自動保存タイマーを設定する
   const scheduleAutoSave = (memoContent: string): void => {
-    console.log('[DEBUG] scheduleAutoSave called, setting timer for', AUTO_SAVE_DELAY, 'ms')
     clearAutoSaveTimer()
     autoSaveTimerRef.current = window.setTimeout(() => {
-      console.log('[DEBUG] Timer fired, calling saveWithStatus')
       saveWithStatus(memoContent)
     }, AUTO_SAVE_DELAY)
   }
@@ -148,7 +145,7 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
   useEffect(() => {
     const savedContent = loadSavedMemo()
     setContent(savedContent)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // コンポーネントアンマウント時にタイマーをクリア
   useEffect(() => {
@@ -166,7 +163,6 @@ export const DailyMemo: React.FC<DailyMemoProps> = ({
 
   // 保存状態インジケーターコンポーネント
   const SaveStatusIndicator: React.FC<{ status: SaveStatus }> = ({ status }) => {
-    console.log('[DEBUG] SaveStatusIndicator render, status:', status.status)
     if (status.status === 'idle') return null
 
     return (
