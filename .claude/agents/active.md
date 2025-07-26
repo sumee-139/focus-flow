@@ -1,6 +1,6 @@
 # Active Agent
 
-## Current Agent: builder
+## Current Agent: planner
 
-Last updated: 2025-07-26 23:31
-Status: T009テストエラー修正中（27件の失敗テスト対応）
+Last updated: 2025-07-26 23:59
+Status: T014+T015統合デバッグロガーシステム実装指示完了・Builder実装待ち（21件テスト失敗 + モバイルタスクメモバグ統合解決）

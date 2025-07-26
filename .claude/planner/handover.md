@@ -1,156 +1,285 @@
-# Builder緊急実装指示書 - Phase 2.2d拡張（データ保護・モバイルUX致命問題解決）
+# 🚀 Builder実装指示書: T014統合デバッグロガーシステム v2.1
 
 ## 対象エージェント: Builder
-## 実装モード: TDD + 緊急修正
-## 優先度: 最高（製品価値に直結する致命的問題）
+## 実装モード: TDD + 品質向上・戦略的価値実現
+## 優先度: 最高（Phase 2.2b前提条件）
 
 ---
 
-## 🚨 緊急事態の背景
+## 🎯 実装目標
 
-プロダクトオーナーの実機確認により、**データ損失**と**基本機能破綻**の致命的問題が発見されました：
+### 統合設計の価値
+**Builder技術課題** + **プロダクトオーナー要望** = **包括的品質向上システム**
 
-1. **モバイル日付設定バグ**: 7/25開始時に7/24表示（UTC/JST問題）
-2. **タスクメモ保存完全失敗**: モバイルでメモが一切保存されない  
-3. **品質ゲート信頼性低下**: CSSクラス検証の誤検出多発
+- **技術的価値**: 21件テスト失敗解決 + プロダクション品質達成
+- **ビジネス価値**: プロダクトオーナー「デバッグロガー開発」要望の完全実現
+- **戦略的価値**: Phase 2.2bフォーカスモード開発の安定基盤確立
+- **緊急価値**: T010モバイルタスクメモ保存バグの根本解決
 
-これらの修正なしに、次期フォーカスモード強化は無意味です。
-
----
-
-## 🎯 実装指示
-
-詳細な技術仕様は以下を参照：
-📋 **設計書**: @docs/design/phase-2-2d-emergency-expansion.md
-
-### 実装概要
-
-**目標**: データ保護機能とモバイル基本動作の確実な実現
-**期間**: 2-3日（当初計画から拡張）
-**完了条件**: プロダクトオーナー実機確認で4つの致命問題完全解決
+### 実装スコープ
+1. **統合デバッグロガーシステム実装**（環境別制御 + パフォーマンス最適化）
+2. **21件テスト失敗の完全解決**（100%テスト成功率達成）
+3. **useState方式維持でのact()警告対応**（現在アーキテクチャ保持）
+4. **🚨 T010緊急修正**: モバイルタスクメモ保存バグ統合対応
 
 ---
 
-## 🔴 最高優先度タスク（即時着手）
+## 🔴 TDD実装指示
 
-### T006: モバイル日付設定バグ修正
+### Phase 1: Red（統合デバッグロガー設計テスト）
+
+#### 1.1 デバッグロガー核心機能テスト
 ```typescript
-// 問題: UTC/JST時差、「今日」ボタン状態異常
-// 解決: JST基準日付計算・状態管理修正
-// 期間: 1日
-// 影響: 基本機能の信頼性、日本市場適合性
+// src/utils/debugLogger.test.ts
+describe('DebugLogger - 統合環境制御', () => {
+  test('should output logs in development environment')
+  test('should suppress non-error logs in production environment') 
+  test('should always output error logs regardless of environment')
+  test('should optimize performance in production (minimal processing)')
+  test('should handle log levels: DEBUG, INFO, WARN, ERROR')
+  test('should replace existing console.log/warn usage patterns')
+})
 ```
 
-### T007: モバイルタスクメモ保存機能実装  
+#### 1.2 環境検出システムテスト
 ```typescript
-// 問題: タスクメモが保存されない（データ損失リスク）
-// 解決: 3秒自動保存 + 戻るボタン保存
-// 期間: 1-2日
-// 影響: ユーザーデータ保護、製品価値の根幹
+// src/utils/environmentDetector.test.ts  
+describe('Environment Detection', () => {
+  test('should detect NODE_ENV=production correctly')
+  test('should detect NODE_ENV=development correctly')
+  test('should handle undefined NODE_ENV gracefully')
+  test('should integrate with webpack DefinePlugin')
+})
 ```
 
-### T008: CSSクラス検証スクリプト改善
-```bash
-# 問題: 複合セレクタ誤検出（nav-large等）
-# 解決: 検出ロジック改善
-# 期間: 0.5日
-# 影響: 品質ゲートの信頼性
+#### 1.3 既存console.log統合テスト
+```typescript
+// src/hooks/useLocalStorage.test.ts (拡張)
+describe('useLocalStorage - DebugLogger統合', () => {
+  test('should use debugLogger instead of console.error for localStorage errors')
+  test('should maintain error information while optimizing production output')
+})
+```
+
+### Phase 2: Green（最小限実装）
+
+#### 2.1 統合デバッグロガー実装
+```typescript
+// src/utils/debugLogger.ts
+interface LogLevel {
+  DEBUG: 0,
+  INFO: 1, 
+  WARN: 2,
+  ERROR: 3
+}
+
+class DebugLogger {
+  private isDevelopment: boolean
+  private minProductionLevel: LogLevel
+  
+  constructor() {
+    // webpack DefinePlugin integration
+    this.isDevelopment = process.env.NODE_ENV === 'development'
+    this.minProductionLevel = LogLevel.ERROR
+  }
+  
+  debug(message: string, ...args: any[]): void
+  info(message: string, ...args: any[]): void  
+  warn(message: string, ...args: any[]): void
+  error(message: string, ...args: any[]): void
+  
+  // プロダクション最適化：webpack Dead Code Eliminationによる完全除去
+}
+
+export const logger = new DebugLogger()
+```
+
+#### 2.2 既存console.log/warn置換
+```typescript
+// src/hooks/useLocalStorage.tsx (修正)
+// Before: console.error(...)
+// After: logger.error(...)
+
+// src/components/DailyMemo.tsx (修正)  
+// Before: console.warn(...)
+// After: logger.warn(...) // プロダクションでは出力されない
+```
+
+### Phase 3: Blue（品質向上・最適化）
+
+#### 3.1 webpack設定統合
+```javascript
+// vite.config.ts
+export default defineConfig({
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+  },
+  // プロダクションビルド時のDead Code Elimination確保
+})
+```
+
+#### 3.2 TypeScript型安全性強化
+```typescript
+// ログレベル型定義、環境変数型定義
+// ESLint rule追加（console.log/warn直接使用禁止）
 ```
 
 ---
 
-## 🔴 重要な実装要件
+## 🧪 21件テスト失敗修正指示
 
-### TDD厳守（緊急時でも妥協禁止）
-- **Red**: 失敗テスト作成（UTC/JST、自動保存、手動保存）
-- **Green**: 最小限実装（データ保護最優先）
-- **Blue**: 品質向上（エラーハンドリング、UX改善）
+### 問題分類と修正戦略
 
-### 技術制約
-- **Design Philosophy完全遵守**: 統一性維持
-- **既存テスト保護**: 266/271テスト成功率維持必須
-- **プロダクション品質**: ビルド成功・TypeScript・ESLintクリア
+#### Category 1: console.log/warn残存（推定12-15件）
+**修正方法**: 上記統合デバッグロガーへの置換
+- `src/hooks/useLocalStorage.tsx:14, 29`
+- `src/components/DailyMemo.tsx:71, 85, 124`
+- その他全ての console.log/warn の検出・置換
 
-### データ保護要件
-- **確実な保存**: LocalStorage書き込み成功保証
-- **エラー処理**: 保存失敗時の適切なフィードバック
-- **ユーザー体験**: 保存状態の視覚的確認
+#### Category 2: act()警告・タイマーモック（推定4-6件）
+**修正方法**: useState方式維持での個別対応
+```typescript
+// DailyMemo.test.tsx等
+test('should handle auto-save timer correctly', async () => {
+  render(<DailyMemo />)
+  
+  // act()で非同期更新を適切にラップ
+  await act(async () => {
+    fireEvent.change(textArea, { target: { value: 'test content' } })
+    await waitFor(() => expect(mockSave).toHaveBeenCalled(), { timeout: 4000 })
+  })
+})
+```
+
+#### Category 3: 型定義・データモデル不整合（推定2-3件）
+**修正方法**: Phase 2.2a実装時の型システム拡張との整合性確保
+```typescript
+// 日付処理とタスクフィルタリングの型統一
+// useTaskFilter.test.ts等の型定義修正
+```
+
+#### 🚨 Category 4: T010モバイルタスクメモ保存バグ（緊急追加）
+**問題**: モバイルでタスクメモがタスク横断で参照される（タスク別保存機能不全）
+**修正方法**: デスクトップ版と同じ保存機能を使用するよう統一
+```typescript
+// TaskMemo保存時の統合処理
+// - TaskMemoModal.tsx: 保存処理の統一
+// - useTaskMemoStorage.tsx: データ分離の確保
+// - モバイル専用ロジックの除去・統合
+```
+
+---
+
+## ⚠️ 重要な実装上の制約事項
+
+### Design Philosophy遵守
+- **統一アイコン使用**: 絵文字による直感的UI維持
+- **色による区別禁止**: アクセシビリティ配慮
+- **レスポンシブ対応**: 768px境界での適切な動作
+
+### TDD厳格遵守
+- **Red→Green→Blue**: 各フェーズでのコミット必須
+- **テストファースト**: 実装前に必ず失敗テストを作成
+- **リファクタリング**: Blue フェーズでの品質向上必須
+
+### useState方式維持（重要）
+- **useReducer移行禁止**: Phase 2.2b開発への影響回避
+- **現在アーキテクチャ保持**: 既存状態管理パターン維持
+- **個別act()対応**: モック・タイマー処理の段階的改善
 
 ---
 
 ## 🎯 完成の定義（DoD）
 
 ### 機能要件
-- [ ] モバイルで正確な今日日付がJST基準で表示される
-- [ ] 「今日」ボタンの選択状態が正常に動作する  
-- [ ] タスクメモが3秒自動保存される（モバイル）
-- [ ] 戻るボタンでタスクメモが手動保存される
-- [ ] CSSクラス検証が複合セレクタを正常検出する
+- [ ] 統合デバッグロガーが全環境で正常動作
+- [ ] 既存console.log/warn完全置換（0件残存）
+- [ ] プロダクション環境でのパフォーマンス最適化確認
 
 ### 品質要件  
-- [ ] 新規テスト15+ケース全通過
-- [ ] 既存266/271テスト成功率維持
-- [ ] プロダクションビルド成功
-- [ ] TypeScript・ESLintエラーなし
+- [ ] **テスト成功率100%達成**（現在93.7%→100%）
+- [ ] プロダクションビルド成功（webpack最適化確認）
+- [ ] TypeScript型エラー0件維持
 
-### 実機確認要件（最重要）
-- [ ] **プロダクトオーナー実機確認**: 4つの致命問題が完全解決
-- [ ] **モバイル・デスクトップ両方**: 全機能正常動作
-- [ ] **データ保護確認**: メモ保存・読み込みの完全動作
+### UX要件
+- [ ] 開発時デバッグ情報の十分な出力
+- [ ] プロダクション時のクリーンな動作
+- [ ] 既存UI/UX動作への影響なし
+
+### パフォーマンス要件
+- [ ] プロダクションビルドサイズ増加なし
+- [ ] 実行時オーバーヘッド最小化
+- [ ] Dead Code Elimination確認
 
 ---
 
 ## 🚀 推奨実装順序
 
-### Day 1: T006 日付バグ緊急修正
-1. **Red Phase**: JST日付・今日判定・状態管理テスト
-2. **Green Phase**: dateUtilsモジュール・DateNavigation修正
-3. **Blue Phase**: エラーハンドリング・エッジケース対応
+### Day 1: 統合デバッグロガー基盤（6-8時間）
+1. **Morning**: DebugLogger核心機能TDD実装
+2. **Afternoon**: 環境検出・webpack統合・型定義
 
-### Day 2: T007 タスクメモ保存実装
-1. **Red Phase**: 自動保存・手動保存・エラー処理テスト
-2. **Green Phase**: useAutoSaveフック・TaskMemo統合
-3. **Blue Phase**: 保存フィードバックUI・UX改善
+### Day 2: テスト修正・統合・T010対応（5-7時間）  
+1. **Morning**: console.log/warn全置換
+2. **Early Afternoon**: act()警告・タイマーモック修正
+3. **Late Afternoon**: 🚨 T010モバイルタスクメモ保存バグ修正
 
-### Day 3: T008 + 全体仕上げ
-1. **Morning**: CSSクラス検証スクリプト改善
-2. **Afternoon**: 全体品質確認・実機テスト
-3. **Evening**: プロダクションビルド・Phase 2.2d完了
+### Day 3: 品質保証・最適化（3-4時間）
+1. **Morning**: 100%テスト成功率達成確認 + T010検証
+2. **Afternoon**: プロダクション最適化・総合検証
 
 ---
 
-## 🎖️ 期待される成果
+## 🔗 必要な依存関係
 
-### 製品価値の回復
-- **データ保護**: ユーザーの情報資産を確実に保護
-- **基本信頼性**: 日付表示・操作の正確性保証
-- **品質基盤**: 自動化ツールの信頼性向上
+### 既存技術スタック活用
+- **Webpack/Vite**: 環境変数・Dead Code Elimination
+- **TypeScript**: 型安全性確保
+- **Jest/React Testing Library**: テスト基盤
 
-### 戦略的価値  
-- **Phase 2.2b準備**: フォーカスモード強化への確実な基盤
-- **ユーザー信頼**: 致命的バグ解決によるプロダクト信頼性向上
-- **開発効率**: 品質ゲート改善による持続可能な開発体制
-
-### 技術的価値
-- **モバイル最適化**: タッチデバイスでの完全動作保証
-- **時差対応**: 日本市場での正確な日付処理
-- **エラー処理**: 予期しない状況への堅牢な対応
+### 新規追加不要
+- 外部ログライブラリ導入なし（自社実装）
+- 設定ファイル最小限追加
+- パッケージ依存関係増加なし
 
 ---
 
-## 💬 Plannerからのメッセージ
+## 📋 Plannerへの引き継ぎ事項
 
-お疲れさまです。Phase 2.2aの素晴らしい実装により、Today-First UXが実現されました。
+### 実装完了報告時の必須項目
+1. **テスト成功率**: 100%達成確認
+2. **プロダクションビルド**: サイズ・性能確認
+3. **統合デバッグロガー**: 機能検証結果
+4. **Phase 2.2b準備状況**: 基盤整備完了宣言
 
-しかし、プロダクトオーナーの実機確認で発見された致命的問題は、Focus-Flowの製品価値そのものを脅かします。特にデータ損失は、ユーザーの信頼を根本的に失う重大事故です。
+### 技術的制約・課題報告
+- useState方式での制約・限界があれば報告
+- 将来のuseReducer移行推奨時期の技術提案
+- パフォーマンス測定結果・改善案
 
-この緊急修正は、次の革新的フォーカスモード強化への確実な基盤作りでもあります。データ保護と基本機能の信頼性を確保して、Focus-Flowを真に価値ある製品に育て上げましょう。
-
-技術的には複雑ではありませんが、確実性が最優先です。TDD手法により、一つずつ着実に問題を解決していけば必ず成功するでしょう。
-
-応援していますね！
+### 戦略的フィードバック
+- プロダクトオーナー要望実現度評価
+- Phase 2.2b開発への影響度分析
+- 品質向上・技術的負債解消効果
 
 ---
 
-*2025-07-25 Planner Agent - Phase 2.2d 緊急拡張実装指示*
-*データ保護・モバイルUX致命問題の完全解決を目指して*
+## 💪 Builderへのメッセージ
+
+T006-T008での完璧な実装実績により、Builderの技術力は実証済みです。
+
+**T009は技術課題とビジネス要望を同時解決する戦略的実装**ですね。
+- プロダクトオーナーの「デバッグロガー開発」要望
+- 21件テスト失敗の技術的解決  
+- Phase 2.2b革新的フォーカスモードへの安定基盤
+
+この統合設計により、**単なる修正を超えた価値創出**が可能になります。
+
+Builder's expertise × Planner's strategic design = **Focus-Flow品質革命**
+
+完璧な実装を期待しております！
+
+---
+
+*2025-07-26 Planner Agent - T009統合デバッグロガー実装指示書*  
+*統合設計: Builder技術課題 + プロダクトオーナー要望 = 戦略的価値実現*
