@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import type { Task } from '../types/Task'
 import { DatePicker } from './DatePicker'
 import { formatTaskDate } from '../utils/taskDate'
+import { getJSTTodayString } from '../utils/dateUtils'
 import './AddTaskForm.css'
 
 interface AddTaskFormProps {
@@ -22,8 +23,8 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, currentDate }) 
   const [error, setError] = useState('')
   const [showAdvanced, setShowAdvanced] = useState(false)
   
-  // 🟢 Green Phase: 日付選択機能の最小限実装
-  const [targetDate, setTargetDate] = useState(currentDate || new Date().toISOString().split('T')[0])
+  // 🟢 Green Phase: 日付選択機能の最小限実装（JST基準）
+  const [targetDate, setTargetDate] = useState(currentDate || getJSTTodayString())
   const [showDatePicker, setShowDatePicker] = useState(false)
   
   // currentDateが変更されたときに、targetDateを自動更新
@@ -41,8 +42,8 @@ export const AddTaskForm: React.FC<AddTaskFormProps> = ({ onAdd, currentDate }) 
     setAlarmTime('')
     setTags('')
     setError('')
-    // 🟢 Green Phase: 日付も今日にリセット
-    setTargetDate(new Date().toISOString().split('T')[0])
+    // 🟢 Green Phase: 日付も今日にリセット（JST基準）
+    setTargetDate(currentDate || getJSTTodayString())
   }
 
   const handleSubmit = (e: React.FormEvent) => {

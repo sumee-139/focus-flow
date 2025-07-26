@@ -1,5 +1,10 @@
 /* DateNavigation.css - Phase 2.2a レスポンシブ対応 + T005ボタンサイズバランス */
 
+/* T008: 未定義クラス date-navigation-container の修正 */
+.date-navigation-container {
+  /* コンテナクラス（現在は空だが将来の拡張用に定義） */
+}
+
 /* T005: 新しい日付ナビゲーションボタンレイアウト */
 .date-navigation-buttons {
   display: flex;

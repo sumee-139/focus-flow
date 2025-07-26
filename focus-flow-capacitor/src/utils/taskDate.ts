@@ -1,6 +1,8 @@
 // Task Date Operations - Phase 2.2a
 // Today-First UXを支援するタスク日付操作機能
 
+import { getJSTTodayString, isJSTToday } from './dateUtils';
+
 /**
  * タスク日付フォーマット設定
  */
@@ -81,13 +83,13 @@ export function formatTaskDate(taskDate: string, options: TaskDateFormatOptions)
 }
 
 /**
- * タスク日付が今日かどうか判定
+ * タスク日付が今日かどうか判定（JST基準）
+ * T006: UTC/JST時差問題修正対応
  * @param taskDate YYYY-MM-DD形式のタスク日付
- * @returns 今日の場合 true
+ * @returns JST基準で今日の場合 true
  */
 export function isTaskDateToday(taskDate: string): boolean {
-  const today = new Date().toISOString().split('T')[0];
-  return taskDate === today;
+  return isJSTToday(taskDate);
 }
 
 /**
@@ -118,22 +120,22 @@ export function calculateDateDifference(baseDate: string, dayDifference: number)
 export function createDateNavigation(): TaskDateNavigation {
   return {
     getToday: (): string => {
-      return new Date().toISOString().split('T')[0];
+      return getJSTTodayString();
     },
 
     getTomorrow: (): string => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getJSTTodayString();
       return calculateDateDifference(today, 1);
     },
 
     getYesterday: (): string => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getJSTTodayString();
       return calculateDateDifference(today, -1);
     },
 
     navigateToDate: (date: string): string => {
       const parsed = parseTaskDate(date);
-      return parsed.isValid ? parsed.date! : new Date().toISOString().split('T')[0];
+      return parsed.isValid ? parsed.date! : getJSTTodayString();
     },
 
     isToday: (date: string): boolean => {
@@ -141,17 +143,17 @@ export function createDateNavigation(): TaskDateNavigation {
     },
 
     isPast: (date: string): boolean => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getJSTTodayString();
       return date < today;
     },
 
     isFuture: (date: string): boolean => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getJSTTodayString();
       return date > today;
     },
 
     prioritizeForTodayFirst: (dates: string[]): string[] => {
-      const today = new Date().toISOString().split('T')[0];
+      const today = getJSTTodayString();
       
       return [...dates].sort((a, b) => {
         // 今日を最優先

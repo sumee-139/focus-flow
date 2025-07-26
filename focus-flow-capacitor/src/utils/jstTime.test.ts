@@ -73,7 +73,7 @@ describe('jstTime - JST基準日付処理', () => {
         { utc: '2025-07-25T00:00:00.000Z', jst: { hour: 9, date: 25 } }, // JST 09:00
       ];
 
-      testCases.forEach(({ utc, jst }, index) => {
+      testCases.forEach(({ utc, jst }, _index) => {
         vi.useFakeTimers();
         vi.setSystemTime(new Date(utc));
         

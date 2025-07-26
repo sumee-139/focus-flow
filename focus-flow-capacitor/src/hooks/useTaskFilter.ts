@@ -59,16 +59,6 @@ function saveFilterToStorage(filter: TaskFilter): void {
   }
 }
 
-/**
- * ローカル時刻での今日の日付を取得（YYYY-MM-DD形式）
- */
-function getLocalDateString(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 /**
  * Today-First UXのためのタスクフィルタリングフック

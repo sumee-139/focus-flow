@@ -51,8 +51,8 @@ describe('App - 日付管理循環依存バグ修正', () => {
     const possibleFormats = [
       `${year}年${month}月${day}日`,
       `${month}/${day}`,
-      `7/25(金)`, // 具体的な今日の日付
-      `2025年7月25日(金)` // 完全な今日の日付
+      `${month}/${day}`, // 動的な今日の日付
+      `${year}年${month}月${day}日` // 完全な今日の日付
     ];
     
     let dateFound = false;
@@ -71,7 +71,7 @@ describe('App - 日付管理循環依存バグ修正', () => {
     expect(dateFound).toBe(true);
     
     // 「今日」ボタンをクリック
-    const todayButton = screen.getByRole('button', { name: '今日' });
+    const todayButton = screen.getByRole('button', { name: '今日に戻る' });
     
     act(() => {
       fireEvent.click(todayButton);
@@ -102,8 +102,8 @@ describe('App - 日付管理循環依存バグ修正', () => {
     const possibleFormats = [
       `${year}年${month}月${day}日`,
       `${month}/${day}`,
-      `7/25(金)`, // 具体的な今日の日付
-      `2025年7月25日(金)` // 完全な今日の日付
+      `${month}/${day}`, // 動的な今日の日付
+      `${year}年${month}月${day}日` // 完全な今日の日付
     ];
     
     let dateFound = false;
@@ -120,6 +120,116 @@ describe('App - 日付管理循環依存バグ修正', () => {
     }
     
     expect(dateFound).toBe(true);
+  });
+
+});
+
+// 🔴 Red Phase: T007 モバイルタスクメモ保存機能失敗テスト
+describe('App - T007 Mobile Task Memo Save Failure', () => {
+  
+  beforeEach(() => {
+    localStorage.clear();
+    
+    // モバイル環境をシミュレート
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation(query => ({
+        matches: query === '(max-width: 768px)', // モバイル判定
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+  });
+
+  // 🔴 失敗するテスト: モバイルでタスクメモが保存されない問題
+  test('should fail to save task memo on mobile (current bug)', async () => {
+    render(<App />);
+    
+    // デフォルトタスクをクリック（モバイルでモーダル表示）
+    const firstTask = await screen.findByText('FocusFlowプロトタイプを完成させる');
+    
+    act(() => {
+      fireEvent.click(firstTask);
+    });
+    
+    // MobileTaskMemoModalが表示されることを確認
+    const modal = await screen.findByTestId('mobile-task-memo-modal');
+    expect(modal).toBeInTheDocument();
+    
+    // メモ内容を入力
+    const textarea = screen.getByLabelText(/タスクメモ/i);
+    const testMemoContent = 'Test memo content for mobile save failure';
+    
+    act(() => {
+      fireEvent.change(textarea, { target: { value: testMemoContent } });
+    });
+    
+    // 3秒待機（自動保存のトリガー）
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 3500));
+    });
+    
+    // LocalStorageにタスクメモが保存されていないことを確認（現在のバグ）
+    const taskMemoKey = 'focus-flow-task-memo-1';
+    const savedMemo = localStorage.getItem(taskMemoKey);
+    
+    // 🟢 修正後テスト: TaskMemoDataオブジェクトが保存されているはず
+    expect(savedMemo).not.toBeNull(); // 保存されていることを確認
+    if (savedMemo) {
+      const taskMemoData = JSON.parse(savedMemo);
+      expect(taskMemoData.content).toBe(testMemoContent);
+      expect(taskMemoData.taskId).toBe('1');
+      expect(taskMemoData.taskSnapshot).toBeDefined();
+    }
+  });
+
+  // 🔴 失敗するテスト: 戻るボタンでも保存されない問題
+  test('should fail to save task memo when closing modal (current bug)', async () => {
+    render(<App />);
+    
+    // デフォルトタスクをクリック
+    const firstTask = await screen.findByText('FocusFlowプロトタイプを完成させる');
+    
+    act(() => {
+      fireEvent.click(firstTask);
+    });
+    
+    // MobileTaskMemoModalが表示されることを確認
+    const modal = await screen.findByTestId('mobile-task-memo-modal');
+    expect(modal).toBeInTheDocument();
+    
+    // メモ内容を入力
+    const textarea = screen.getByLabelText(/タスクメモ/i);
+    const testMemoContent = 'Test memo for back button save failure';
+    
+    act(() => {
+      fireEvent.change(textarea, { target: { value: testMemoContent } });
+    });
+    
+    // 戻るボタンをクリック
+    const backButton = screen.getByText('← 戻る');
+    
+    act(() => {
+      fireEvent.click(backButton);
+    });
+    
+    // LocalStorageにタスクメモが保存されていないことを確認（現在のバグ）
+    const taskMemoKey = 'focus-flow-task-memo-1';
+    const savedMemo = localStorage.getItem(taskMemoKey);
+    
+    // 🟢 修正後テスト: TaskMemoDataオブジェクトが保存されているはず
+    expect(savedMemo).not.toBeNull(); // 保存されていることを確認
+    if (savedMemo) {
+      const taskMemoData = JSON.parse(savedMemo);
+      expect(taskMemoData.content).toBe(testMemoContent);
+      expect(taskMemoData.taskId).toBe('1');
+      expect(taskMemoData.taskSnapshot).toBeDefined();
+    }
   });
 
 });

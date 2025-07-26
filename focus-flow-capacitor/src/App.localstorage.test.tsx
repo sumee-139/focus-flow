@@ -37,12 +37,16 @@ describe('App - LocalStorage Integration', () => {
   })
 
   test('should load tasks from localStorage on initial render', async () => {
+    // 今日の日付を取得（YYYY-MM-DD形式）
+    const today = new Date().toISOString().split('T')[0]
+    
     const storedTasks = [
       {
         id: 'stored-1',
         title: 'Stored Task 1',
         description: 'Task from localStorage',
         estimatedMinutes: 60,
+        targetDate: today, // 今日の日付を設定
         order: 1,
         completed: false,
         tags: ['stored'],
@@ -54,6 +58,7 @@ describe('App - LocalStorage Integration', () => {
         title: 'Stored Task 2',
         description: 'Another stored task',
         estimatedMinutes: 30,
+        targetDate: today, // 今日の日付を設定
         order: 2,
         completed: true,
         tags: ['stored', 'completed'],
@@ -69,6 +74,14 @@ describe('App - LocalStorage Integration', () => {
     // localStorage からタスクが読み込まれることを確認
     await waitFor(() => {
       expect(screen.getByText('Stored Task 1')).toBeInTheDocument()
+      // Stored Task 2は完了タスクなので、完了タスク表示をONにする必要がある
+    })
+    
+    // 完了タスクを表示する
+    const showCompletedToggle = screen.getByTestId('show-completed-toggle')
+    fireEvent.click(showCompletedToggle)
+    
+    await waitFor(() => {
       expect(screen.getByText('Stored Task 2')).toBeInTheDocument()
     })
 
@@ -141,6 +154,10 @@ describe('App - LocalStorage Integration', () => {
   })
 
   test('should handle localStorage errors gracefully', async () => {
+    // コンソールエラーをモック（エラーログが期待されるため）
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
     localStorageMock.getItem.mockImplementation(() => {
       throw new Error('localStorage error')
     })
@@ -152,9 +169,17 @@ describe('App - LocalStorage Integration', () => {
     await waitFor(() => {
       expect(screen.getByText(/FocusFlowプロトタイプ/)).toBeInTheDocument()
     })
+
+    // クリーンアップ
+    consoleErrorSpy.mockRestore()
+    consoleWarnSpy.mockRestore()
   })
 
   test('should handle invalid JSON in localStorage gracefully', async () => {
+    // コンソールエラーをモック（JSONパースエラーが期待されるため）
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
     localStorageMock.getItem.mockReturnValue('invalid-json{')
 
     // 不正なJSONでもアプリが正常に動作すること
@@ -164,15 +189,23 @@ describe('App - LocalStorage Integration', () => {
     await waitFor(() => {
       expect(screen.getByText(/FocusFlowプロトタイプ/)).toBeInTheDocument()
     })
+
+    // クリーンアップ
+    consoleErrorSpy.mockRestore()
+    consoleWarnSpy.mockRestore()
   })
 
   test('should migrate Date objects correctly', async () => {
+    // 今日の日付を取得（YYYY-MM-DD形式）
+    const today = new Date().toISOString().split('T')[0]
+    
     const storedTasksWithStringDates = [
       {
         id: 'date-test-1',
         title: 'Date Test Task',
         description: 'Task with string dates',
         estimatedMinutes: 60,
+        targetDate: today, // 今日の日付を設定
         order: 1,
         completed: false,
         tags: ['date-test'],

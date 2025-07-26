@@ -30,6 +30,7 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
 }) => {
   const [content, setContent] = useState(taskMemoContent)
   const autoSaveTimerRef = useRef<number | null>(null)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   // 自動保存タイマーをクリア
   const clearAutoSaveTimer = useCallback((): void => {
@@ -42,11 +43,19 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
   // 自動保存をスケジュール
   const scheduleAutoSave = useCallback((newContent: string): void => {
     clearAutoSaveTimer()
+    setSaveStatus('saving')
+    
     autoSaveTimerRef.current = window.setTimeout(() => {
       try {
         onSave(newContent)
+        setSaveStatus('saved')
+        // 2秒後にsavedステータスをクリア
+        setTimeout(() => setSaveStatus('idle'), 2000)
       } catch (error) {
         console.warn('Failed to save task memo:', error)
+        setSaveStatus('error')
+        // 3秒後にerrorステータスをクリア
+        setTimeout(() => setSaveStatus('idle'), 3000)
       }
     }, AUTO_SAVE_DELAY)
   }, [clearAutoSaveTimer, onSave])
@@ -61,20 +70,25 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
   // モーダルクローズハンドラ
   const handleClose = useCallback(() => {
     clearAutoSaveTimer()
+    
+    // 🟢 T007: 戻るボタンでも現在の内容を保存
+    try {
+      setSaveStatus('saving')
+      onSave(content)
+      setSaveStatus('saved')
+    } catch (error) {
+      console.warn('Failed to save task memo on close:', error)
+      setSaveStatus('error')
+    }
+    
     onClose()
-  }, [clearAutoSaveTimer, onClose])
+  }, [clearAutoSaveTimer, onSave, content, onClose])
 
   // コンテンツ初期化
   useEffect(() => {
     setContent(taskMemoContent)
   }, [taskMemoContent])
 
-  // コンポーネントアンマウント時にタイマークリア
-  useEffect(() => {
-    return () => {
-      clearAutoSaveTimer()
-    }
-  }, [])
 
   // モーダルが閉じている場合は何も表示しない
   if (!isOpen) {
@@ -157,15 +171,29 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
         />
       </div>
 
-      {/* 自動保存インジケーター */}
+      {/* 🔵 Blue Phase: 保存状態フィードバックUI */}
       <div style={{
         padding: '0.5rem 1rem',
         borderTop: '1px solid #e2e8f0',
         fontSize: '0.875rem',
-        color: '#718096',
-        textAlign: 'center'
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.5rem'
       }}>
-        📄 自動保存: 入力停止から3秒後
+        {saveStatus === 'idle' && (
+          <span style={{ color: '#718096' }}>📄 自動保存: 入力停止から3秒後</span>
+        )}
+        {saveStatus === 'saving' && (
+          <span style={{ color: '#3182ce' }}>💾 保存中...</span>
+        )}
+        {saveStatus === 'saved' && (
+          <span style={{ color: '#38a169' }}>✅ 保存完了</span>
+        )}
+        {saveStatus === 'error' && (
+          <span style={{ color: '#e53e3e' }}>⚠️ 保存に失敗しました</span>
+        )}
       </div>
     </div>
   )
