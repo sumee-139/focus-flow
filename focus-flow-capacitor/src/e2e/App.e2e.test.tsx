@@ -110,7 +110,7 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
       const targetDays = screen.getAllByLabelText(new RegExp(`${targetDayNumber}日`))
       // 最初に見つかった日付をクリック（通常は現在の月の日付）
       fireEvent.click(targetDays[0])
-    } catch (error) {
+    } catch (_error) {
       // フォールバック: 28日を選択（月末を避ける）
       const fallbackDays = screen.getAllByLabelText(/28日/)
       fireEvent.click(fallbackDays[0])

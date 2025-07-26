@@ -293,8 +293,10 @@ describe('useTaskFilter - Today-First UX タスクフィルタリングフック
     
     const { result } = renderHook(() => useTaskFilter(invalidTasks));
     
-    expect(() => result.current.filteredTasks).not.toThrow();
-    expect(() => result.current.statistics).not.toThrow();
-    expect(() => result.current.updateFilter({ showCompleted: true })).not.toThrow();
+    act(() => {
+      expect(() => result.current.filteredTasks).not.toThrow();
+      expect(() => result.current.statistics).not.toThrow();
+      expect(() => result.current.updateFilter({ showCompleted: true })).not.toThrow();
+    });
   });
 });
