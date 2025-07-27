@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent, act, cleanup } from '@testing-library/react'
 import { describe, test, expect, beforeEach, vi, afterEach } from 'vitest'
 import { DailyMemo } from './DailyMemo'
 
@@ -41,10 +41,7 @@ describe('DailyMemo - データ永続化', () => {
   })
 
   afterEach(() => {
-    if (vi.isFakeTimers()) {
-      vi.runOnlyPendingTimers()
-    }
-    vi.useRealTimers()
+    // グローバルクリーンアップに移譲 (src/test/setup.ts)
   })
 
   test('should auto-save memo after 3 seconds of inactivity', async () => {
@@ -268,13 +265,6 @@ describe('DailyMemo - データ永続化', () => {
   test('should show saving indicator when auto-save is in progress', async () => {
     vi.useFakeTimers()
     
-    // 保存処理を遅らせるためにsetItemを遅延実行する
-    localStorageMock.setItem.mockImplementation(async (key: string, value: string) => {
-      // 少し遅延させる
-      await new Promise(resolve => setTimeout(resolve, 50))
-      localStorageMock.store[key] = value
-    })
-    
     render(<DailyMemo />)
     
     const textarea = screen.getByTestId('daily-memo-textarea')
@@ -284,19 +274,28 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for saving' } })
     })
     
-    // 3秒経過で保存プロセス開始（但し完了まで時間がかかる） - 状態更新を待つ
+    // 3秒経過で保存プロセス開始
     await act(async () => {
       vi.advanceTimersByTime(3000)
-      // setTimeout callbacks for state updates
-      await vi.runAllTimersAsync()
     })
     
-    // 保存中または保存完了インジケーターが表示されることを確認
-    // （保存処理が高速な場合、保存完了が表示される可能性がある）
-    const savingIndicator = screen.queryByText(/保存中/i)
-    const successIndicator = screen.queryByText(/保存完了/i)
+    // saving状態を確認（50msの間表示される）
+    await act(async () => {
+      vi.advanceTimersByTime(25) // saving状態の途中
+    })
     
-    expect(savingIndicator || successIndicator).toBeInTheDocument()
+    let saveIndicator = screen.queryByTestId('save-status-indicator')
+    expect(saveIndicator).toBeInTheDocument()
+    expect(saveIndicator?.textContent).toMatch(/💾.*保存中/)
+    
+    // success状態に移行
+    await act(async () => {
+      vi.advanceTimersByTime(50) // saving→success遷移完了
+    })
+    
+    saveIndicator = screen.queryByTestId('save-status-indicator')
+    expect(saveIndicator).toBeInTheDocument()
+    expect(saveIndicator?.textContent).toMatch(/✅.*保存完了/)
   })
 
   test('should show success indicator when auto-save succeeds', async () => {
@@ -311,22 +310,22 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for success' } })
     })
     
-    // 3秒経過で保存実行 - 状態更新を待つ
+    // 3秒経過で保存プロセス開始
     await act(async () => {
       vi.advanceTimersByTime(3000)
-      // setTimeout callbacks for state updates
-      await vi.runAllTimersAsync()
     })
     
-    // 少し待って成功状態を確認（2秒以内に）
+    // success状態に移行（50ms後）
     await act(async () => {
-      vi.advanceTimersByTime(500)
-      await vi.runAllTimersAsync()
+      vi.advanceTimersByTime(50)
     })
     
-    // 成功インジケーターが表示されることを確認
-    expect(screen.getByText(/保存完了/i)).toBeInTheDocument()
-    expect(screen.getByText('check_circle')).toBeInTheDocument() // Material Icon
+    // 保存成功状態インジケーターが表示されることを確認
+    const saveIndicator = screen.queryByTestId('save-status-indicator')
+    expect(saveIndicator).toBeInTheDocument()
+    
+    // success状態の内容確認
+    expect(saveIndicator?.textContent).toMatch(/✅.*保存完了/)
   })
 
   test('should show error indicator when auto-save fails', async () => {
@@ -355,7 +354,7 @@ describe('DailyMemo - データ永続化', () => {
     
     // エラーインジケーターが表示されることを確認
     expect(screen.getByText(/保存失敗/i)).toBeInTheDocument()
-    expect(screen.getByText('error')).toBeInTheDocument() // Material Icon
+    expect(screen.getByText(/❌/)).toBeInTheDocument() // Emoji icon
     expect(screen.getByText(/LocalStorage quota exceeded/i)).toBeInTheDocument()
   })
 
@@ -382,16 +381,20 @@ describe('DailyMemo - データ永続化', () => {
     await expect(
       act(async () => {
         vi.advanceTimersByTime(3000)
-        // setTimeout callbacks for state updates
-        await vi.runAllTimersAsync()
       })
     ).resolves.not.toThrow()
     
+    // Promise-based saveWithStatus の状態更新を待つ
+    await act(async () => {
+      await Promise.resolve()
+    })
+    
     // 適切なエラーメッセージが表示されることを確認
     expect(screen.getByText(/容量不足/i)).toBeInTheDocument()
+    expect(screen.getByText(/❌/)).toBeInTheDocument() // Emoji icon
   })
 
-  test('should position save status indicator at bottom-right (non-intrusive)', async () => {
+  test('should display save status indicator with inline styling', async () => {
     vi.useFakeTimers()
     
     render(<DailyMemo />)
@@ -403,27 +406,29 @@ describe('DailyMemo - データ永続化', () => {
       fireEvent.change(textarea, { target: { value: 'Test content for save indicator' } })
     })
     
-    // 保存中インジケーターが表示される - 状態更新を待つ
+    // 保存プロセス開始
     await act(async () => {
       vi.advanceTimersByTime(3000)
-      // setTimeout callbacks for state updates
-      await vi.runAllTimersAsync()
     })
     
-    // 保存中または保存完了インジケーターが表示されることを確認
-    // （保存処理が高速な場合、保存完了が表示される可能性がある）
-    const savingIndicator = screen.queryByText(/保存中/i)
-    const successIndicator = screen.queryByText(/保存完了/i)
+    // success状態に移行（50ms後）
+    await act(async () => {
+      vi.advanceTimersByTime(50)
+    })
     
-    const saveIndicator = savingIndicator || successIndicator
+    // 保存状態インジケーターの確認
+    const saveIndicator = screen.queryByTestId('save-status-indicator')
     expect(saveIndicator).toBeInTheDocument()
     
-    // 右下配置の確認（bottom: '20px', right: '20px'）
-    const indicatorElement = saveIndicator!.closest('.save-indicator')
-    expect(indicatorElement).toHaveStyle({
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px'
+    // inline-block スタイルの確認
+    expect(saveIndicator).toHaveStyle({
+      display: 'inline-block',
+      marginTop: '8px',
+      padding: '6px 10px',
+      borderRadius: '4px'
     })
+    
+    // success状態の内容確認
+    expect(saveIndicator?.textContent).toMatch(/✅.*保存完了/)
   })
 })

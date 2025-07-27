@@ -10,6 +10,7 @@ import {
   parseTaskDate
 } from '../utils/taskDate';
 import { jstTime } from '../utils/jstTime';
+import { logger } from '../utils/debugLogger';
 
 /**
  * 日付ナビゲーションフックのオプション
@@ -64,7 +65,7 @@ function loadDateFromStorage(): string | null {
   try {
     return localStorage.getItem(STORAGE_KEY);
   } catch (error) {
-    console.warn('Failed to load date from localStorage:', error);
+    logger.warn('Failed to load date from localStorage:', error);
     return null;
   }
 }
@@ -76,7 +77,7 @@ function saveDateToStorage(date: string): void {
   try {
     localStorage.setItem(STORAGE_KEY, date);
   } catch (error) {
-    console.warn('Failed to save date to localStorage:', error);
+    logger.warn('Failed to save date to localStorage:', error);
   }
 }
 
@@ -126,7 +127,7 @@ export function useDateNavigation(options: UseDateNavigationOptions = {}): UseDa
   const updateDate = useCallback((newDate: string) => {
     const parsed = parseTaskDate(newDate);
     if (!parsed.isValid) {
-      console.warn('Invalid date provided:', newDate);
+      logger.warn('Invalid date provided:', newDate);
       return;
     }
 

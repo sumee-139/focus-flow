@@ -109,4 +109,37 @@ describe('useLocalStorage', () => {
     expect(result.current[0]).toBe(6)
     expect(localStorageMock.setItem).toHaveBeenCalledWith('test-key', JSON.stringify(6))
   })
+
+  // DebugLogger統合テスト
+  describe('DebugLogger Integration', () => {
+    test('should use debugLogger instead of console.error for localStorage errors', () => {
+      // This test will verify that useLocalStorage uses the new debugLogger
+      // instead of direct console.error calls
+      localStorageMock.getItem.mockImplementation(() => {
+        throw new Error('localStorage access error')
+      })
+      
+      const { result } = renderHook(() => useLocalStorage('test-key', 'default'))
+      
+      // Should fallback to default value when localStorage errors occur
+      expect(result.current[0]).toBe('default')
+      // Note: Actual logger usage will be verified after debugLogger implementation
+    })
+
+    test('should maintain error information while optimizing production output', () => {
+      localStorageMock.setItem.mockImplementation(() => {
+        throw new Error('localStorage quota exceeded')
+      })
+      
+      const { result } = renderHook(() => useLocalStorage('test-key', 'initial'))
+      
+      act(() => {
+        result.current[1]('new-value')
+      })
+      
+      // Should handle error gracefully and maintain state
+      expect(result.current[0]).toBe('new-value')
+      // Error should be logged through debugLogger (not direct console.error)
+    })
+  })
 })

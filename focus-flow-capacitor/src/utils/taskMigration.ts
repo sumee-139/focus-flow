@@ -2,6 +2,7 @@
 // 既存データとの互換性を保つためのマイグレーション処理
 
 import { Task } from '../types/Task';
+import { logger } from './debugLogger';
 
 /**
  * 旧形式のタスクデータ（targetDate なし）
@@ -118,7 +119,7 @@ export function loadAndMigrateTaskData(storageKey: string): Task[] {
 
     return parsedData as Task[];
   } catch (error) {
-    console.error('Failed to load and migrate task data:', error);
+    logger.error('Failed to load and migrate task data:', error);
     return [];
   }
 }
@@ -130,8 +131,8 @@ export function loadAndMigrateTaskData(storageKey: string): Task[] {
  */
 export function logMigrationResult(oldCount: number, newCount: number): void {
   if (oldCount !== newCount) {
-    console.warn(`Task migration completed: ${oldCount} → ${newCount} tasks`);
+    logger.warn(`Task migration completed: ${oldCount} → ${newCount} tasks`);
   } else {
-    console.log(`Task migration completed: ${newCount} tasks processed`);
+    logger.info(`Task migration completed: ${newCount} tasks processed`);
   }
 }

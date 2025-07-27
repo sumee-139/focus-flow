@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, useCallback } from 'react'
+import { useState, useEffect, useReducer, useCallback, useMemo } from 'react'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { Capacitor } from '@capacitor/core'
 import type { AppState, AppAction, Task } from './types/Task'
@@ -16,38 +16,43 @@ import { DatePicker } from './components/DatePicker'
 import { TaskStatistics } from './components/TaskStatistics'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { useTaskFilter } from './hooks/useTaskFilter'
-import { useTaskMemoStorage } from './hooks/useTaskMemoStorage'
 import { MEDIA_QUERIES } from './constants/ui'
+import { logger } from './utils/debugLogger'
+import { getJSTTodayString } from './utils/dateUtils'
 import './App.css'
 
 // デフォルトタスク（localStorage が空の場合の初期値）
-const defaultTasks: Task[] = [
-  {
-    id: '1',
-    title: 'FocusFlowプロトタイプを完成させる',
-    description: 'Design Philosophyに準拠したUI実装',
-    estimatedMinutes: 120,
-    alarmTime: '14:00',
-    targetDate: new Date().toISOString().split('T')[0], // 今日の日付をデフォルト
-    order: 1,
-    completed: false,
-    tags: ['development'],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '2',
-    title: 'タスク管理機能をテストする',
-    description: '基本的なCRUD操作の動作確認',
-    estimatedMinutes: 30,
-    targetDate: new Date().toISOString().split('T')[0], // 今日の日付をデフォルト
-    order: 2,
-    completed: false, // 🔥 FIX: テスト用に未完了タスクを保持
-    tags: ['testing'],
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-]
+// 🔧 TEST FIX: getJSTTodayString()ではなく動的に今日の日付を取得する関数を使用
+const getDefaultTasks = (): Task[] => {
+  const todayString = getJSTTodayString() // 実行時の今日の日付を取得
+  return [
+    {
+      id: '1',
+      title: 'FocusFlowプロトタイプを完成させる',
+      description: 'Design Philosophyに準拠したUI実装',
+      estimatedMinutes: 120,
+      alarmTime: '14:00',
+      targetDate: todayString, // 実行時の今日の日付をデフォルト
+      order: 1,
+      completed: false,
+      tags: ['development'],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: '2',
+      title: 'タスク管理機能をテストする',
+      description: '基本的なCRUD操作の動作確認',
+      estimatedMinutes: 30,
+      targetDate: todayString, // 実行時の今日の日付をデフォルト
+      order: 2,
+      completed: false, // 🔥 FIX: テスト用に未完了タスクを保持
+      tags: ['testing'],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ]
+}
 
 // App State Reducer (Design Philosophy準拠の状態管理)
 const getInitialState = (tasks: Task[]): AppState => ({
@@ -211,18 +216,16 @@ const parseTasks = (tasks: Task[]): Task[] => {
   }))
 }
 
-// ローカル時刻での今日の日付を取得（YYYY-MM-DD形式）
+// JST基準での今日の日付を取得（YYYY-MM-DD形式）
+// T006: UTC/JST時差問題修正のためgetJSTTodayStringを使用
 const getLocalDateString = (): string => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return getJSTTodayString();
 }
 
 function App() {
   // LocalStorageからタスクを読み込み
-  const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', defaultTasks)
+  // 🔧 TEST FIX: 動的にデフォルトタスクを生成してテスト時の日付モックに対応
+  const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', getDefaultTasks())
   
   // 初期状態をlocalStorageのタスクで設定
   const [state, dispatch] = useReducer(appReducer, getInitialState(parseTasks(storedTasks)))
@@ -260,9 +263,27 @@ function App() {
   const [isTaskMemoModalOpen, setIsTaskMemoModalOpen] = useState(false)
   const [selectedTaskForMobile, setSelectedTaskForMobile] = useState<Task | null>(null)
   const [dailyMemoContent, setDailyMemoContent] = useState('')
+  const [taskMemoUpdateCounter, setTaskMemoUpdateCounter] = useState(0) // useMemo再計算トリガー
   
-  // 🟢 Green Phase: T007 Mobile Task Memo Storage Integration
-  const [currentTaskMemo, setCurrentTaskMemo] = useTaskMemoStorage(selectedTaskForMobile?.id || '')
+  // 🔧 T015 Fix: useMemoでタスクメモ内容を計算（useEffect避け + Reactルール遵守）
+  const currentTaskMemoContent = useMemo(() => {
+    if (!selectedTaskForMobile?.id) {
+      return ''
+    }
+    
+    const storageKey = `focus-flow-task-memo-${selectedTaskForMobile.id}`
+    try {
+      const saved = localStorage.getItem(storageKey)
+      if (saved) {
+        const memoData = JSON.parse(saved)
+        return memoData.content || ''
+      }
+    } catch (error) {
+      logger.warn('Failed to load task memo:', error)
+    }
+    
+    return ''
+  }, [selectedTaskForMobile?.id, taskMemoUpdateCounter])
 
   // タスクの変更をlocalStorageに保存
   useEffect(() => {
@@ -274,9 +295,10 @@ function App() {
   }, [])
 
   // Load daily memo content for mobile accordion (Phase 2.1d+ Final)
+  // T006: UTC/JST時差問題修正のためJST基準日付を使用
   useEffect(() => {
     if (isMobile) {
-      const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+      const today = getJSTTodayString() // JST基準の今日の日付
       const storageKey = `daily-memo-${today}`
       try {
         const saved = localStorage.getItem(storageKey)
@@ -285,7 +307,7 @@ function App() {
           setDailyMemoContent(memoData.content || '')
         }
       } catch (error) {
-        console.warn('Failed to load daily memo:', error)
+        logger.warn('Failed to load daily memo:', error)
       }
     }
   }, [isMobile])
@@ -296,7 +318,7 @@ function App() {
       try {
         setIsMobile(window.matchMedia(MEDIA_QUERIES.MOBILE).matches)
       } catch (error) {
-        console.warn('matchMedia not supported:', error)
+        logger.warn('matchMedia not supported:', error)
         setIsMobile(false) // デスクトップとして扱う
       }
     }
@@ -308,7 +330,7 @@ function App() {
       mediaQuery = window.matchMedia(MEDIA_QUERIES.MOBILE)
       mediaQuery.addEventListener('change', checkIsMobile)
     } catch (error) {
-      console.warn('matchMedia event listener not supported:', error)
+      logger.warn('matchMedia event listener not supported:', error)
     }
     
     return () => {
@@ -344,7 +366,7 @@ function App() {
         }
       }
     } catch (error) {
-      console.error('Permission check error:', error)
+      logger.error('Permission check error:', error)
     }
   }
 
@@ -352,9 +374,9 @@ function App() {
     try {
       dispatch({ type: 'START_FOCUS', payload: { duration: 60 } })
       showMessage('Focus Mode Started - 通知がブロックされます', 'success')
-      console.log('Focus mode activated')
+      logger.info('Focus mode activated')
     } catch (error) {
-      console.error('Focus mode start error:', error)
+      logger.error('Focus mode start error:', error)
       showMessage('Focus mode start failed', 'error')
     }
   }, [showMessage])
@@ -363,19 +385,19 @@ function App() {
     try {
       dispatch({ type: 'END_FOCUS' })
       showMessage('Focus Mode Stopped - 通知が再開されます', 'info')
-      console.log('Focus mode deactivated')
+      logger.info('Focus mode deactivated')
     } catch (error) {
-      console.error('Focus mode stop error:', error)
+      logger.error('Focus mode stop error:', error)
       showMessage('Focus mode stop failed', 'error')
     }
   }, [showMessage])
 
   const testNotification = useCallback(async () => {
     try {
-      console.log('Testing notification, focus mode:', state.focusMode.isActive)
+      logger.info('Testing notification, focus mode:', state.focusMode.isActive)
       
       if (state.focusMode.isActive) {
-        console.log('✅ Notification BLOCKED - Focus mode working correctly')
+        logger.info('✅ Notification BLOCKED - Focus mode working correctly')
         showMessage('Focus Mode Working! 通知がブロックされました', 'success')
         return
       }
@@ -396,7 +418,7 @@ function App() {
           ]
         })
         
-        console.log('✅ Critical Alert sent (should bypass DND)')
+        logger.info('✅ Critical Alert sent (should bypass DND)')
         showMessage('Critical Alert Sent - DND回避通知を送信', 'success')
       } else {
         // Web環境: 標準通知
@@ -406,14 +428,14 @@ function App() {
             icon: '/vite.svg'
           })
           
-          console.log('✅ Web notification sent')
+          logger.info('✅ Web notification sent')
           showMessage('Web Notification Sent - 通知を送信しました', 'success')
         } else {
           showMessage('通知権限が必要です - ブラウザの通知を有効にしてください', 'error')
         }
       }
     } catch (error) {
-      console.error('Test notification error:', error)
+      logger.error('Test notification error:', error)
       showMessage(`通知テスト失敗: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error')
     }
   }, [state.focusMode.isActive, showMessage])
@@ -428,7 +450,7 @@ function App() {
   }, [])
 
   const handleEditTask = useCallback((id: string) => {
-    console.log('Edit task:', id)
+    logger.info('Edit task:', id)
     // TODO: Implement edit functionality
   }, [])
 
@@ -447,7 +469,7 @@ function App() {
   }, [])
 
   const handleReorderTask = useCallback((dragIndex: number, hoverIndex: number) => {
-    console.log('Reorder task:', dragIndex, hoverIndex)
+    logger.info('Reorder task:', dragIndex, hoverIndex)
     // TODO: Implement reorder functionality
   }, [])
 
@@ -530,7 +552,8 @@ function App() {
 
   const handleSaveDailyMemo = useCallback((content: string) => {
     // DailyMemoコンポーネントと同じ保存ロジックを使用
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    // T006: UTC/JST時差問題修正のためJST基準日付を使用
+    const today = getJSTTodayString() // JST基準の今日の日付
     const storageKey = `daily-memo-${today}`
     const memoData = {
       date: today,
@@ -544,7 +567,7 @@ function App() {
       // Mobile state も更新
       setDailyMemoContent(content)
     } catch (error) {
-      console.warn('Failed to save daily memo:', error)
+      logger.warn('Failed to save daily memo:', error)
     }
   }, [])
 
@@ -790,9 +813,9 @@ function App() {
                 isOpen={isTaskMemoModalOpen}
                 taskId={selectedTaskForMobile.id}
                 taskTitle={selectedTaskForMobile.title}
-                taskMemoContent={currentTaskMemo?.content || ''} // 🟢 Load from localStorage
+                taskMemoContent={currentTaskMemoContent} // 🔧 T015 Fix: 手動管理のメモ内容
                 onSave={(content) => {
-                  // 🟢 Green Phase: T007 Actual Task Memo Save Implementation
+                  // 🔧 T015 Fix: 手動でLocalStorageに保存
                   if (!selectedTaskForMobile) return
                   
                   const taskMemoData = {
@@ -809,10 +832,13 @@ function App() {
                   }
                   
                   try {
-                    setCurrentTaskMemo(taskMemoData)
-                    console.log(`✅ Task memo saved for ${selectedTaskForMobile.id}:`, content)
+                    const storageKey = `focus-flow-task-memo-${selectedTaskForMobile.id}`
+                    localStorage.setItem(storageKey, JSON.stringify(taskMemoData))
+                    setTaskMemoUpdateCounter(prev => prev + 1) // useMemo再計算をトリガー
+                    logger.info(`✅ Task memo saved for ${selectedTaskForMobile.id}:`, content)
                   } catch (error) {
-                    console.error('❌ Failed to save task memo:', error)
+                    logger.error('❌ Failed to save task memo:', error)
+                    throw error // エラーをモーダルに伝える
                   }
                 }}
                 onClose={handleTaskMemoModalClose}

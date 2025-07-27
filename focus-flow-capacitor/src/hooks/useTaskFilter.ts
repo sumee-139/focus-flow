@@ -9,6 +9,7 @@ import {
   createTaskFilter 
 } from '../utils/taskFiltering';
 import { createDateNavigation } from '../utils/taskDate';
+import { logger } from '../utils/debugLogger';
 
 /**
  * useTaskFilter フック戻り値の型
@@ -43,7 +44,7 @@ function loadFilterFromStorage(): TaskFilter | null {
     
     return parsed;
   } catch (error) {
-    console.warn('Failed to load filter from localStorage:', error);
+    logger.warn('Failed to load filter from localStorage:', error);
     return null;
   }
 }
@@ -55,7 +56,7 @@ function saveFilterToStorage(filter: TaskFilter): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filter));
   } catch (error) {
-    console.warn('Failed to save filter to localStorage:', error);
+    logger.warn('Failed to save filter to localStorage:', error);
   }
 }
 
@@ -109,7 +110,7 @@ export function useTaskFilter(tasks: Task[]): UseTaskFilterResult {
     try {
       return applyTaskFilters(tasks, filter);
     } catch (error) {
-      console.warn('Failed to apply task filters:', error);
+      logger.warn('Failed to apply task filters:', error);
       return [];
     }
   }, [tasks, filter]);
@@ -130,7 +131,7 @@ export function useTaskFilter(tasks: Task[]): UseTaskFilterResult {
     try {
       return calculateTaskStatistics(tasks, filter.viewDate);
     } catch (error) {
-      console.warn('Failed to calculate task statistics:', error);
+      logger.warn('Failed to calculate task statistics:', error);
       return {
         date: filter.viewDate,
         totalTasks: 0,
