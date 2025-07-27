@@ -4,6 +4,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { calculateDateDifference } from '../utils/taskDate';
 import { jstTime } from '../utils/jstTime';
+import { logger } from '../utils/debugLogger';
 import './DateNavigation.css';
 
 /**
@@ -114,7 +115,7 @@ export const DateNavigation: React.FC<DateNavigationProps> = ({
       
       return `${year}年${month}月${day}日(${dayOfWeek})`;
     } catch (error) {
-      console.warn('Failed to format current date:', error);
+      logger.warn('Failed to format current date:', error);
       return currentDate;
     }
   }, [currentDate]);
@@ -133,7 +134,7 @@ export const DateNavigation: React.FC<DateNavigationProps> = ({
       
       return `${month}/${day}(${dayOfWeek})`;
     } catch (error) {
-      console.warn('Failed to format compact date:', error);
+      logger.warn('Failed to format compact date:', error);
       return currentDate;
     }
   }, [currentDate]);
@@ -212,7 +213,7 @@ export const DateNavigation: React.FC<DateNavigationProps> = ({
           if (onDatePickerOpen) {
             onDatePickerOpen();
           } else {
-            console.log('DatePicker will be implemented');
+            logger.info('DatePicker will be implemented');
           }
         }}
         className="nav-btn nav-small nav-calendar"

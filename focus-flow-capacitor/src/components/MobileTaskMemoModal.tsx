@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { AUTO_SAVE, Z_INDEX } from '../constants/ui'
+import { logger } from '../utils/debugLogger'
 
 // モバイル全画面タスクメモモーダルのProps
 interface MobileTaskMemoModalProps {
@@ -52,7 +53,7 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
         // 2秒後にsavedステータスをクリア
         setTimeout(() => setSaveStatus('idle'), 2000)
       } catch (error) {
-        console.warn('Failed to save task memo:', error)
+        logger.warn('Failed to save task memo:', error)
         setSaveStatus('error')
         // 3秒後にerrorステータスをクリア
         setTimeout(() => setSaveStatus('idle'), 3000)
@@ -77,7 +78,7 @@ export const MobileTaskMemoModal: React.FC<MobileTaskMemoModalProps> = ({
       onSave(content)
       setSaveStatus('saved')
     } catch (error) {
-      console.warn('Failed to save task memo on close:', error)
+      logger.warn('Failed to save task memo on close:', error)
       setSaveStatus('error')
     }
     

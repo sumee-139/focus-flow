@@ -2,6 +2,7 @@
 // Today-First UXを支援するタスク日付操作機能
 
 import { getJSTTodayString, isJSTToday } from './dateUtils';
+import { logger } from './debugLogger';
 
 /**
  * タスク日付フォーマット設定
@@ -77,7 +78,7 @@ export function formatTaskDate(taskDate: string, options: TaskDateFormatOptions)
         return taskDate;
     }
   } catch (_error) {
-    console.warn('Failed to format task date:', _error);
+    logger.warn('Failed to format task date:', _error);
     return taskDate;
   }
 }
@@ -108,7 +109,7 @@ export function calculateDateDifference(baseDate: string, dayDifference: number)
     date.setDate(date.getDate() + dayDifference);
     return date.toISOString().split('T')[0];
   } catch (_error) {
-    console.warn('Failed to calculate date difference:', _error);
+    logger.warn('Failed to calculate date difference:', _error);
     return baseDate;
   }
 }
@@ -201,7 +202,7 @@ export function createTaskDateRange(startDate: string, endDate: string): string[
     
     return dates;
   } catch (_error) {
-    console.warn('Failed to create task date range:', _error);
+    logger.warn('Failed to create task date range:', _error);
     return [];
   }
 }
@@ -224,7 +225,7 @@ export function getTaskWeekStart(taskDate: string): string {
     
     return calculateDateDifference(taskDate, daysToMonday);
   } catch (_error) {
-    console.warn('Failed to get task week start:', _error);
+    logger.warn('Failed to get task week start:', _error);
     return taskDate;
   }
 }

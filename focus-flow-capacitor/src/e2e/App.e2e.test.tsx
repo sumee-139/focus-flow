@@ -5,6 +5,34 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import App from '../App'
 
+// 🔵 Blue Phase: 日付モック化でテストの安定性を確保
+const MOCK_DATE = '2025-07-27' // 固定日付（日曜日）
+const MOCK_DATE_OBJECT = new Date('2025-07-27T12:00:00.000Z') // UTCで固定
+
+// Mock Date constructor and related methods
+const originalDate = Date
+vi.stubGlobal('Date', class extends Date {
+  constructor(...args: any[]) {
+    if (args.length === 0) {
+      super(MOCK_DATE_OBJECT)
+    } else {
+      super(...args)
+    }
+  }
+  
+  static now() {
+    return MOCK_DATE_OBJECT.getTime()
+  }
+  
+  static parse(dateString: string) {
+    return originalDate.parse(dateString)
+  }
+  
+  static UTC(...args: any[]) {
+    return originalDate.UTC(...args)
+  }
+})
+
 // Mock window.matchMedia for consistent testing
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -34,21 +62,16 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     const todayButton = screen.getByRole('button', { name: /今日/ })
     expect(todayButton).toBeInTheDocument()
     expect(todayButton).toHaveClass('nav-today-active')
-    // 動的に今日の日付を取得（YYYY年M月D日形式）
-    const today = new Date()
-    const todayString = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
-    expect(screen.getByText(new RegExp(todayString))).toBeInTheDocument()
+    // 固定日付での確認（2025年7月27日）
+    expect(screen.getByText(/2025年7月27日/)).toBeInTheDocument()
 
     // Step 2: 「次へ」ボタンで明日に移動
     const nextButton = screen.getByLabelText(/次の日/)
     fireEvent.click(nextButton)
 
     await waitFor(() => {
-      // 明日の日付に変更されている
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      const tomorrowString = `${tomorrow.getFullYear()}年${tomorrow.getMonth() + 1}月${tomorrow.getDate()}日`
-      expect(screen.getByText(new RegExp(tomorrowString))).toBeInTheDocument()
+      // 明日の日付に変更されている（2025年7月28日）
+      expect(screen.getByText(/2025年7月28日/)).toBeInTheDocument()
       // 「今日」ボタンが非アクティブになっている
       expect(todayButton).not.toHaveClass('nav-today-active')
     })
@@ -71,10 +94,8 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     fireEvent.click(todayButton)
 
     await waitFor(() => {
-      // 今日の日付に戻っている
-      const today = new Date()
-      const todayString = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
-      expect(screen.getByText(new RegExp(todayString))).toBeInTheDocument()
+      // 今日の日付に戻っている（2025年7月27日）
+      expect(screen.getByText(/2025年7月27日/)).toBeInTheDocument()
       expect(todayButton).toHaveClass('nav-today-active')
       // 明日のタスクは表示されない（日付フィルタリング）
       expect(screen.queryByText('明日の重要会議の準備')).not.toBeInTheDocument()
@@ -102,18 +123,14 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
       expect(screen.getByText('日付を選択')).toBeInTheDocument()
     })
 
-    // Step 2: カレンダーで明日を選択（より安全なテスト）
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    const targetDayNumber = tomorrow.getDate()
+    // Step 2: カレンダーで28日を選択（固定日付テスト）
     try {
-      const targetDays = screen.getAllByLabelText(new RegExp(`${targetDayNumber}日`))
-      // 最初に見つかった日付をクリック（通常は現在の月の日付）
+      const targetDays = screen.getAllByLabelText(/28日/)
+      // 28日をクリック（モック日付から1日後）
       fireEvent.click(targetDays[0])
     } catch (_error) {
-      // フォールバック: 28日を選択（月末を避ける）
-      const fallbackDays = screen.getAllByLabelText(/28日/)
-      fireEvent.click(fallbackDays[0])
+      // フォールバック: 何もしない（テスト続行）
+      logger.warn('Could not find 28日 in calendar')
     }
 
     await waitFor(() => {
@@ -139,9 +156,8 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     fireEvent.click(todayButton)
 
     await waitFor(() => {
-      const today = new Date()
-      const todayString = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
-      expect(screen.getByText(new RegExp(todayString))).toBeInTheDocument()
+      // 今日の日付に戻っている（2025年7月27日）
+      expect(screen.getByText(/2025年7月27日/)).toBeInTheDocument()
     })
 
     // DatePickerで再度同じ日付を選択
@@ -150,19 +166,17 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
       expect(screen.getByTestId('date-picker-modal')).toBeInTheDocument()
     })
 
-    // 27日を選択（タスクが保存される日付）
-    const targetDays = screen.getAllByLabelText(/27日/)
+    // 28日を選択（タスクが保存された日付と同じ）
+    const targetDays = screen.getAllByLabelText(/28日/)
     fireEvent.click(targetDays[0])
 
     await waitFor(() => {
-      // 日付が変更されていることを確認
-      expect(screen.getByTestId('date-display')).toBeInTheDocument()
+      // DatePickerが閉じる
+      expect(screen.queryByTestId('date-picker-modal')).not.toBeInTheDocument()
+      // 28日の日付に変更されていることを確認
+      expect(screen.getByText(/2025年7月28日/)).toBeInTheDocument()
     })
 
-    // DatePickerを手動で閉じる（現実的なユーザー操作）
-    if (screen.queryByTestId('date-picker-modal')) {
-      fireEvent.keyDown(document, { key: 'Escape' })
-    }
 
     await waitFor(() => {
       // デバッグ: 現在の日付表示を確認
@@ -208,11 +222,8 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     fireEvent.click(prevButton)
 
     await waitFor(() => {
-      // 動的に昨日の日付を取得
-      const yesterday = new Date()
-      yesterday.setDate(yesterday.getDate() - 1)
-      const yesterdayString = `${yesterday.getFullYear()}年${yesterday.getMonth() + 1}月${yesterday.getDate()}日`
-      expect(screen.getByText(new RegExp(yesterdayString))).toBeInTheDocument()
+      // 昨日の日付に変更されている（2025年7月26日）
+      expect(screen.getByText(/2025年7月26日/)).toBeInTheDocument()
     })
 
     await addTaskOnDate('昨日のタスク')
@@ -223,11 +234,8 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     fireEvent.click(nextButton) // 明日へ
 
     await waitFor(() => {
-      // 動的に明日の日付を取得
-      const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      const tomorrowString = `${tomorrow.getFullYear()}年${tomorrow.getMonth() + 1}月${tomorrow.getDate()}日`
-      expect(screen.getByText(new RegExp(tomorrowString))).toBeInTheDocument()
+      // 明日の日付に変更されている（2025年7月28日）
+      expect(screen.getByText(/2025年7月28日/)).toBeInTheDocument()
     })
 
     await addTaskOnDate('明日のタスク')
@@ -326,10 +334,8 @@ describe('App E2E Tests - Phase 2.2a Today-First UX Workflows', () => {
     fireEvent.click(nextButton)
 
     await waitFor(() => {
-      const tomorrow = new Date()
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      const tomorrowString = `${tomorrow.getFullYear()}年${tomorrow.getMonth() + 1}月${tomorrow.getDate()}日`
-      expect(screen.getByText(new RegExp(tomorrowString))).toBeInTheDocument()
+      // 明日の日付に変更されている（2025年7月28日）
+      expect(screen.getByText(/2025年7月28日/)).toBeInTheDocument()
     })
 
     fireEvent.change(screen.getByLabelText(/タスクタイトル/), { 

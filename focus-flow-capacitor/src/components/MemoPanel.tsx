@@ -3,6 +3,7 @@ import { TaskMemo } from './TaskMemo'
 import { DailyMemo } from './DailyMemo'
 import type { Task } from '../types/Task'
 import { MEDIA_QUERIES } from '../constants/ui'
+import { logger } from '../utils/debugLogger'
 import './MemoPanel.css'
 
 export interface MemoPanelProps {
@@ -31,7 +32,7 @@ export const MemoPanel: React.FC<MemoPanelProps> = ({
       try {
         setIsMobile(window.matchMedia(MEDIA_QUERIES.MOBILE).matches)
       } catch (error) {
-        console.warn('matchMedia not supported:', error)
+        logger.warn('matchMedia not supported:', error)
         setIsMobile(false) // デスクトップとして扱う
       }
     }
@@ -43,7 +44,7 @@ export const MemoPanel: React.FC<MemoPanelProps> = ({
       mediaQuery = window.matchMedia(MEDIA_QUERIES.MOBILE)
       mediaQuery.addEventListener('change', checkIsMobile)
     } catch (error) {
-      console.warn('matchMedia event listener not supported:', error)
+      logger.warn('matchMedia event listener not supported:', error)
     }
     
     return () => {

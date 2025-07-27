@@ -70,15 +70,17 @@ describe('useTaskFilter - Today-First UX タスクフィルタリングフック
       showArchived: false,
     };
     
-    // Mock localStorage to return outdated filter
-    vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(JSON.stringify(outdatedFilter));
+    // Set up localStorage with outdated filter using the mock
+    const testKey = 'focus-flow-task-filter';
+    const mockValue = JSON.stringify(outdatedFilter);
+    localStorage.setItem(testKey, mockValue);
     
     const { result } = renderHook(() => useTaskFilter(sampleTasks));
     
     // 常に今日の日付で起動（シンプル）
     expect(result.current.filter.viewDate).toBe(today);
     expect(result.current.filter.mode).toBe('today');
-    // ただし設定は復元される
+    // ただし設定は復元される（outdatedFilterのshowCompleted: trueが復元）
     expect(result.current.filter.showCompleted).toBe(true);
   });
 

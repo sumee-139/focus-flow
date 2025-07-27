@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Task, TaskMemoData } from '../types/Task'
 import { useTaskMemoStorage } from '../hooks/useTaskMemoStorage'
 import { AUTO_SAVE } from '../constants/ui'
+import { logger } from '../utils/debugLogger'
 
 // 自動保存状態の型定義
 interface SaveStatus {
@@ -96,7 +97,7 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
         status: 'error', 
         message: errorMessage 
       })
-      console.warn('Failed to save task memo:', error)
+      logger.warn('Failed to save task memo:', error)
     }
   }
 
@@ -146,7 +147,7 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
   // 引用ボタンのハンドラー
   const handleQuote = () => {
     // 仮実装: まだ機能は実装しない
-    console.log('Quote button clicked')
+    logger.info('Quote button clicked')
   }
 
   // 保存状態インジケーターコンポーネント
@@ -170,20 +171,17 @@ export const TaskMemo: React.FC<TaskMemoProps> = ({ taskId, task, onTaskAction: 
       }}>
         {status.status === 'saving' && (
           <>
-            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>save</span>
-            保存中...
+            💾 保存中...
           </>
         )}
         {status.status === 'success' && (
           <>
-            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>check_circle</span>
-            保存完了
+            ✅ 保存完了
           </>
         )}
         {status.status === 'error' && (
           <>
-            <span className="material-icons" style={{ fontSize: '14px', marginRight: '4px' }}>error</span>
-            保存失敗: {status.message}
+            ❌ 保存失敗: {status.message}
           </>
         )}
       </div>
