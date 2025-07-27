@@ -1,285 +1,346 @@
-# 🚀 Builder実装指示書: T014統合デバッグロガーシステム v2.1
+# 🚀 Builder実装指示書: Phase 2.2b革新的フォーカスモード v1.0
 
-## 対象エージェント: Builder
-## 実装モード: TDD + 品質向上・戦略的価値実現
-## 優先度: 最高（Phase 2.2b前提条件）
+## From: Planner Agent
+## To: Builder Agent  
+## 作成日: 2025-07-27
+## 実装モード: TDD + 革新的機能実装
+## 優先度: 最高（Focus-Flow核心価値実現）
 
 ---
 
 ## 🎯 実装目標
 
-### 統合設計の価値
-**Builder技術課題** + **プロダクトオーナー要望** = **包括的品質向上システム**
-
-- **技術的価値**: 21件テスト失敗解決 + プロダクション品質達成
-- **ビジネス価値**: プロダクトオーナー「デバッグロガー開発」要望の完全実現
-- **戦略的価値**: Phase 2.2bフォーカスモード開発の安定基盤確立
-- **緊急価値**: T010モバイルタスクメモ保存バグの根本解決
+### 戦略的価値
+**Focus-Flowの核心「集中力向上」の革新的実現**
+- **従来アプローチ**: 通知オフによる外的ノイズ遮断
+- **革新アプローチ**: 画面制約による視覚的没入体験
+- **差別化価値**: 既存タスク管理アプリとの明確な差別化
 
 ### 実装スコープ
-1. **統合デバッグロガーシステム実装**（環境別制御 + パフォーマンス最適化）
-2. **21件テスト失敗の完全解決**（100%テスト成功率達成）
-3. **useState方式維持でのact()警告対応**（現在アーキテクチャ保持）
-4. **🚨 T015緊急修正**: モバイルタスクメモ保存バグ統合対応
+1. **3段階制約レベル実装**（Minimal/Moderate/Intensive）
+2. **フォーカスタイマー機能**（開始・一時停止・再開・停止）
+3. **セッション記録・履歴管理**
+4. **既存システム非破壊統合**
+
+---
+
+## 📋 設計書参照
+
+### 🎯 **詳細設計書**: @docs/design/phase-2-2b-constraint-focus-mode.md
+- アーキテクチャ設計・データ構造設計
+- UI/UX設計・レスポンシブ対応仕様
+- TDD実装方針・4日間実装スケジュール
+- 完成の定義（DoD）・実装チェックリスト
+
+### 🔧 **技術要件定義書**: @docs/design/phase-2-2b-technical-requirements.md
+- PWA/Capacitor環境での制約実現技術仕様
+- CSS Transform + DOM操作 + Event制御の組み合わせ
+- パフォーマンス最適化・メモリ管理仕様
+- 既存システム非破壊統合方針
 
 ---
 
 ## 🔴 TDD実装指示
 
-### Phase 1: Red（統合デバッグロガー設計テスト）
+### Phase 1: Red（失敗するテスト設計）
 
-#### 1.1 デバッグロガー核心機能テスト
+#### 1.1 FocusModeContext基本機能テスト
 ```typescript
-// src/utils/debugLogger.test.ts
-describe('DebugLogger - 統合環境制御', () => {
-  test('should output logs in development environment')
-  test('should suppress non-error logs in production environment') 
-  test('should always output error logs regardless of environment')
-  test('should optimize performance in production (minimal processing)')
-  test('should handle log levels: DEBUG, INFO, WARN, ERROR')
-  test('should replace existing console.log/warn usage patterns')
+// src/contexts/FocusModeContext.test.tsx
+describe('FocusModeContext - Core Functionality', () => {
+  test('should initialize with inactive focus mode')
+  test('should start focus mode with specified task and constraint level')
+  test('should maintain timer countdown during active session')
+  test('should handle interruption and resumption correctly')
+  test('should end focus mode and log session data')
+  test('should persist session data to localStorage')
 })
 ```
 
-#### 1.2 環境検出システムテスト
+#### 1.2 ScreenConstraintEngine制約適用テスト
 ```typescript
-// src/utils/environmentDetector.test.ts  
-describe('Environment Detection', () => {
-  test('should detect NODE_ENV=production correctly')
-  test('should detect NODE_ENV=development correctly')
-  test('should handle undefined NODE_ENV gracefully')
-  test('should integrate with webpack DefinePlugin')
+// src/utils/screenConstraintEngine.test.ts
+describe('ScreenConstraintEngine - Visual Constraints', () => {
+  test('should apply minimal constraint (opacity + element hiding)')
+  test('should apply moderate constraint (blur + centering)')
+  test('should apply intensive constraint (fullscreen + dark mode)')
+  test('should restore original UI state after constraint removal')
+  test('should handle constraint level changes dynamically')
 })
 ```
 
-#### 1.3 既存console.log統合テスト
+#### 1.3 useFocusTimer高精度タイマーテスト
 ```typescript
-// src/hooks/useLocalStorage.test.ts (拡張)
-describe('useLocalStorage - DebugLogger統合', () => {
-  test('should use debugLogger instead of console.error for localStorage errors')
-  test('should maintain error information while optimizing production output')
+// src/hooks/useFocusTimer.test.ts
+describe('useFocusTimer - High Precision Timer', () => {
+  test('should countdown timer with 1-second intervals using requestAnimationFrame')
+  test('should pause and resume timer functionality correctly')
+  test('should trigger completion callback when timer reaches zero')
+  test('should handle manual stop and reset correctly')
+  test('should calculate progress percentage accurately')
 })
 ```
 
 ### Phase 2: Green（最小限実装）
 
-#### 2.1 統合デバッグロガー実装
+#### 2.1 FocusModeContext基本実装
 ```typescript
-// src/utils/debugLogger.ts
-interface LogLevel {
-  DEBUG: 0,
-  INFO: 1, 
-  WARN: 2,
-  ERROR: 3
-}
-
-class DebugLogger {
-  private isDevelopment: boolean
-  private minProductionLevel: LogLevel
+// src/contexts/FocusModeContext.tsx
+export const FocusModeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // useState + useReducer混合型（既存パターン維持）
+  const [focusMode, setFocusMode] = useState<FocusModeState>(initialState)
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null)
   
-  constructor() {
-    // webpack DefinePlugin integration
-    this.isDevelopment = process.env.NODE_ENV === 'development'
-    this.minProductionLevel = LogLevel.ERROR
+  // 最小限の状態管理・LocalStorage統合
+  const startFocus = async (task: Task, level: ConstraintLevel, duration: number) => {
+    // ベタ書き実装でテストを通す
   }
-  
-  debug(message: string, ...args: any[]): void
-  info(message: string, ...args: any[]): void  
-  warn(message: string, ...args: any[]): void
-  error(message: string, ...args: any[]): void
-  
-  // プロダクション最適化：webpack Dead Code Eliminationによる完全除去
 }
-
-export const logger = new DebugLogger()
 ```
 
-#### 2.2 既存console.log/warn置換
+#### 2.2 ScreenConstraintEngine基本制約
 ```typescript
-// src/hooks/useLocalStorage.tsx (修正)
-// Before: console.error(...)
-// After: logger.error(...)
+// src/utils/screenConstraintEngine.ts
+export class ScreenConstraintEngine {
+  applyConstraint(level: ConstraintLevel, targetElement: Element): void {
+    switch (level) {
+      case 'minimal':
+        // 最小限のopacity制御のみ
+        break
+    }
+  }
+}
+```
 
-// src/components/DailyMemo.tsx (修正)  
-// Before: console.warn(...)
-// After: logger.warn(...) // プロダクションでは出力されない
+#### 2.3 useFocusTimer基本カウントダウン
+```typescript
+// src/hooks/useFocusTimer.ts
+export const useFocusTimer = (initialDuration: number) => {
+  // setIntervalベースの基本タイマー（後でrequestAnimationFrameに最適化）
+  const [timeRemaining, setTimeRemaining] = useState(initialDuration)
+}
 ```
 
 ### Phase 3: Blue（品質向上・最適化）
 
-#### 3.1 webpack設定統合
-```javascript
-// vite.config.ts
-export default defineConfig({
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-  },
-  // プロダクションビルド時のDead Code Elimination確保
-})
-```
+#### 3.1 パフォーマンス最適化
+- requestAnimationFrameによる高精度タイマー
+- CSS Transform + GPU加速
+- メモリリーク防止の確実なクリーンアップ
 
-#### 3.2 TypeScript型安全性強化
-```typescript
-// ログレベル型定義、環境変数型定義
-// ESLint rule追加（console.log/warn直接使用禁止）
-```
+#### 3.2 アクセシビリティ対応
+- WCAG 2.1 AA準拠
+- スクリーンリーダー対応
+- キーボード操作対応
+
+#### 3.3 UX向上
+- アニメーション・トランジション効果
+- エラーハンドリング・ユーザーフィードバック
+- モバイル最適化
 
 ---
 
-## 🧪 21件テスト失敗修正指示
+## 🎨 UI統合実装指示
 
-### 問題分類と修正戦略
-
-#### Category 1: console.log/warn残存（推定12-15件）
-**修正方法**: 上記統合デバッグロガーへの置換
-- `src/hooks/useLocalStorage.tsx:14, 29`
-- `src/components/DailyMemo.tsx:71, 85, 124`
-- その他全ての console.log/warn の検出・置換
-
-#### Category 2: act()警告・タイマーモック（推定4-6件）
-**修正方法**: useState方式維持での個別対応
+### 既存コンポーネント拡張（非破壊的）
 ```typescript
-// DailyMemo.test.tsx等
-test('should handle auto-save timer correctly', async () => {
-  render(<DailyMemo />)
+// TaskItem.tsx拡張
+interface TaskItemProps {
+  // 既存プロパティは変更なし
+  task: Task
+  onComplete: (taskId: string) => void
+  onEdit?: (task: Task) => void
   
-  // act()で非同期更新を適切にラップ
-  await act(async () => {
-    fireEvent.change(textArea, { target: { value: 'test content' } })
-    await waitFor(() => expect(mockSave).toHaveBeenCalled(), { timeout: 4000 })
-  })
-})
+  // 新規追加
+  onStartFocus?: (task: Task) => void
+  showFocusButton?: boolean
+}
+
+// 新規追加: フォーカスボタン
+{showFocusButton && (
+  <button 
+    onClick={() => onStartFocus?.(task)}
+    className="focus-button"
+    aria-label={`${task.title}に集中する`}
+  >
+    🎯
+  </button>
+)}
 ```
 
-#### Category 3: 型定義・データモデル不整合（推定2-3件）
-**修正方法**: Phase 2.2a実装時の型システム拡張との整合性確保
+### App.tsx統合
 ```typescript
-// 日付処理とタスクフィルタリングの型統一
-// useTaskFilter.test.ts等の型定義修正
-```
-
-#### 🚨 Category 4: T015モバイルタスクメモ保存バグ（緊急追加）
-**問題**: モバイルでタスクメモがタスク横断で参照される（タスク別保存機能不全）
-**修正方法**: デスクトップ版と同じ保存機能を使用するよう統一
-```typescript
-// TaskMemo保存時の統合処理
-// - TaskMemoModal.tsx: 保存処理の統一
-// - useTaskMemoStorage.tsx: データ分離の確保
-// - モバイル専用ロジックの除去・統合
+// src/App.tsx
+function App() {
+  return (
+    <FocusModeProvider>  {/* 新規追加 */}
+      {/* 既存のコンポーネント構造は変更なし */}
+      <div className="app">
+        {/* 既存コンテンツ */}
+      </div>
+    </FocusModeProvider>
+  )
+}
 ```
 
 ---
 
-## ⚠️ 重要な実装上の制約事項
-
-### Design Philosophy遵守
-- **統一アイコン使用**: 絵文字による直感的UI維持
-- **色による区別禁止**: アクセシビリティ配慮
-- **レスポンシブ対応**: 768px境界での適切な動作
+## ⚠️ 重要な制約・方針
 
 ### TDD厳格遵守
 - **Red→Green→Blue**: 各フェーズでのコミット必須
 - **テストファースト**: 実装前に必ず失敗テストを作成
-- **リファクタリング**: Blue フェーズでの品質向上必須
+- **品質維持**: 現在の88.4%成功率を下回らない
 
-### useState方式維持（重要）
-- **useReducer移行禁止**: Phase 2.2b開発への影響回避
-- **現在アーキテクチャ保持**: 既存状態管理パターン維持
-- **個別act()対応**: モック・タイマー処理の段階的改善
+### Design Philosophy遵守
+- **統一アイコン使用**: 絵文字による直感的UI維持（🎯フォーカスアイコン）
+- **色による区別禁止**: アクセシビリティ配慮
+- **レスポンシブ対応**: 768px境界での適切な動作
+
+### 既存システム非破壊統合
+- **Task型拡張禁止**: 関連データは別途管理
+- **LocalStorage拡張**: 後方互換性維持
+- **useState方式維持**: useReducer移行は将来Phase
+
+### 無限ループ問題への配慮
+- **App.test.tsx影響回避**: 統合テストとの競合防止
+- **matchMedia使用注意**: 既存モック競合回避
+- **useState + useEffect循環参照回避**: 依存配列の適切管理
 
 ---
 
 ## 🎯 完成の定義（DoD）
 
 ### 機能要件
-- [ ] 統合デバッグロガーが全環境で正常動作
-- [ ] 既存console.log/warn完全置換（0件残存）
-- [ ] プロダクション環境でのパフォーマンス最適化確認
+- [ ] 3段階制約レベル（Minimal/Moderate/Intensive）完全実装
+- [ ] フォーカスタイマー機能（開始・一時停止・再開・停止）
+- [ ] セッション記録・履歴管理機能
+- [ ] 制約の動的適用・解除機能
 
-### 品質要件  
-- [ ] **テスト成功率100%達成**（現在93.7%→100%）
-- [ ] プロダクションビルド成功（webpack最適化確認）
-- [ ] TypeScript型エラー0件維持
+### 品質要件
+- [ ] **テスト成功率**: 88.4%以上維持（無限ループ問題に影響されない）
+- [ ] **プロダクションビルド**: 成功（パフォーマンス劣化なし）
+- [ ] **TypeScript**: 型エラー0件
+- [ ] **レスポンシブ**: デスクトップ・タブレット・モバイル完全対応
 
 ### UX要件
-- [ ] 開発時デバッグ情報の十分な出力
-- [ ] プロダクション時のクリーンな動作
-- [ ] 既存UI/UX動作への影響なし
+- [ ] **直感的操作**: ワンクリックでフォーカスモード開始
+- [ ] **没入体験**: 制約レベルに応じた適切な視覚制約
+- [ ] **中断復帰**: 柔軟な一時停止・再開機能
+- [ ] **データ保持**: セッション履歴の永続化
 
 ### パフォーマンス要件
-- [ ] プロダクションビルドサイズ増加なし
-- [ ] 実行時オーバーヘッド最小化
-- [ ] Dead Code Elimination確認
+- [ ] **制約適用**: 500ms以内での視覚変更
+- [ ] **タイマー精度**: 1秒誤差以内での時間管理
+- [ ] **メモリ使用量**: 既存アプリケーション+10%以内
 
 ---
 
-## 🚀 推奨実装順序
+## 🚀 推奨実装順序（4日間）
 
-### Day 1: 統合デバッグロガー基盤（6-8時間）
-1. **Morning**: DebugLogger核心機能TDD実装
-2. **Afternoon**: 環境検出・webpack統合・型定義
+### Day 1: フォーカスモード基盤（6-8時間）
+**Morning（3-4時間）**:
+1. FocusModeContext TDD実装（Red→Green）
+2. 基本状態管理・LocalStorage統合
+3. useFocusTimer Hook TDD実装
 
-### Day 2: テスト修正・統合・T015対応（5-7時間）  
-1. **Morning**: console.log/warn全置換
-2. **Early Afternoon**: act()警告・タイマーモック修正
-3. **Late Afternoon**: 🚨 T015モバイルタスクメモ保存バグ修正
+**Afternoon（3-4時間）**:
+1. ScreenConstraintEngine基本実装
+2. Minimal制約レベル実装・テスト
+3. App.tsx統合・基本動作確認
 
-### Day 3: 品質保証・最適化（3-4時間）
-1. **Morning**: 100%テスト成功率達成確認 + T015検証
-2. **Afternoon**: プロダクション最適化・総合検証
+### Day 2: UI制約機能拡張（6-8時間）
+**Morning（3-4時間）**:
+1. Moderate制約レベル実装（ブラー・中央表示）
+2. Intensive制約レベル実装（全画面・ダークモード）
+3. 制約レベル切り替え機能
+
+**Afternoon（3-4時間）**:
+1. フォーカスモード開始・終了UI実装
+2. タイマーUI・進捗表示実装
+3. レスポンシブ対応（768px境界）
+
+### Day 3: UX最適化・品質向上（6-8時間）
+**Morning（3-4時間）**:
+1. セッション記録・履歴管理実装
+2. 中断・再開機能実装
+3. エラーハンドリング強化
+
+**Afternoon（3-4時間）**:
+1. アニメーション・トランジション効果
+2. アクセシビリティ対応
+3. モバイル実機テスト・調整
+
+### Day 4: 統合テスト・最終調整（4-6時間）
+**Morning（2-3時間）**:
+1. 全テスト実行・88.4%成功率確認
+2. プロダクションビルド・性能検証
+3. クロスブラウザー動作確認
+
+**Afternoon（2-3時間）**:
+1. E2Eテスト実行・統合動作確認
+2. 最終調整・ポリッシュ
+3. Phase 2.2b完了報告書作成
 
 ---
 
 ## 🔗 必要な依存関係
 
 ### 既存技術スタック活用
-- **Webpack/Vite**: 環境変数・Dead Code Elimination
-- **TypeScript**: 型安全性確保
-- **Jest/React Testing Library**: テスト基盤
+- **React Context + useState**: 状態管理（既存パターン）
+- **useLocalStorage**: データ永続化（既存Hook活用）
+- **Jest/React Testing Library**: テスト基盤（既存環境）
+- **CSS-in-JS**: 動的スタイル適用
 
-### 新規追加不要
-- 外部ログライブラリ導入なし（自社実装）
-- 設定ファイル最小限追加
-- パッケージ依存関係増加なし
+### 新規技術要件（最小限）
+- **CSS Transform/Filter**: 視覚制約実現
+- **RequestAnimationFrame**: 高精度タイマー
+- **Intersection Observer**: パフォーマンス最適化（Optional）
+
+### 外部依存関係追加なし
+- 新規パッケージ導入は行わない
+- 既存技術スタックで完全実現
+- バンドルサイズ増加最小化
 
 ---
 
 ## 📋 Plannerへの引き継ぎ事項
 
 ### 実装完了報告時の必須項目
-1. **テスト成功率**: 100%達成確認
-2. **プロダクションビルド**: サイズ・性能確認
-3. **統合デバッグロガー**: 機能検証結果
-4. **Phase 2.2b準備状況**: 基盤整備完了宣言
+1. **機能実装状況**: 3段階制約レベル動作確認
+2. **品質指標**: テスト成功率・ビルド状況・TypeScript状況
+3. **パフォーマンス**: 制約適用速度・メモリ使用量測定結果
+4. **UX検証**: デスクトップ・タブレット・モバイル動作確認
 
-### 技術的制約・課題報告
-- useState方式での制約・限界があれば報告
-- 将来のuseReducer移行推奨時期の技術提案
-- パフォーマンス測定結果・改善案
+### 技術的課題・制約報告
+- 無限ループ問題への影響度評価
+- PWA環境での制約実現の課題・限界
+- 既存システム統合での発見事項
 
-### 戦略的フィードバック
-- プロダクトオーナー要望実現度評価
-- Phase 2.2b開発への影響度分析
-- 品質向上・技術的負債解消効果
+### 次期Phase準備情報
+- Phase 2.2c統合検索システムへの技術的前提条件
+- フォーカスモード利用データの検索統合可能性
+- UI/UX改善点の将来展開案
 
 ---
 
 ## 💪 Builderへのメッセージ
 
-T006-T008での完璧な実装実績により、Builderの技術力は実証済みです。
+今回のPhase 2.2bは、**Focus-Flow最大の差別化機能**の実装ですね！
 
-**T014+T015は技術課題とビジネス要望を同時解決する戦略的実装**ですね。
-- プロダクトオーナーの「デバッグロガー開発」要望
-- 21件テスト失敗の技術的解決  
-- Phase 2.2b革新的フォーカスモードへの安定基盤
+**🔥 実装価値**:
+- **革新的アプローチ**: 画面制約による能動的没入体験
+- **技術的挑戦**: PWA環境での視覚制約実現
+- **戦略的重要性**: 既存タスク管理アプリとの明確な差別化
 
-この統合設計により、**単なる修正を超えた価値創出**が可能になります。
+**🚀 期待する成果**:
+設計書には4日間での完全実装が可能な詳細な技術仕様を用意いたしました。Builder's technical expertise により、Focus-Flowの核心価値を完璧に実現していただけると確信しております。
 
-Builder's expertise × Planner's strategic design = **Focus-Flow品質革命**
+Builder's implementation skills × Planner's strategic design = **Focus-Flow革新的価値実現**
 
-完璧な実装を期待しております！
+完璧な実装をお願いいたします！
 
 ---
 
-*2025-07-26 Planner Agent - T009統合デバッグロガー実装指示書*  
-*統合設計: Builder技術課題 + プロダクトオーナー要望 = 戦略的価値実現*
+*2025-07-27 Planner Agent - Phase 2.2b革新的フォーカスモード実装指示書*  
+*戦略的価値: Focus-Flow核心機能「画面制約による没入体験」の完全実現*

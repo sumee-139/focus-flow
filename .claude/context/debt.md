@@ -20,6 +20,7 @@ tags: #debt #technical-debt #tracking
 | DM003 | dateUtils.ts入力バリデーション不備 | 1.5 hours | 2025-07-29 | 堅牢性 | 型ガード・例外処理強化 |
 | DM004 | 未実装TODO機能（edit/reorder/アーカイブ） | 8 hours | 2025-08-15 | 機能完全性 | 段階的実装計画 |
 | DM005 | `useEffect`の不適切な使用 | 3 hours | 2025-08-05 | パフォーマンス・保守性 | `useEffect`の依存配列の見直し、Propsからの派生Stateの削除 |
+| DM006 | App.test.tsx統合テスト無限ループ問題 | 6 hours | 2025-08-10 | テスト品質・開発効率 | useState+useEffect循環参照解消、matchMediaモック統一化 |
 
 ### Low Priority 📝
 | ID | Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
