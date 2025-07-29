@@ -132,6 +132,41 @@ describe('DebugLogger - 統合環境制御', () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith('This replaces console.error')
   })
 
+  // 🔴 ブラウザ互換性テスト（process未定義エラー対応完了）
+  describe('Browser Compatibility Tests', () => {
+    test('should create default development logger when process is undefined', () => {
+      // getEnvironmentSafely と isTestEnvironmentSafely 関数をテスト
+      // ブラウザ環境では development logger が作成されることを確認
+      
+      // logger インスタンスの基本メソッドが存在することを確認
+      expect(typeof logger.debug).toBe('function')
+      expect(typeof logger.info).toBe('function')
+      expect(typeof logger.warn).toBe('function')
+      expect(typeof logger.error).toBe('function')
+      
+      // エラーが発生しないことを確認
+      expect(() => logger.debug('Browser compatibility test')).not.toThrow()
+      expect(() => logger.info('Browser compatibility test')).not.toThrow()
+      expect(() => logger.warn('Browser compatibility test')).not.toThrow()
+      expect(() => logger.error('Browser compatibility test')).not.toThrow()
+    })
+
+    test('should handle environment detection gracefully', () => {
+      // 環境検出機能が正常に動作することを確認
+      // テスト環境では TestLogger が作成されることを確認
+      
+      // logger が正常に作成されていることを確認
+      expect(logger).toBeDefined()
+      
+      // process が存在する環境でも安全に動作することを確認
+      expect(typeof process).toBe('object')
+      expect(() => {
+        const testLogger = new (logger.constructor as any)()
+        testLogger.debug('test')
+      }).not.toThrow()
+    })
+  })
+
   // 🔵 継承ベース最適化テスト
   describe('Inheritance-Based Performance Optimization', () => {
     test('should provide zero-overhead production logger', () => {

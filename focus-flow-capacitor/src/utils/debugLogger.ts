@@ -162,22 +162,66 @@ export class DevelopmentLogger extends BaseLogger {
 }
 
 /**
+ * # ブラウザ互換性環境判定ヘルパー
+ * ## 用途
+ * ブラウザとNode.js環境で安全に環境変数にアクセス
+ * ## 引数
+ * なし
+ * ## 戻り値
+ * string: 環境名 ('development' | 'production' | 'test')
+ */
+function getEnvironmentSafely(): string {
+  // ブラウザ環境でprocess未定義の場合に安全に処理
+  try {
+    if (typeof process === 'undefined' || !process.env) {
+      return 'development' // ブラウザ環境ではデフォルトで開発モード
+    }
+    return process.env.NODE_ENV || 'development'
+  } catch (error) {
+    // process参照で例外が発生した場合のフォールバック
+    return 'development'
+  }
+}
+
+/**
+ * # ブラウザ互換性テスト環境判定
+ * ## 用途
+ * ブラウザとNode.js環境で安全にテスト環境かどうかを判定
+ * ## 引数
+ * なし
+ * ## 戻り値
+ * boolean: テスト環境かどうか
+ */
+function isTestEnvironmentSafely(): boolean {
+  try {  
+    // vitest判定（globalThis.__vitest__は常に安全）
+    if (typeof globalThis !== 'undefined' && (globalThis as any).__vitest__ !== undefined) {
+      return true
+    }
+    
+    // process.env判定（process未定義の可能性を考慮）
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env.VITEST === 'true' || process.env.NODE_ENV === 'test'
+    }
+    
+    return false
+  } catch (error) {
+    return false
+  }
+}
+
+/**
  * # 環境別ロガーファクトリー
  * ## 用途
- * 環境に応じて最適化されたロガーインスタンスを作成
+ * 環境に応じて最適化されたロガーインスタンスを作成（ブラウザ互換性対応）
  * ## 引数
  * なし
  * ## 戻り値
  * LoggerInterface: 環境最適化ロガー
  */
 function createOptimizedLogger(): LoggerInterface {
-  const currentEnv = process.env.NODE_ENV || 'development'
-  
-  // テスト環境判定（vitest実行時）
-  const isTestEnv = typeof globalThis !== 'undefined' && 
-                   (globalThis as any).__vitest__ !== undefined || 
-                   process.env.VITEST === 'true' ||
-                   currentEnv === 'test'
+  const currentEnv = getEnvironmentSafely()
+  const isTestEnv = isTestEnvironmentSafely()
   
   if (isTestEnv) {
     return new TestLogger()
