@@ -1470,3 +1470,186 @@ textarea:focus {
     color: #991b1b;
   }
 }
+
+/* ============================================
+   Focus Mode Constraint Styles
+   ============================================ */
+
+/* Focus Button in TaskItem */
+.focus-button {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  color: var(--primary-text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.focus-button:hover {
+  background-color: var(--light-gray);
+  border-color: var(--focus-color);
+}
+
+.focus-button:active {
+  transform: scale(0.95);
+}
+
+/* Screen Constraint Engine Styles */
+
+/* Minimal Constraint - Reduce opacity of non-focused elements */
+.focus-constraint-minimal {
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease !important;
+}
+
+/* Moderate Constraint - Blur overlay */
+.focus-overlay-moderate {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.focus-constraint-moderate {
+  position: relative !important;
+  z-index: 1001 !important;
+  background-color: var(--background) !important;
+  border: 2px solid var(--focus-color) !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.3) !important;
+  transition: all 0.5s ease !important;
+}
+
+/* Intensive Constraint - Fullscreen with dark background */
+.focus-fullscreen-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.7s ease;
+}
+
+.focus-fullscreen-container > * {
+  background-color: var(--background) !important;
+  border: 3px solid var(--focus-color) !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.5) !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  overflow: auto !important;
+}
+
+/* Focus Mode Active State */
+.app.focus-mode-active {
+  transition: all 0.3s ease;
+}
+
+.app.focus-mode-active .focus-button {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Accessibility - Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .focus-constraint-minimal,
+  .focus-overlay-moderate,
+  .focus-constraint-moderate,
+  .focus-fullscreen-container,
+  .focus-button {
+    transition: none !important;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .focus-constraint-moderate {
+    border-color: #000000 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  .focus-fullscreen-container > * {
+    border-color: #000000 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7) !important;
+  }
+  
+  .focus-button {
+    border-color: #000000;
+  }
+}
+
+/* Focus Mode Overlay - Phase 2.2b Integration */
+.focus-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: focus-overlay-fade-in 0.5s ease-out;
+}
+
+.focus-mode-overlay > * {
+  width: 95vw;
+  height: 90vh;
+  max-width: 1400px;
+  max-height: 900px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+@keyframes focus-overlay-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .focus-mode-overlay > * {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .focus-mode-overlay {
+    animation: none;
+  }
+}
