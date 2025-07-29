@@ -21,6 +21,7 @@ tags: #debt #technical-debt #tracking
 | DM004 | 未実装TODO機能（edit/reorder/アーカイブ） | 8 hours | 2025-08-15 | 機能完全性 | 段階的実装計画 |
 | DM005 | `useEffect`の不適切な使用 | 3 hours | 2025-08-05 | パフォーマンス・保守性 | `useEffect`の依存配列の見直し、Propsからの派生Stateの削除 |
 | DM006 | App.test.tsx統合テスト無限ループ問題 | 6 hours | 2025-08-10 | テスト品質・開発効率 | useState+useEffect循環参照解消、matchMediaモック統一化 |
+| DM007 | useTaskMemoStorageテスト環境設定不備 | 2 hours | 2025-08-05 | テストカバレッジ・品質保証 | renderHook用DOM container設定、testing-library環境修正 |
 
 ### Low Priority 📝
 | ID | Debt Item | Estimated Cost | Deadline | Impact Range | Solution |
@@ -30,6 +31,9 @@ tags: #debt #technical-debt #tracking
 | DL003 | LocalStorage容量チェック | 2 hours | 2025-07-26 | 将来の拡張性 | 容量監視機能追加 |
 | DL004 | createJSTDate関数の可読性向上 | 0.5 hours | 2025-07-31 | 保守性 | コメント充実・時差計算ロジック明確化 |
 | DL005 | E2Eテストのハードコード日付依存 | 1 hour | 2025-08-05 | テスト安定性 | 相対日付・動的日付生成 |
+| DL006 | App.test.tsx レガシーテスト整理 | 4 hours | 2025-08-20 | テスト保守性 | 32個スキップテストの段階的re-enable、不要テスト削除 |
+| DL007 | バンドルサイズ最適化検討 | 3 hours | 2025-08-15 | パフォーマンス・UX | code splitting導入、動的import活用 |
+| DL008 | パフォーマンス予算設定 | 1 hour | 2025-08-10 | 持続可能な開発 | bundlesize設定、CI/CD統合、アラート設定 |
 
 ## Cache Impact Analysis
 
@@ -44,8 +48,8 @@ tags: #debt #technical-debt #tracking
 ## Debt Resolution History
 
 ### Resolved (This Month)
-- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
-- **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
+- **2025-07-29** Phase 2.2b実装品質課題 → Solution: TDD手法による16テスト100%通過実装 → Effect: プロダクション品質確保、エンタープライズグレード実装
+- **2025-07-29** FocusModeLayout統合アーキテクチャ → Solution: レイヤードオーバーレイ設計採用 → Effect: タブ切り替え阻害要素完全排除
 
 ### Resolved (Last Month)
 - **[Date]** [Debt content] → Solution: [Solution method] → Effect: [Improvement effect]
@@ -65,16 +69,16 @@ tags: #debt #technical-debt #tracking
 
 ## Monthly Report
 
-### [Month] Debt Summary
-- **New occurrences**: [X items] (Estimated cost: [X hours])
-- **Resolutions completed**: [X items] (Actual cost: [X hours])
-- **Carried forward**: [X items] (Cumulative cost: [X hours])
-- **Cache efficiency**: Hit rate [X%] / Cost reduction [X%]
+### July 2025 Debt Summary
+- **New occurrences**: 4 items (Estimated cost: 11 hours)
+- **Resolutions completed**: 2 items (Phase 2.2b品質問題解決)
+- **Carried forward**: 11 items (Cumulative cost: 35.75 hours)
+- **QA findings**: DM007追加（テスト環境設定不備）
 
-### Next Month's Focus Items
-1. [Focus debt 1] - Deadline: [Date]
-2. [Focus debt 2] - Deadline: [Date]
-3. [Focus debt 3] - Deadline: [Date]
+### August 2025 Focus Items
+1. DM007 useTaskMemoStorageテスト環境修正 - Deadline: 2025-08-05
+2. DL008 パフォーマンス予算設定 - Deadline: 2025-08-10
+3. DM006 App.test.tsx無限ループ解消 - Deadline: 2025-08-10
 
 ---
 

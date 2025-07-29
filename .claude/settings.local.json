@@ -72,7 +72,9 @@
       "Bash(--draft )",
       "Bash(--base main )",
       "Bash(--head feature/T006-T007)",
-      "Bash(timeout 30s npm run test:*)"
+      "Bash(timeout 30s npm run test:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.chakra-ui.com)"
     ],
     "deny": []
   }

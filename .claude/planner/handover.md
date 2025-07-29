@@ -1,26 +1,26 @@
-# 🚀 Builder実装指示書: Phase 2.2b革新的フォーカスモード v1.0
+# 🚀 Builder実装指示書: Phase 2.2b フォーカスモード統合UI v2.0
 
 ## From: Planner Agent
 ## To: Builder Agent  
-## 作成日: 2025-07-27
-## 実装モード: TDD + 革新的機能実装
-## 優先度: 最高（Focus-Flow核心価値実現）
+## 作成日: 2025-07-28（緊急修正版）
+## 実装モード: TDD + 核心価値実現
+## 優先度: 最高（FocusFlow差別化要素の完全実装）
 
 ---
 
 ## 🎯 実装目標
 
 ### 戦略的価値
-**Focus-Flowの核心「集中力向上」の革新的実現**
-- **従来アプローチ**: 通知オフによる外的ノイズ遮断
-- **革新アプローチ**: 画面制約による視覚的没入体験
-- **差別化価値**: 既存タスク管理アプリとの明確な差別化
+**FocusFlowの核心価値「集中しながら思考を記録できる」の完全実現**
+- **Problem**: 現在の実装は「ただのポモドーロタイマー」
+- **Solution**: タイマー + タスクメモ同時表示による真の集中環境
+- **差別化価値**: 他のタスク管理アプリにない「集中×思考記録」の融合
 
 ### 実装スコープ
-1. **3段階制約レベル実装**（Minimal/Moderate/Intensive）
-2. **フォーカスタイマー機能**（開始・一時停止・再開・停止）
-3. **セッション記録・履歴管理**
-4. **既存システム非破壊統合**
+1. **タイマー＋タスクメモ同時表示**（集中阻害要素の完全排除）
+2. **ひらめきメモ追記機能**（展開式UI・参照不可）
+3. **レスポンシブ分割レイアウト**（デスクトップ・タブレット・モバイル対応）
+4. **既存技術基盤完全活用**（CircularTimer・TaskMemo・DailyMemo統合）
 
 ---
 
@@ -140,32 +140,64 @@ export const useFocusTimer = (initialDuration: number) => {
 
 ---
 
-## 🎨 UI統合実装指示
+## 🎨 UI統合実装指示: 分割表示レイアウト
 
-### 既存コンポーネント拡張（非破壊的）
+### レスポンシブ分割レイアウト設計
+
+#### デスクトップ（1200px以上）: 左右分割
 ```typescript
-// TaskItem.tsx拡張
-interface TaskItemProps {
-  // 既存プロパティは変更なし
-  task: Task
-  onComplete: (taskId: string) => void
-  onEdit?: (task: Task) => void
+<FocusModeLayout className="desktop-layout">
+  <TimerSection className="timer-left">    {/* 左50% */}
+    <CircularTimer />
+  </TimerSection>
   
-  // 新規追加
-  onStartFocus?: (task: Task) => void
-  showFocusButton?: boolean
-}
+  <TaskMemoSection className="memo-right"> {/* 右50% */}
+    <EmbeddedTaskMemo readOnly={false} autoSave={true} />
+  </TaskMemoSection>
+  
+  <DailyMemoSection className="inspiration-bottom">
+    <ToggleButton onClick={() => setShowDailyMemo(!showDailyMemo)}>
+      💡 ひらめきメモ {showDailyMemo ? '▲' : '▼'}
+    </ToggleButton>
+    {showDailyMemo && <AppendOnlyDailyMemo />}
+  </DailyMemoSection>
+</FocusModeLayout>
+```
 
-// 新規追加: フォーカスボタン
-{showFocusButton && (
-  <button 
-    onClick={() => onStartFocus?.(task)}
-    className="focus-button"
-    aria-label={`${task.title}に集中する`}
-  >
-    🎯
-  </button>
-)}
+#### タブレット（768px-1199px）: 上下分割
+```typescript
+<FocusModeLayout className="tablet-layout">
+  <TimerSection className="timer-top">     {/* 上40% */}
+    <CircularTimer />
+  </TimerSection>
+  
+  <TaskMemoSection className="memo-bottom"> {/* 下60% */}
+    <EmbeddedTaskMemo readOnly={false} autoSave={true} />
+  </TaskMemoSection>
+  
+  <DailyMemoSection className="inspiration-overlay">
+    <ToggleButton>💡 ひらめき</ToggleButton>
+    {showDailyMemo && <AppendOnlyDailyMemo />}
+  </DailyMemoSection>
+</FocusModeLayout>
+```
+
+#### モバイル（768px未満）: 縦配置
+```typescript
+<FocusModeLayout className="mobile-layout">
+  <TimerSection className="timer-compact">   {/* 上30% */}
+    <CircularTimer size="small" />
+  </TimerSection>
+  
+  <TaskMemoSection className="memo-main">    {/* 下70% */}
+    <EmbeddedTaskMemo readOnly={false} autoSave={true} />
+  </TaskMemoSection>
+  
+  <DailyMemoSection className="inspiration-float">
+    <FloatingButton>💡</FloatingButton>
+    {showDailyMemo && <AppendOnlyDailyMemo />}
+  </DailyMemoSection>
+</FocusModeLayout>
 ```
 
 ### App.tsx統合
@@ -177,6 +209,7 @@ function App() {
       {/* 既存のコンポーネント構造は変更なし */}
       <div className="app">
         {/* 既存コンテンツ */}
+        {focusMode.isActive && <FocusModeOverlay />}
       </div>
     </FocusModeProvider>
   )
@@ -236,51 +269,44 @@ function App() {
 
 ---
 
-## 🚀 推奨実装順序（4日間）
+## 🚀 推奨実装順序（2日間集中実装）
 
-### Day 1: フォーカスモード基盤（6-8時間）
+### Day 1: 分割レイアウト基盤＋メモ統合（6-8時間）
 **Morning（3-4時間）**:
-1. FocusModeContext TDD実装（Red→Green）
-2. 基本状態管理・LocalStorage統合
-3. useFocusTimer Hook TDD実装
+1. **FocusModeLayout TDD実装**（Red→Green）
+   - レスポンシブ分割レイアウト（デスクトップ・タブレット・モバイル）
+   - CSS Grid / Flexboxによる動的配置
+2. **EmbeddedTaskMemo統合**
+   - 既存TaskMemoコンポーネントの埋め込み対応
+   - autoSave機能統合
 
 **Afternoon（3-4時間）**:
-1. ScreenConstraintEngine基本実装
-2. Minimal制約レベル実装・テスト
-3. App.tsx統合・基本動作確認
+1. **CircularTimer配置調整**
+   - 各画面サイズでの最適表示
+   - 既存の美しいUIを維持
+2. **FocusModeContext拡張**
+   - showDailyMemo状態追加
+   - キーボードショートカット（Ctrl+I）実装
+3. **基本動作確認・テスト**
 
-### Day 2: UI制約機能拡張（6-8時間）
+### Day 2: ひらめきメモ＋UX最適化（6-8時間）
 **Morning（3-4時間）**:
-1. Moderate制約レベル実装（ブラー・中央表示）
-2. Intensive制約レベル実装（全画面・ダークモード）
-3. 制約レベル切り替え機能
+1. **AppendOnlyDailyMemo実装**
+   - 展開式UI（ToggleButton + TextArea）
+   - 追記専用モード（参照不可）
+   - 構造化フォーマット追記（詳細は下記「ひらめきメモ追記フォーマット仕様」参照）
+2. **レスポンシブ調整**
+   - 768px境界での完璧な動作
+   - モバイル実機テスト
 
 **Afternoon（3-4時間）**:
-1. フォーカスモード開始・終了UI実装
-2. タイマーUI・進捗表示実装
-3. レスポンシブ対応（768px境界）
-
-### Day 3: UX最適化・品質向上（6-8時間）
-**Morning（3-4時間）**:
-1. セッション記録・履歴管理実装
-2. 中断・再開機能実装
-3. エラーハンドリング強化
-
-**Afternoon（3-4時間）**:
-1. アニメーション・トランジション効果
-2. アクセシビリティ対応
-3. モバイル実機テスト・調整
-
-### Day 4: 統合テスト・最終調整（4-6時間）
-**Morning（2-3時間）**:
-1. 全テスト実行・88.4%成功率確認
-2. プロダクションビルド・性能検証
-3. クロスブラウザー動作確認
-
-**Afternoon（2-3時間）**:
-1. E2Eテスト実行・統合動作確認
-2. 最終調整・ポリッシュ
-3. Phase 2.2b完了報告書作成
+1. **統合テスト・品質確認**
+   - 全テスト実行・88.4%成功率維持
+   - プロダクションビルド成功確認
+2. **UX最終調整**
+   - アニメーション・トランジション
+   - エラーハンドリング
+3. **Phase 2.2b完了報告書作成**
 
 ---
 
@@ -324,23 +350,83 @@ function App() {
 
 ---
 
-## 💪 Builderへのメッセージ
+## 📝 ひらめきメモ追記フォーマット仕様
 
-今回のPhase 2.2bは、**Focus-Flow最大の差別化機能**の実装ですね！
+### 基本フォーマット
+```typescript
+interface InspirationEntry {
+  timestamp: string;     // "HH:MM" format
+  taskName: string;      // 現在のフォーカスタスク名
+  content: string;       // ユーザー入力内容
+}
 
-**🔥 実装価値**:
-- **革新的アプローチ**: 画面制約による能動的没入体験
-- **技術的挑戦**: PWA環境での視覚制約実現
-- **戦略的重要性**: 既存タスク管理アプリとの明確な差別化
+const formatInspirationEntry = (entry: InspirationEntry): string => {
+  return `**${entry.timestamp}** ${entry.taskName} - ${entry.content}`;
+};
+```
 
-**🚀 期待する成果**:
-設計書には4日間での完全実装が可能な詳細な技術仕様を用意いたしました。Builder's technical expertise により、Focus-Flowの核心価値を完璧に実現していただけると確信しております。
+### デイリーメモ追記処理
+```typescript
+const appendToDailyMemo = (inspiration: InspirationEntry) => {
+  const todayKey = getJSTDateString(new Date());
+  const existingMemo = localStorage.getItem(`focus-flow-daily-memo-${todayKey}`) || '';
+  
+  let updatedMemo: string;
+  
+  if (existingMemo.includes('### 🎯 集中セッション記録')) {
+    // 既存セクションに追記
+    updatedMemo = existingMemo + '\n' + formatInspirationEntry(inspiration);
+  } else {
+    // 新規セクション作成
+    updatedMemo = existingMemo + '\n\n---\n### 🎯 集中セッション記録\n' + 
+                  formatInspirationEntry(inspiration);
+  }
+  
+  localStorage.setItem(`focus-flow-daily-memo-${todayKey}`, updatedMemo);
+};
+```
 
-Builder's implementation skills × Planner's strategic design = **Focus-Flow革新的価値実現**
+### 追記結果例
+```markdown
+## 2025-07-28 今日のタスク整理
 
-完璧な実装をお願いいたします！
+- 朝のルーティン確認
+- プロジェクト進捗レビュー
+
+---
+### 🎯 集中セッション記録
+**14:30** Focus-Flow UI設計 - タイマーとメモの分割比率はモバイルでは3:7が最適
+**14:45** Focus-Flow UI設計 - Ctrl+Iよりもフローティングボタンの方が直感的
+**15:10** Focus-Flow UI設計 - 円型タイマーのモバイル最小サイズ限界値を確認必要
+```
+
+### 実装ポイント
+- **セクション分離**: `---` + `### 🎯 集中セッション記録` で明確に区別
+- **時系列記録**: フォーカスセッション中の思考の流れを時間順で記録
+- **コンテキスト保持**: どのタスクでの思いつきかを自動記録
+- **視認性**: `**時刻**` 形式で時間を強調表示
 
 ---
 
-*2025-07-27 Planner Agent - Phase 2.2b革新的フォーカスモード実装指示書*  
-*戦略的価値: Focus-Flow核心機能「画面制約による没入体験」の完全実現*
+## 💪 Builderへのメッセージ
+
+今回のPhase 2.2bは、**FocusFlowの存在意義を決定づける**最重要実装ですね！
+
+**🔥 実装価値**:
+- **核心価値実現**: 「集中しながら思考を記録できる」FocusFlow唯一の差別化
+- **UX革新**: タブ切り替え不要の同時表示による集中阻害要素の完全排除
+- **戦略的重要性**: 単なるポモドーロタイマーからの完全脱却
+
+**🚀 期待する成果**:
+Builderが既に完成させた美しいCircularTimerと、既存のTaskMemo・DailyMemoコンポーネントを統合し、**2日間での完全実装**により FocusFlow の真の価値を実現していただけると確信しております。
+
+**✨ Builder's 技術力 × Planner's UX設計 = FocusFlow核心価値の完全実現**
+
+この実装により、FocusFlowは他のどのタスク管理アプリとも明確に差別化された、真に価値ある製品となりますね。
+
+Builder の卓越した実装力で、完璧に仕上げていただけることを楽しみにしております！
+
+---
+
+*2025-07-28 Planner Agent - Phase 2.2b フォーカスモード統合UI実装指示書 v2.0*  
+*戦略的価値: FocusFlow核心価値「集中×思考記録」の融合実現*
