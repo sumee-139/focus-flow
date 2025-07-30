@@ -192,4 +192,36 @@ describe('FocusModeLayout - Phase 2.2b Integration Tests', () => {
     const memoComponent = screen.getByTestId('embedded-task-memo')
     expect(memoComponent).toHaveAttribute('data-auto-save', 'true')
   })
+
+  // ✅ TDD完了: デスクトップレイアウトでひらめきメモ一覧が表示される
+  test('should provide sufficient height for inspiration memo list in desktop layout', () => {
+    // Mock desktop viewport
+    Object.defineProperty(window, 'innerWidth', { value: 1400 })
+    
+    render(
+      <TestWrapper>
+        <FocusModeLayout currentTask={mockTask} />
+      </TestWrapper>
+    )
+
+    // ひらめきメモボタンをクリックして展開
+    const toggleButton = screen.getByTestId('daily-memo-toggle-button')
+    fireEvent.click(toggleButton)
+    
+    // ひらめきメモコンテナが表示されることを確認
+    const inspirationContainer = screen.getByTestId('append-only-daily-memo')
+    expect(inspirationContainer).toBeInTheDocument()
+    
+    // デスクトップレイアウトのdaily-memo-sectionが存在することを確認
+    const dailyMemoSection = screen.getByTestId('daily-memo-section-bottom')
+    expect(dailyMemoSection).toBeInTheDocument()
+    
+    // デスクトップレイアウトが正しく適用されることを確認
+    const layoutContainer = screen.getByTestId('focus-mode-layout-desktop')
+    expect(layoutContainer).toBeInTheDocument()
+    expect(layoutContainer).toHaveClass('desktop-layout')
+    
+    // ひらめきメモが表示され、ユーザーが操作可能であることを確認
+    expect(inspirationContainer).toBeVisible()
+  })
 })

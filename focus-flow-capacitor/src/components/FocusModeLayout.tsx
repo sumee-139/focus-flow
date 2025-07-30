@@ -154,12 +154,7 @@ export const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ currentTask })
           💡
         </button>
         {showDailyMemo && (
-          <div 
-            data-testid="append-only-daily-memo"
-            className="append-only-daily-memo"
-          >
-            AppendOnly DailyMemo
-          </div>
+          <AppendOnlyDailyMemo />
         )}
       </div>
     </div>
