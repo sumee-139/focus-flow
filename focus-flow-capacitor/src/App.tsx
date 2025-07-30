@@ -227,7 +227,7 @@ const getLocalDateString = (): string => {
 
 function AppContent() {
   // Focus Mode Context
-  const { startFocus, isInFocusMode } = useFocusMode()
+  const { startFocus, isInFocusMode, focusMode } = useFocusMode()
   
   // LocalStorageからタスクを読み込み
   // 🔧 TEST FIX: 動的にデフォルトタスクを生成してテスト時の日付モックに対応
@@ -869,7 +869,7 @@ function AppContent() {
         {/* Focus Mode Overlay - Phase 2.2b Integration */}
         {isInFocusMode ? (
           <div className="focus-mode-overlay">
-            <FocusModeLayout currentTask={filteredTasks.find(task => !task.completed) || filteredTasks[0]} />
+            <FocusModeLayout currentTask={focusMode.currentTask || filteredTasks[0]} />
           </div>
         ) : (
           <FocusTimer />
