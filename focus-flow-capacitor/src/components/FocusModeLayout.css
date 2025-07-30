@@ -1,0 +1,193 @@
+/* FocusModeLayout - Phase 2.2b レスポンシブ分割レイアウト */
+
+.focus-mode-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--background-color, #ffffff);
+  z-index: 1000;
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* デスクトップレイアウト（1200px以上）: 左右分割 */
+.desktop-layout {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas: 
+    "timer memo"
+    "daily daily";
+}
+
+.desktop-layout .timer-left {
+  grid-area: timer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-layout .memo-right {
+  grid-area: memo;
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop-layout .inspiration-bottom {
+  grid-area: daily;
+  max-height: 200px;
+}
+
+/* タブレットレイアウト（768px-1199px）: 上下分割 */
+.tablet-layout {
+  grid-template-rows: 40% 60%;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "timer"
+    "memo";
+}
+
+.tablet-layout .timer-top {
+  grid-area: timer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tablet-layout .memo-bottom {
+  grid-area: memo;
+  display: flex;
+  flex-direction: column;
+}
+
+.tablet-layout .inspiration-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1001;
+}
+
+/* モバイルレイアウト（768px未満）: 縦配置 */
+.mobile-layout {
+  grid-template-rows: 30% 70%;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "timer"
+    "memo";
+}
+
+.mobile-layout .timer-compact {
+  grid-area: timer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-layout .memo-main {
+  grid-area: memo;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-layout .inspiration-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1001;
+}
+
+/* 共通スタイル */
+.timer-section {
+  background: var(--card-background, #f8f9fa);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-color, #e9ecef);
+}
+
+.memo-section {
+  background: var(--card-background, #f8f9fa);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-color, #e9ecef);
+  overflow: hidden;
+}
+
+.embedded-task-memo {
+  flex: 1;
+  min-height: 200px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+}
+
+.daily-memo-section {
+  background: var(--card-background, #f8f9fa);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-color, #e9ecef);
+}
+
+.daily-memo-toggle-button {
+  background: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.daily-memo-toggle-button:hover {
+  background: var(--primary-hover-color, #0056b3);
+}
+
+.daily-memo-toggle-button.floating-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.append-only-daily-memo {
+  margin-top: 12px;
+  padding: 12px;
+  background: white;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 1199px) {
+  .desktop-layout {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .tablet-layout {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-layout {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .tablet-layout,
+  .mobile-layout {
+    display: none;
+  }
+}

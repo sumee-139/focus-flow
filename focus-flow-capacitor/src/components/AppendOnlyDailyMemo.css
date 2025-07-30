@@ -1,0 +1,209 @@
+/* AppendOnly デイリーメモ用CSS */
+
+.append-only-daily-memo {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e9ecef);
+  padding: 16px;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.inspiration-title {
+  font-size: 16px;
+  color: var(--text-primary, #212529);
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ひらめき入力エリア */
+.inspiration-input-section {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.inspiration-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  background: white;
+}
+
+.inspiration-input:focus {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.inspiration-input::placeholder {
+  color: var(--text-tertiary, #adb5bd);
+  font-style: italic;
+}
+
+.add-inspiration-btn {
+  padding: 8px 16px;
+  background: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.add-inspiration-btn:hover {
+  background: var(--primary-color-hover, #0056b3);
+}
+
+.add-inspiration-btn:active {
+  transform: translateY(1px);
+}
+
+/* ひらめきリスト */
+.inspirations-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inspiration-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--background-secondary, #f8f9fa);
+  border: 1px solid var(--border-light, #f1f3f4);
+  border-radius: 6px;
+  padding: 8px 10px;
+  animation: inspiration-fade-in 0.3s ease-out;
+}
+
+@keyframes inspiration-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.inspiration-content {
+  font-size: 13px;
+  color: var(--text-primary, #212529);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.inspiration-timestamp {
+  font-size: 11px;
+  color: var(--text-secondary, #6c757d);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 767px) {
+  .append-only-daily-memo {
+    padding: 12px;
+    max-height: 300px;
+  }
+  
+  .inspiration-title {
+    font-size: 14px;
+  }
+  
+  .inspiration-input {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .add-inspiration-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .inspiration-content {
+    font-size: 12px;
+  }
+  
+  .inspiration-timestamp {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .append-only-daily-memo {
+    padding: 20px;
+    max-height: 500px;
+  }
+  
+  .inspiration-title {
+    font-size: 18px;
+  }
+  
+  .inspiration-input {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+  
+  .add-inspiration-btn {
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+  
+  .inspiration-content {
+    font-size: 14px;
+  }
+  
+  .inspiration-timestamp {
+    font-size: 12px;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .inspiration-entry {
+    animation: none;
+  }
+}
+
+/* フォーカス表示 */
+.inspiration-input:focus-visible,
+.add-inspiration-btn:focus-visible {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+}
+
+/* スクロールバーのスタイリング */
+.inspirations-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inspirations-list::-webkit-scrollbar-track {
+  background: var(--background-secondary, #f8f9fa);
+  border-radius: 3px;
+}
+
+.inspirations-list::-webkit-scrollbar-thumb {
+  background: var(--border-color, #e9ecef);
+  border-radius: 3px;
+}
+
+.inspirations-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary, #6c757d);
+}
