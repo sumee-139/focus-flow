@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { logger } from '../utils/debugLogger'
 import './AppendOnlyDailyMemo.css'
 
@@ -32,24 +32,29 @@ const MEMO_TITLE = '💡 ひらめきメモ'
 const INPUT_PLACEHOLDER = '集中中のひらめき・アイデアを記録...'
 const ADD_BUTTON_TEXT = '追加'
 
+interface AppendOnlyDailyMemoProps {
+  onFullscreenToggle?: () => void
+}
+
 /**
  * # AppendOnly デイリーメモコンポーネント
  * ## 用途
  * フォーカスモード中のひらめき・アイデアを追記専用で記録
  * ## 引数
- * なし
+ * - onFullscreenToggle?: () => void - フルスクリーンモード切り替え時のコールバック
  * ## 戻り値
  * JSX.Element - 追記専用ひらめきメモエディタ
  */
-export const AppendOnlyDailyMemo: React.FC = () => {
+export const AppendOnlyDailyMemo: React.FC<AppendOnlyDailyMemoProps> = ({ onFullscreenToggle }) => {
   const [inputValue, setInputValue] = useState('')
   const [inspirations, setInspirations] = useState<InspirationEntry[]>([])
+  const [isFullscreenMode, setIsFullscreenMode] = useState(false)
 
   // 今日の日付キーを取得
-  const getTodayKey = (): string => {
+  const getTodayKey = useCallback((): string => {
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
     return `${STORAGE_KEY_PREFIX}${today}`
-  }
+  }, [])
 
   // 今日の日付を取得
   const getTodayDate = (): string => {
@@ -64,7 +69,7 @@ export const AppendOnlyDailyMemo: React.FC = () => {
       try {
         const parsedData = JSON.parse(existingData) as DailyMemoData
         return parsedData
-      } catch (error) {
+      } catch (_error) {
         // 後方互換性: 古い文字列形式をJSON形式に移行
         logger.warn('Legacy string format detected, migrating to JSON format')
         return {
@@ -86,7 +91,7 @@ export const AppendOnlyDailyMemo: React.FC = () => {
   }
 
   // LocalStorageから保存されたひらめきメモを取得
-  const loadSavedInspirations = (): InspirationEntry[] => {
+  const loadSavedInspirations = useCallback((): InspirationEntry[] => {
     try {
       const savedData = localStorage.getItem(getTodayKey())
       if (savedData) {
@@ -97,7 +102,7 @@ export const AppendOnlyDailyMemo: React.FC = () => {
       logger.warn('Failed to load saved inspirations:', error)
     }
     return []
-  }
+  }, [getTodayKey])
 
   // LocalStorageにひらめきメモを保存
   const saveInspirations = (inspirationList: InspirationEntry[]): void => {
@@ -189,11 +194,12 @@ export const AppendOnlyDailyMemo: React.FC = () => {
     }
   }
 
+
   // 初回ロード時に保存されたひらめきを復元
   useEffect(() => {
     const savedInspirations = loadSavedInspirations()
     setInspirations(savedInspirations)
-  }, [])
+  }, [loadSavedInspirations])
 
   return (
     <div 
@@ -222,26 +228,55 @@ export const AppendOnlyDailyMemo: React.FC = () => {
         </button>
       </div>
 
-      {/* ひらめきリスト */}
+      {/* ひらめき件数がある場合のみ一覧表示ボタンを表示 */}
       {inspirations.length > 0 && (
-        <div className="inspirations-list">
-          {inspirations.map((inspiration) => (
-            <div 
-              key={inspiration.id}
-              className="inspiration-entry"
-              data-testid="inspiration-entry"
-            >
-              <div className="inspiration-content">
-                {inspiration.content}
-              </div>
-              <div className="inspiration-timestamp">
-                {new Date(inspiration.timestamp).toLocaleTimeString('ja-JP', {
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </div>
+        <button
+          className="inspirations-view-all-btn"
+          onClick={() => setIsFullscreenMode(true)}
+          data-testid="inspirations-view-all-btn"
+        >
+          🔍 一覧表示 ({inspirations.length}件)
+        </button>
+      )}
+
+      {/* フルスクリーンモード */}
+      {isFullscreenMode && (
+        <div 
+          className="inspirations-fullscreen-overlay"
+          data-testid="inspirations-fullscreen-overlay"
+        >
+          <div className="inspirations-fullscreen-content">
+            <div className="inspirations-fullscreen-header">
+              <h3>💡 ひらめき履歴</h3>
+              <button 
+                className="inspirations-close-btn"
+                onClick={() => {
+                  setIsFullscreenMode(false)
+                  onFullscreenToggle?.()
+                }}
+              >
+                ✕
+              </button>
             </div>
-          ))}
+            <div 
+              className="inspirations-fullscreen-list"
+              data-testid="inspirations-fullscreen-list"
+            >
+              {inspirations.map((inspiration) => (
+                <div key={inspiration.id} className="inspiration-item-full">
+                  <div className="inspiration-timestamp">
+                    {new Date(inspiration.timestamp).toLocaleTimeString('ja-JP', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </div>
+                  <div className="inspiration-content">
+                    {inspiration.content}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

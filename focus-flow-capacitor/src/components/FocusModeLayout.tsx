@@ -57,6 +57,11 @@ export const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ currentTask })
     setShowDailyMemo(prev => !prev)
   }, [])
 
+  const handleFullscreenToggle = useCallback(() => {
+    // AppendOnlyDailyMemoのフルスクリーンモード切り替えをトリガー
+    // 実際の状態管理はAppendOnlyDailyMemo内部で行う
+  }, [])
+
   // デスクトップレイアウト（1200px以上）
   if (screenSize === 'desktop') {
     return (
@@ -77,16 +82,7 @@ export const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ currentTask })
         </div>
         
         <div className="daily-memo-section inspiration-bottom" data-testid="daily-memo-section-bottom">
-          <button
-            className="daily-memo-toggle-button"
-            data-testid="daily-memo-toggle-button"
-            onClick={handleDailyMemoToggle}
-          >
-            💡 ひらめきメモ {showDailyMemo ? '▲' : '▼'}
-          </button>
-          {showDailyMemo && (
-            <AppendOnlyDailyMemo />
-          )}
+          <AppendOnlyDailyMemo onFullscreenToggle={handleFullscreenToggle} />
         </div>
       </div>
     )
@@ -120,7 +116,7 @@ export const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ currentTask })
             💡 ひらめき
           </button>
           {showDailyMemo && (
-            <AppendOnlyDailyMemo />
+            <AppendOnlyDailyMemo onFullscreenToggle={handleFullscreenToggle} />
           )}
         </div>
       </div>
@@ -154,7 +150,7 @@ export const FocusModeLayout: React.FC<FocusModeLayoutProps> = ({ currentTask })
           💡
         </button>
         {showDailyMemo && (
-          <AppendOnlyDailyMemo />
+          <AppendOnlyDailyMemo onFullscreenToggle={handleFullscreenToggle} />
         )}
       </div>
     </div>

@@ -30,9 +30,9 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.change(input, { target: { value: 'フォーカスモードでの新しいアイデア' } })
     fireEvent.click(addButton)
 
-    // エントリが追加されることを確認
+    // ボタンが表示されることを確認（エントリは常時表示されない）
     await waitFor(() => {
-      expect(screen.getByText(/フォーカスモードでの新しいアイデア/)).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
 
     // 入力フィールドがクリアされることを確認
@@ -50,17 +50,22 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.click(addButton)
 
     await waitFor(() => {
-      expect(screen.getByText(/第一のアイデア/)).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
 
     fireEvent.change(input, { target: { value: '第二のアイデア' } })
     fireEvent.click(addButton)
 
     await waitFor(() => {
-      expect(screen.getByText(/第二のアイデア/)).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (2件)')).toBeInTheDocument()
     })
 
-    // 両方のアイデアが表示されることを確認
+    // 一覧表示ボタンをクリックしてフルスクリーンで両方確認
+    const viewAllButton = screen.getByText('🔍 一覧表示 (2件)')
+    fireEvent.click(viewAllButton)
+    
+    // フルスクリーンオーバーレイで両方のアイデアが表示されることを確認
+    expect(screen.getByTestId('inspirations-fullscreen-overlay')).toBeInTheDocument()
     expect(screen.getByText(/第一のアイデア/)).toBeInTheDocument()
     expect(screen.getByText(/第二のアイデア/)).toBeInTheDocument()
   })
@@ -74,9 +79,9 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.change(input, { target: { value: 'Enterキーテスト' } })
     fireEvent.keyDown(input, { key: 'Enter' })
 
-    // エントリが追加されることを確認
+    // ボタンが表示されることを確認（エントリは常時表示されない）
     await waitFor(() => {
-      expect(screen.getByText(/Enterキーテスト/)).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
   })
 
@@ -102,9 +107,9 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.change(input, { target: { value: 'LocalStorage保存テスト' } })
     fireEvent.click(addButton)
 
-    // アイテムが追加されることを確認
+    // ボタンが表示されることを確認
     await waitFor(() => {
-      expect(screen.getByText(/LocalStorage保存テスト/)).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
 
     // LocalStorageに実際に保存されているかを確認
@@ -135,7 +140,12 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
 
     render(<AppendOnlyDailyMemo />)
 
-    // 復元されたアイデアが表示されることを確認
+    // 復元時は一覧表示ボタンが表示されることを確認
+    expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
+    
+    // フルスクリーンで復元されたアイデアが確認できることを確認
+    const viewAllButton = screen.getByText('🔍 一覧表示 (1件)')
+    fireEvent.click(viewAllButton)
     expect(screen.getByText(/復元されたアイデア/)).toBeInTheDocument()
   })
 
@@ -181,7 +191,7 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.click(addButton)
 
     await waitFor(() => {
-      expect(screen.getByTestId('inspiration-entry')).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
 
     // Assert 1: Inspiration should be saved to its own storage
@@ -228,7 +238,7 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     fireEvent.click(addButton)
 
     await waitFor(() => {
-      expect(screen.getByTestId('inspiration-entry')).toBeInTheDocument()
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
     })
 
     // Assert: The daily memo should still be valid JSON that DailyMemo can parse
@@ -243,5 +253,171 @@ describe('AppendOnlyDailyMemo - Phase 2.2b Inspiration Tests', () => {
     expect(parsedData).toHaveProperty('date')
     expect(parsedData).toHaveProperty('lastUpdated')
     expect(parsedData).toHaveProperty('taskReferences')
+  })
+
+  // 🔴 NEW FAILING TESTS: PC版ひらめきメモUX改善最終修正版 - 常時表示一覧削除
+  describe('PC版ひらめきメモUX改善 - 段階的情報開示', () => {
+    test('should NOT show inspirations list by default', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // ひらめきを追加
+      fireEvent.change(input, { target: { value: 'テスト用アイデア' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        // 入力は成功するが、一覧表示は見えない
+        expect(screen.getByTestId('inspiration-input')).toBeInTheDocument()
+      })
+
+      // 🔴 FAILING: 常時表示一覧は存在してはいけない
+      expect(screen.queryByTestId('inspiration-entry')).not.toBeInTheDocument()
+      
+      // ✅ 一覧表示ボタンのみ表示される（件数付き）
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
+    })
+
+    test('should show only "🔍 一覧表示" button when inspirations exist', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // ひらめきを追加
+      fireEvent.change(input, { target: { value: 'テスト用アイデア' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('inspirations-view-all-btn')).toBeInTheDocument()
+      })
+
+      // 一覧表示ボタンが表示されることを確認（件数付き）
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
+      
+      // 🔴 FAILING: 常時表示の一覧コンテンツは存在してはいけない
+      expect(screen.queryByText('inspiration-entry')).not.toBeInTheDocument()
+    })
+
+    test('should show fullscreen overlay when button clicked', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // ひらめきを追加
+      fireEvent.change(input, { target: { value: 'フルスクリーンテスト' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('inspirations-view-all-btn')).toBeInTheDocument()
+      })
+
+      // 一覧表示ボタンをクリック
+      const viewAllButton = screen.getByText('🔍 一覧表示 (1件)')
+      fireEvent.click(viewAllButton)
+
+      // フルスクリーンオーバーレイが表示されることを確認
+      expect(screen.getByTestId('inspirations-fullscreen-overlay')).toBeInTheDocument()
+      expect(screen.getByText('💡 ひらめき履歴')).toBeInTheDocument()
+    })
+
+    test('should display all inspirations in fullscreen overlay', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // 複数のひらめきを追加
+      fireEvent.change(input, { target: { value: '第一のアイデア' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('inspirations-view-all-btn')).toBeInTheDocument()
+      })
+
+      fireEvent.change(input, { target: { value: '第二のアイデア' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByText('🔍 一覧表示 (2件)')).toBeInTheDocument()
+      })
+
+      // 一覧表示ボタンをクリック
+      const viewAllButton = screen.getByText('🔍 一覧表示 (2件)')
+      fireEvent.click(viewAllButton)
+
+      // フルスクリーンオーバーレイで全てのひらめきが表示されることを確認
+      const fullscreenOverlay = screen.getByTestId('inspirations-fullscreen-overlay')
+      expect(fullscreenOverlay).toBeInTheDocument()
+      
+      // フルスクリーンリスト内で要素を検索
+      const fullscreenList = screen.getByTestId('inspirations-fullscreen-list')
+      expect(fullscreenList).toBeInTheDocument()
+      expect(screen.getByText(/第一のアイデア/)).toBeInTheDocument()
+      expect(screen.getByText(/第二のアイデア/)).toBeInTheDocument()
+    })
+
+    test('should close fullscreen overlay when close button clicked', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // ひらめきを追加
+      fireEvent.change(input, { target: { value: 'クローズテスト' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByTestId('inspirations-view-all-btn')).toBeInTheDocument()
+      })
+
+      // フルスクリーン表示
+      const viewAllButton = screen.getByText('🔍 一覧表示 (1件)')
+      fireEvent.click(viewAllButton)
+
+      expect(screen.getByTestId('inspirations-fullscreen-overlay')).toBeInTheDocument()
+
+      // 閉じるボタンをクリック
+      const closeButton = screen.getByText('✕')
+      fireEvent.click(closeButton)
+
+      // フルスクリーンオーバーレイが非表示になることを確認
+      expect(screen.queryByTestId('inspirations-fullscreen-overlay')).not.toBeInTheDocument()
+      // 一覧表示ボタンが再表示されることを確認
+      expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
+    })
+
+    test('should show inspiration count in view all button', async () => {
+      render(<AppendOnlyDailyMemo />)
+
+      const input = screen.getByTestId('inspiration-input')
+      const addButton = screen.getByText('追加')
+
+      // 1つ目のひらめきを追加
+      fireEvent.change(input, { target: { value: 'カウントテスト1' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByText('🔍 一覧表示 (1件)')).toBeInTheDocument()
+      })
+
+      // 2つ目のひらめきを追加
+      fireEvent.change(input, { target: { value: 'カウントテスト2' } })
+      fireEvent.click(addButton)
+
+      await waitFor(() => {
+        expect(screen.getByText('🔍 一覧表示 (2件)')).toBeInTheDocument()
+      })
+    })
+
+    test('should handle empty inspirations list gracefully', () => {
+      render(<AppendOnlyDailyMemo />)
+
+      // ひらめきが空の場合、一覧表示ボタンは表示されない
+      expect(screen.queryByText(/🔍 一覧表示/)).not.toBeInTheDocument()
+      expect(screen.queryByTestId('inspirations-fullscreen-overlay')).not.toBeInTheDocument()
+    })
   })
 })

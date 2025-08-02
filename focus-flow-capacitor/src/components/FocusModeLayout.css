@@ -17,7 +17,7 @@
 /* デスクトップレイアウト（1200px以上）: 左右分割 */
 .desktop-layout {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr minmax(150px, auto);
+  grid-template-rows: 1fr minmax(120px, 180px);
   grid-template-areas: 
     "timer memo"
     "daily daily";
@@ -38,10 +38,13 @@
 
 .desktop-layout .inspiration-bottom {
   grid-area: daily;
-  max-height: 200px;
+  max-height: 220px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  background: white;
 }
 
 /* タブレットレイアウト（768px-1199px）: 上下分割 */
