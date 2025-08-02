@@ -1,0 +1,185 @@
+/* 埋め込み型タスクメモ用CSS */
+
+.embedded-task-memo {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e9ecef);
+  padding: 16px;
+  position: relative;
+}
+
+.embedded-task-memo[data-read-only="true"] {
+  background: var(--background-secondary, #f8f9fa);
+}
+
+/* 保存状態インジケーター */
+.embedded-save-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  z-index: 10;
+  animation: embedded-fade-in 0.3s ease-out;
+}
+
+.embedded-save-indicator.saving {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.embedded-save-indicator.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.embedded-save-indicator.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@keyframes embedded-fade-in {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* タスク情報ヘッダー（簡略版） */
+.embedded-task-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+.embedded-task-title {
+  font-size: 14px;
+  color: var(--text-primary, #212529);
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.embedded-task-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary, #6c757d);
+  align-items: center;
+}
+
+.embedded-task-meta span {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* メモエリア */
+.embedded-memo-textarea {
+  flex: 1;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  background: white;
+  line-height: 1.4;
+  min-height: 120px;
+}
+
+.embedded-memo-textarea:focus {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.embedded-memo-textarea[readonly] {
+  background: var(--background-secondary, #f8f9fa);
+  color: var(--text-secondary, #6c757d);
+  cursor: default;
+}
+
+.embedded-memo-textarea::placeholder {
+  color: var(--text-tertiary, #adb5bd);
+  font-style: italic;
+}
+
+/* 自動保存情報 */
+.embedded-auto-save-info {
+  font-size: 11px;
+  color: var(--text-secondary, #6c757d);
+  margin: 8px 0 0 0;
+  text-align: right;
+  font-style: italic;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 767px) {
+  .embedded-task-memo {
+    padding: 12px;
+  }
+  
+  .embedded-task-title {
+    font-size: 13px;
+  }
+  
+  .embedded-task-meta {
+    font-size: 11px;
+  }
+  
+  .embedded-memo-textarea {
+    font-size: 12px;
+    min-height: 100px;
+  }
+  
+  .embedded-auto-save-info {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .embedded-task-memo {
+    padding: 20px;
+  }
+  
+  .embedded-task-title {
+    font-size: 15px;
+  }
+  
+  .embedded-memo-textarea {
+    font-size: 14px;
+    min-height: 150px;
+  }
+  
+  .embedded-auto-save-info {
+    font-size: 12px;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .embedded-save-indicator {
+    animation: none;
+  }
+}
+
+/* フォーカス表示 */
+.embedded-memo-textarea:focus-visible {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+}

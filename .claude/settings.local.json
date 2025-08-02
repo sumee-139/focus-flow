@@ -72,7 +72,13 @@
       "Bash(--draft )",
       "Bash(--base main )",
       "Bash(--head feature/T006-T007)",
-      "Bash(timeout 30s npm run test:*)"
+      "Bash(timeout 30s npm run test:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.chakra-ui.com)",
+      "Bash(touch:*)",
+      "Bash(chmod:*)",
+      "Bash(./scripts/check-css-classes-enhanced.sh:*)",
+      "mcp__playwright__browser_press_key"
     ],
     "deny": []
   }

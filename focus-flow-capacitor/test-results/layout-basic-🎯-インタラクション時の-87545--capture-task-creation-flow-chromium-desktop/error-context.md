@@ -1,0 +1,51 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - heading "FocusFlow" [level=1]
+  - paragraph: 今日必ず着手するタスクのみを管理
+  - text: 2025年7月29日(火)
+  - navigation "日付ナビゲーション":
+    - button "前の日": chevron_left 前へ
+    - button "今日に戻る": 📍 今日
+    - button "明日に移動": 明日
+    - button "次の日": 次へ chevron_right
+    - button "カレンダーを開く": calendar_today
+  - 'button "Focus: OFF"'
+  - button "完了タスクを表示": 👁️ 完了タスクを表示
+- complementary:
+  - form:
+    - text: 📝
+    - textbox "タスクタイトル"
+    - spinbutton "見積時間": "30"
+    - text: 分
+    - button "詳細オプション": 詳細
+    - button "日付を選択": 明日
+    - button "追加"
+  - status "2025年7月29日(火)のタスク統計":
+    - text: 7/29(火) 3件 完了0件 見積:3時間 0 達成率:0%
+    - progressbar
+  - text: "⋮⋮ 📝 タスク管理機能をテストする 基本的なCRUD操作の動作確認 📅 明日 ⏱️ 30分 #testing"
+  - checkbox "Mark \"タスク管理機能をテストする\" as complete"
+  - button "Edit \"タスク管理機能をテストする\"": ✏️
+  - button "Delete \"タスク管理機能をテストする\"": 🗑️
+  - button "Start focus mode for \"タスク管理機能をテストする\"": 🎯
+  - text: ⋮⋮ 📝 レイアウトテスト 📅 明日 ⏱️ 30分
+  - checkbox "Mark \"レイアウトテスト\" as complete"
+  - button "Edit \"レイアウトテスト\"": ✏️
+  - button "Delete \"レイアウトテスト\"": 🗑️
+  - button "Start focus mode for \"レイアウトテスト\"": 🎯
+  - text: "⋮⋮ 📝 FocusFlowプロトタイプを完成させる Design Philosophyに準拠したUI実装 📅 明日 ⏱️ 120分 ⏰ 14:00 #development"
+  - checkbox "Mark \"FocusFlowプロトタイプを完成させる\" as complete"
+  - button "Edit \"FocusFlowプロトタイプを完成させる\"": ✏️
+  - button "Delete \"FocusFlowプロトタイプを完成させる\"": 🗑️
+  - button "Start focus mode for \"FocusFlowプロトタイプを完成させる\"": 🎯
+- main:
+  - button "Open memo panel": 📝 メモパネルを開く
+  - heading "📝 デイリーメモ" [level=2]
+  - textbox "デイリーメモ"
+  - paragraph: "📄 自動保存: 入力停止から3秒後"
+- complementary:
+  - button "📝 デイリーメモ"
+- group: Debug Information
+```

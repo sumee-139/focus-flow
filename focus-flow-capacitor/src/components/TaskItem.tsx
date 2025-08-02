@@ -10,6 +10,8 @@ interface TaskItemProps {
   onDelete: (id: string) => void;
   onReorder: (dragIndex: number, hoverIndex: number) => void;
   onMemoClick?: (id: string) => void;
+  onStartFocus?: (task: Task) => void;
+  showFocusButton?: boolean;
 }
 
 export const TaskItem: React.FC<TaskItemProps> = ({
@@ -18,7 +20,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({
   onEdit,
   onDelete,
   onReorder: _onReorder,
-  onMemoClick
+  onMemoClick,
+  onStartFocus,
+  showFocusButton = false
 }) => {
   const handleToggle = () => {
     onToggle(task.id)
@@ -34,6 +38,10 @@ export const TaskItem: React.FC<TaskItemProps> = ({
 
   const handleMemoClick = () => {
     onMemoClick?.(task.id)
+  }
+
+  const handleStartFocus = () => {
+    onStartFocus?.(task)
   }
 
   return (
@@ -140,6 +148,18 @@ export const TaskItem: React.FC<TaskItemProps> = ({
         >
           🗑️
         </button>
+        
+        {/* Focus Mode Button */}
+        {showFocusButton && (
+          <button
+            onClick={handleStartFocus}
+            className="focus-button"
+            data-testid="focus-task-button"
+            aria-label={`Start focus mode for "${task.title}"`}
+          >
+            🎯
+          </button>
+        )}
       </div>
     </div>
   )

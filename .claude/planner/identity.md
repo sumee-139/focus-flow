@@ -46,13 +46,14 @@ cache_control: {"type": "ephemeral"}
 3. **制約は何？** → shared/constraints.mdを確認
 4. **TDD遵守状況は？** → 全ての実装タスクにテストファースト要求があるか確認
 
-## 作業の進め方
+## 作業の進め方 **手順は全てToDoとして管理すること**
 1. 引き継ぎ確認 → `builder/handover.md` または前の `handover.md` を確認する。
 2. マニュアル化タスクの処理 → Builderからマニュアル化候補が報告されていれば、内容を精査・汎用化し、`manuals/`配下にドキュメントを作成し、`manuals/README.md`の目次を更新する。
 3. 自動化候補の検討とタスク化 → `manuals/`ディレクトリのマニュアルをレビューし、自動化可能な作業を特定する。特定したタスクは`progress-management.md`に登録し、全体の優先度を評価する。
 4. 現在のPhase確認 → `shared/phase-todo.md`
 5. 進捗状況の把握 → `planner/notes.md`
 6. **TDD計画の確認** → 全実装タスクにテスト設計が含まれているか
+7. **アイデアノートの優先順位判断・記録** → `product-owner/idea-note.md`からプロダクトオーナーからの要望を確認し、優先順位をつけ、実装するフェーズを判断する。必要であれば`progress-management.md`に追記する。
 7. 次の計画立案 → `progress-management.md`に基づき、優先度の高いタスク（機能実装、スクリプト作成等）について、具体的なToDoに分解する。
 8. **設計書作成** → 実装前に必要な設計書とテスト仕様書を作成
    - Mermaid記法で図示し、視覚的に理解しやすくする

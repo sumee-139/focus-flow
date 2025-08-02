@@ -60,14 +60,48 @@ if ! adb devices | tail -n +2 | grep -qw 'device'; then
     fi
 
     echo -e "${YELLOW}${DEVICE_IP}に接続を試みます...${NC}"
-    adb connect "${DEVICE_IP}"
-    
+    # adb connectは失敗時に非0の終了コードを返すことがあるため、|| trueでスクリプトの即時終了を防ぐ
+    adb connect "${DEVICE_IP}" || true
+
     # 再度デバイス接続を確認
-    DEVICE_COUNT=$(adb devices | tail -n +2 | grep -c '.')
-    if [ "$DEVICE_COUNT" -eq 0 ]; then
-        echo -e "${RED}デバイスへの接続に失敗しました。スクリプトを終了します。${NC}"
-        exit 1
+    if ! adb devices | tail -n +2 | grep -qw 'device'; then
+        echo -e "${RED}IPアドレス (${DEVICE_IP}) への接続に失敗しました。${NC}"
+        read -p "ワイヤレスデバッグのペアリングを試みますか？ (y/n): " TRY_PAIRING
+
+        if [[ "$TRY_PAIRING" =~ ^[Yy]$ ]]; then
+            echo -e "${YELLOW}ペアリング情報を入力してください。${NC}"
+            read -p "ペアリング用のIPアドレス: " PAIRING_IP
+            read -p "ペアリング用のポート番号: " PAIRING_PORT
+            read -p "6桁のペアリングコード: " PAIRING_CODE
+
+            if [ -z "$PAIRING_IP" ] || [ -z "$PAIRING_PORT" ] || [ -z "$PAIRING_CODE" ]; then
+                echo -e "${RED}ペアリング情報が不足しています。スクリプトを終了します。${NC}"
+                exit 1
+            fi
+
+            echo -e "${YELLOW}${PAIRING_IP}:${PAIRING_PORT} とペアリングを試みます...${NC}"
+            # ペアリングコードを標準入力で渡す
+            echo "$PAIRING_CODE" | adb pair "${PAIRING_IP}:${PAIRING_PORT}"
+
+            # ペアリング後の接続試行
+            echo -e "${YELLOW}ペアリング後、再度 ${DEVICE_IP} に接続を試みます...${NC}"
+            adb connect "${DEVICE_IP}" || true
+
+            if ! adb devices | tail -n +2 | grep -qw 'device'; then
+                echo -e "${RED}ペアリング後の接続にも失敗しました。スクリプトを終了します。${NC}"
+                echo "以下の点を確認してください:"
+                echo " - デバイスとPCが同じWi-Fiに接続されているか"
+                echo " - 入力したIPアドレス、ポート、ペアリングコードが正しいか"
+                echo " - デバイスのワイヤレスデバッグが有効になっているか"
+                exit 1
+            fi
+        else
+            echo -e "${RED}ペアリングを行わずにスクリプトを終了します。${NC}"
+            exit 1
+        fi
     fi
+    echo -e "${GREEN}デバイスに接続しました。${NC}"
+    adb devices | tail -n +2
 else
     echo -e "${GREEN}接続中のデバイスが見つかりました。${NC}"
     adb devices | tail -n +2

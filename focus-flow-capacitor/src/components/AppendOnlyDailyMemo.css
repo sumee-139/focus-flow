@@ -1,0 +1,527 @@
+/* AppendOnly デイリーメモ用CSS */
+
+.append-only-daily-memo {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e9ecef);
+  padding: 16px;
+  /* max-height: 400px; 削除 - フォーカスモード内で制限される */
+  overflow: visible;
+}
+
+.inspiration-title {
+  font-size: 16px;
+  color: var(--text-primary, #212529);
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ひらめき入力エリア */
+.inspiration-input-section {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.inspiration-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  background: white;
+}
+
+.inspiration-input:focus {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.inspiration-input::placeholder {
+  color: var(--text-tertiary, #adb5bd);
+  font-style: italic;
+}
+
+.add-inspiration-btn {
+  padding: 8px 16px;
+  background: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.add-inspiration-btn:hover {
+  background: var(--primary-color-hover, #0056b3);
+}
+
+.add-inspiration-btn:active {
+  transform: translateY(1px);
+}
+
+/* ひらめきリスト */
+.inspirations-list {
+  flex: 1;
+  min-height: 80px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inspiration-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--background-secondary, #f8f9fa);
+  border: 1px solid var(--border-light, #f1f3f4);
+  border-radius: 6px;
+  padding: 8px 10px;
+  animation: inspiration-fade-in 0.3s ease-out;
+}
+
+@keyframes inspiration-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.inspiration-content {
+  font-size: 13px;
+  color: var(--text-primary, #212529);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.inspiration-timestamp {
+  font-size: 11px;
+  color: var(--text-secondary, #6c757d);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3段階レスポンシブ対応 */
+
+/* モバイル（≤768px） */
+@media (max-width: 768px) {
+  .append-only-daily-memo {
+    padding: 12px;
+    max-height: 300px;
+  }
+  
+  .inspiration-title {
+    font-size: 14px;
+  }
+  
+  .inspiration-input {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .add-inspiration-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .inspiration-content {
+    font-size: 12px;
+  }
+  
+  .inspiration-timestamp {
+    font-size: 10px;
+  }
+
+  /* 展開縮小UI - モバイル対応 */
+  .inspirations-expanded-list {
+    max-height: 150px;
+    padding: 8px;
+  }
+  
+  .inspirations-expanded-header {
+    padding: 10px 12px;
+  }
+  
+  .inspiration-item-expanded {
+    padding: 6px 10px;
+    margin-bottom: 8px;
+  }
+}
+
+/* タブレット（769px〜1200px） */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .inspirations-expanded-list {
+    max-height: 180px;
+    padding: 10px;
+  }
+}
+
+/* デスクトップ（≥1201px） */
+@media (min-width: 1201px) {
+  .append-only-daily-memo {
+    padding: 20px;
+    /* max-height: 500px; 削除 - フォーカスモード内でGrid制御される */
+  }
+  
+  .inspiration-title {
+    font-size: 18px;
+  }
+  
+  .inspiration-input {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+  
+  .add-inspiration-btn {
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+  
+  .inspiration-content {
+    font-size: 14px;
+  }
+  
+  .inspiration-timestamp {
+    font-size: 12px;
+  }
+
+  /* 展開縮小UI - デスクトップ対応 */
+  .inspirations-expanded-list {
+    max-height: 200px;
+    padding: 12px;
+  }
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .inspiration-entry {
+    animation: none;
+  }
+}
+
+/* フォーカス表示 */
+.inspiration-input:focus-visible,
+.add-inspiration-btn:focus-visible {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+}
+
+/* スクロールバーのスタイリング */
+.inspirations-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inspirations-list::-webkit-scrollbar-track {
+  background: var(--background-secondary, #f8f9fa);
+  border-radius: 3px;
+}
+
+.inspirations-list::-webkit-scrollbar-thumb {
+  background: var(--border-color, #e9ecef);
+  border-radius: 3px;
+}
+
+.inspirations-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary, #6c757d);
+}
+
+/* 展開縮小UI - トグルボタン（縮小モード） */
+.inspirations-toggle-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background: var(--color-secondary, #f8f9fa);
+  color: var(--color-text, #333);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.inspirations-toggle-btn:hover {
+  background: var(--color-secondary-hover, #e9ecef);
+  border-color: var(--color-primary, #007acc);
+}
+
+.inspirations-toggle-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #007acc);
+  outline-offset: 2px;
+}
+
+/* 展開ビュー */
+.inspirations-expanded-view {
+  margin-top: 8px;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 4px;
+  background: white;
+}
+
+.inspirations-expanded-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border, #ddd);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-secondary, #f8f9fa);
+}
+
+.inspirations-title {
+  font-weight: bold;
+  color: var(--color-text, #333);
+}
+
+.inspirations-collapse-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary, #007acc);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.inspirations-collapse-btn:hover {
+  background: var(--color-primary-light, #e3f2fd);
+}
+
+.inspirations-collapse-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #007acc);
+  outline-offset: 2px;
+}
+
+.inspirations-expanded-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.inspiration-item-expanded {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--color-primary, #007acc);
+  background: var(--color-secondary, #f8f9fa);
+  border-radius: 0 4px 4px 0;
+}
+
+.inspiration-item-expanded:last-child {
+  margin-bottom: 0;
+}
+
+.inspiration-item-expanded .inspiration-timestamp {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-primary, #007acc);
+  margin-bottom: 4px;
+}
+
+.inspiration-item-expanded .inspiration-content {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text, #333);
+  white-space: pre-wrap;
+}
+
+/* 全画面オーバーレイ */
+.inspirations-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: overlay-fade-in 0.3s ease-out;
+}
+
+@keyframes overlay-fade-in {
+  0% { 
+    opacity: 0; 
+  }
+  100% { 
+    opacity: 1; 
+  }
+}
+
+.inspirations-fullscreen-content {
+  background: white;
+  width: 90vw;
+  height: 90vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: content-slide-up 0.3s ease-out;
+}
+
+@keyframes content-slide-up {
+  0% { 
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.inspirations-fullscreen-header {
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background-secondary, #f8f9fa);
+}
+
+.inspirations-fullscreen-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-primary, #212529);
+}
+
+.inspirations-close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.inspirations-close-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.inspirations-close-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #007acc);
+  outline-offset: 2px;
+}
+
+.inspirations-fullscreen-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.inspiration-item-full {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-left: 4px solid var(--color-primary, #007acc);
+  background: #f8f9fa;
+}
+
+.inspiration-timestamp {
+  font-weight: bold;
+  color: var(--color-primary, #007acc);
+  margin-bottom: 4px;
+}
+
+.inspiration-content {
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* 一覧表示ボタン - PC版ひらめきメモUX改善最終版 */
+.inspirations-view-all-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background: var(--color-secondary, #f8f9fa);
+  color: var(--color-text, #333);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.inspirations-view-all-btn:hover {
+  background: var(--color-secondary-hover, #e9ecef);
+  border-color: var(--color-primary, #007acc);
+}
+
+.inspirations-view-all-btn:active {
+  transform: translateY(0);
+}
+
+.inspirations-view-all-btn:focus-visible {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+}
+
+/* アクセシビリティ対応 */
+@media (prefers-reduced-motion: reduce) {
+  .inspirations-fullscreen-overlay,
+  .inspirations-fullscreen-content {
+    animation: none;
+  }
+  
+  .inspirations-view-all-btn {
+    transition: none;
+  }
+  
+  .inspirations-view-all-btn:hover {
+    transform: none;
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .inspirations-fullscreen-content {
+    width: 95vw;
+    height: 95vh;
+  }
+  
+  .inspirations-fullscreen-header {
+    padding: 12px;
+  }
+  
+  .inspirations-fullscreen-header h3 {
+    font-size: 16px;
+  }
+  
+  .inspirations-fullscreen-list {
+    padding: 12px;
+  }
+  
+  .inspiration-item-full {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .inspirations-view-all-btn {
+    font-size: 13px;
+    padding: 6px;
+  }
+}

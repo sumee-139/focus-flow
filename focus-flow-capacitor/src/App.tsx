@@ -14,6 +14,9 @@ import { MobileTaskMemoModal } from './components/MobileTaskMemoModal'
 import { DateNavigation } from './components/DateNavigation'
 import { DatePicker } from './components/DatePicker'
 import { TaskStatistics } from './components/TaskStatistics'
+import { FocusModeProvider, useFocusMode } from './contexts/FocusModeContext'
+import { FocusTimer } from './components/FocusTimer'
+import { FocusModeLayout } from './components/FocusModeLayout'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { useTaskFilter } from './hooks/useTaskFilter'
 import { MEDIA_QUERIES } from './constants/ui'
@@ -222,7 +225,10 @@ const getLocalDateString = (): string => {
   return getJSTTodayString();
 }
 
-function App() {
+function AppContent() {
+  // Focus Mode Context
+  const { startFocus, isInFocusMode, focusMode } = useFocusMode()
+  
   // LocalStorageからタスクを読み込み
   // 🔧 TEST FIX: 動的にデフォルトタスクを生成してテスト時の日付モックに対応
   const [storedTasks, setStoredTasks] = useLocalStorage<Task[]>('focus-flow-tasks', getDefaultTasks())
@@ -610,6 +616,17 @@ function App() {
     updateFilter({ showCompleted: !filter.showCompleted })
   }, [filter.showCompleted, updateFilter])
 
+  // 🎯 Focus Mode Handler
+  const handleStartFocus = useCallback(async (task: Task) => {
+    try {
+      // Default to moderate constraint level and 25 minutes for Green Phase
+      await startFocus(task, 'moderate', 25)
+      logger.info(`Focus mode started for task: ${task.title}`)
+    } catch (error) {
+      logger.error('Failed to start focus mode:', error)
+    }
+  }, [startFocus])
+
   // 🟢 Green Phase: Ctrl+H キーボードショートカット
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -694,6 +711,8 @@ function App() {
                       onDelete={handleDeleteTask}
                       onReorder={handleReorderTask}
                       onMemoClick={handleTaskClick}
+                      onStartFocus={handleStartFocus}
+                      showFocusButton={!isInFocusMode && !task.completed}
                     />
                   ))}
                 </div>
@@ -846,8 +865,25 @@ function App() {
             )}
           </>
         )}
+
+        {/* Focus Mode Overlay - Phase 2.2b Integration */}
+        {isInFocusMode ? (
+          <div className="focus-mode-overlay">
+            <FocusModeLayout currentTask={focusMode.currentTask || filteredTasks[0]} />
+          </div>
+        ) : (
+          <FocusTimer />
+        )}
       </div>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <FocusModeProvider>
+      <AppContent />
+    </FocusModeProvider>
   )
 }
 

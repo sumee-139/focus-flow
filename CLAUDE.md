@@ -3,6 +3,15 @@
 ## プロジェクト概要
 **集中力と知的生産性の向上**を目指すマルチプラットフォームアプリケーション。「あなたの可能性を解き放つ、知的生産性の伴走者」として、デジタルノイズを遮断し、静かな集中環境を提供する。段階的な機能解放とゲーミフィケーション（成長の木）により、無理なく習慣化をサポートし、ユーザーがフロー状態を日常的に体験できるよう支援する。
 
+## レスポンシブレイアウト境界（重要）
+**統一レイアウト境界** - 全コンポーネント共通基準:
+- 🔷 **モバイル**: ≤768px (`max-width: 768px`)
+- 🔶 **タブレット**: 769px-1200px (`min-width: 769px and max-width: 1200px`)  
+- 🔵 **デスクトップ**: ≥1201px (`min-width: 1201px`)
+
+**技術仕様**: `/src/constants/ui.ts` BREAKPOINTS定数で管理
+**適用範囲**: 全CSSコンポーネント、TSXロジック、テストケース
+
 ## プロンプトキャッシュ最適化設定
 - **CLAUDE_CACHE**: `./.ccache` - 90%コスト削減・85%レイテンシ短縮
 - **cache_control**: 長期安定情報に適用済み
@@ -254,6 +263,29 @@ Detailed rules: @docs/development-rules.md
 - **アサーション提案**: 適切なアサーションの推奨
 - **テストケース分析**: エッジケースの検出
 
+## UIバグ修正時の必須確認手順（重要）
+
+### Playwright視覚確認プロトコル
+**UI関連バグ修正時は必ずスクリーンショット確認を実施**
+
+#### 🚨 必須手順（Builder専用）
+1. **要素存在確認**: `mcp__playwright__browser_snapshot()` でDOM要素確認
+2. **📸 スクリーンショット取得**: `mcp__playwright__browser_take_screenshot()` で視覚確認
+3. **実際の表示検証**: スクリーンショット画像で以下を確認
+   - 要素が実際に視認可能か
+   - レイアウトが正常に表示されているか
+   - 重要なUI要素が画面外に隠れていないか
+   - 色、サイズ、配置が期待通りか
+
+#### ❌ 禁止事項
+- **要素存在のみ確認して「修正完了」報告** → DOM要素が存在しても視認できない場合がある
+- **Playwright スナップショットのみで判断** → 実際の視覚表示と異なる場合がある
+
+#### ✅ 品質基準
+- スクリーンショットで全てのUI要素が**明確に視認可能**
+- 期待されるレイアウトが**完全に実現**されている
+- ユーザー操作に必要な要素がすべて**画面内に表示**されている
+
 ## Agent Coordination Optimization (NEW!)
 
 ### スマートハンドオフ
@@ -354,6 +386,13 @@ Automatically recorded in `.clauderules` file.
 - Refactoring Scheduler: @.claude/shared/refactoring-scheduler.md
 - Best Practices: @BEST_PRACTICES.md
 - Architecture: @ARCHITECTURE.md
+
+## レイアウト・UI関連ドキュメント
+- **レスポンシブ統一基準**: @focus-flow-capacitor/src/constants/ui.ts
+- **フォーカスモードレイアウト**: @focus-flow-capacitor/src/components/FocusModeLayout.tsx
+- **AppendOnlyDailyMemo実装**: @focus-flow-capacitor/src/components/AppendOnlyDailyMemo.tsx
+- **CSS Grid設計ガイド**: @focus-flow-capacitor/src/components/FocusModeLayout.css
+- **メイン技術仕様**: @.claude/context/tech.md
 ## コミュニケーション原則
 - **確認優先**: 不明瞭な点は自己判断せず、必ず確認
 - **選択肢提示**: 質問時は「1. xxx」「2. yyy」形式で選択肢を提示
